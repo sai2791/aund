@@ -1,0 +1,68 @@
+REM Copyright (c) 2010 Ben Harris
+REM All rights reserved.
+REM
+REM Redistribution and use in source and binary forms, with or without
+REM modification, are permitted provided that the following conditions
+REM are met:
+REM 1. Redistributions of source code must retain the above copyright
+REM    notice, this list of conditions and the following disclaimer.
+REM 2. Redistributions in binary form must reproduce the above copyright
+REM    notice, this list of conditions and the following disclaimer in the
+REM    documentation and/or other materials provided with the distribution.
+REM 3. The name of the author may not be used to endorse or promote products
+REM    derived from this software without specific prior written permission.
+REM 
+REM THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+REM IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+REM OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+REM IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+REM INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+REM NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+REM DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+REM THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+REM (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+REM THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+REM A trivial Econet proxy
+
+bsize% = 8192
+DIM block0% bsize%, block1% bsize%
+
+REM Network and station numbers of the two stations we should interpose
+REM ourselves between.
+net0%=0
+stn0%=15
+net1%=128
+stn1%=107
+
+ON ERROR PROCdie
+
+h0% = FNcr(block0%, stn0%, net0%)
+h1% = FNcr(block1%, stn1%, net1%)
+
+REPEAT
+  h0% = FNproxy(h0%, block0%, stn0%, net0%, stn1%, net1%)
+  h1% = FNproxy(h1%, block1%, stn1%, net1%, stn0%, net0%)
+UNTIL FALSE
+
+DEF FNcr(block%, stn%, net%)
+  LOCAL handle%
+  SYS "Econet_CreateReceive", 0, stn%, net%, block%, bsize% TO handle%
+=handle%
+
+DEF FNproxy(h%, block%, sstn%, snet%, dstn%, dnet%)
+  LOCAL status%, flag%, port%, size%
+  SYS "Econet_ReadReceive", h% TO status%, flag%, port%, , , , size%
+  IF status% = 9 THEN
+    SYS "Econet_AbandonReceive", h%
+    SYS "Econet_DoTransmit", flag%, port%, dstn%, dnet%, block%, size%, 50, 10
+    h% = FNcr(block%, sstn%, snet%)
+  ENDIF
+=h%
+
+DEF PROCdie
+  SYS "XEconet_AbandonReceive", h0%
+  SYS "XEconet_AbandonReceive", h1%
+  ON ERROR OFF
+  ERROR ERR, REPORT$
+ENDPROC

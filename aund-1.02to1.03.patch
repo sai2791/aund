@@ -1,0 +1,266 @@
+diff aund-1.02/NEWS aund-1.03/NEWS
+0a1,7
+> aund 1.03
+> 
+>   * Add *PRIV command  (Supports the commands to LVL 4)
+>     None, Fixed, Passwd and Syst
+> 
+> -- Steve Inglis <Sai2791@mac.com>  Wed, 15 Dec 2010 13:09:00 +0100
+> 
+diff aund-1.02/aun.c aund-1.03/aun.c
+73a74
+> 	memset(&name, 0, sizeof(name));
+Only in aund-1.03: aun.c.orig
+Only in aund-1.03: aun.h.orig
+Only in aund-1.03: aun.h.rej
+diff aund-1.02/aund.passwd.5 aund-1.03/aund.passwd.5
+35,36c35,36
+< Each line of the file defines one user, and consists of either two or
+< three fields, separated by colon
+---
+> Each line of the file defines one user, and consists of from two to
+> four fields, separated by colon
+48a49,50
+> .It
+> Priviledge Flag
+diff aund-1.02/beebem.c aund-1.03/beebem.c
+162a163
+> 	memset(&name, 0, sizeof(name));
+Only in aund-1.03: config.h
+Only in aund-1.03: config.log
+Only in aund-1.03: config.status
+Common subdirectories: aund-1.02/contrib and aund-1.03/contrib
+Only in aund-1.03: file.txt
+diff aund-1.02/fileserver.h aund-1.03/fileserver.h
+88a89
+> 	int priv;
+185a187,188
+> 	int (*set_priv)(struct fs_client *, char const *, char const *);
+>         int (*get_priv)(char const *);
+Only in aund-1.03: fileserver.h.orig
+diff aund-1.02/fs_cli.c aund-1.03/fs_cli.c
+74a75
+> static fs_cmd_impl fs_cmd_priv;
+92a94
+>  	{"PRIV",	1, fs_cmd_priv,		},
+279a282,283
+> 	c->client->priv = userfuncs->get_priv(c->client->login);
+>         if (debug) printf("Cli: %s has %d\n", c->client->login, c->client->priv);
+295a300,320
+> fs_cmd_priv(struct fs_context *c, char *tail)
+> {
+> 	struct ec_fs_reply reply;
+> 	char *user, *priv;
+> 	user = fs_cli_getarg(&tail);
+> 	priv = fs_cli_getarg(&tail);
+> 	if (debug) printf("cli: priv request %s to '%s'\n",user,priv);
+>         if (c->client == NULL) {
+> 		fs_error(c, 0xff, "Who are you?");
+> 		return;
+> 	}
+> 	if (userfuncs->set_priv(c->client, user, priv)) {
+> 		fs_err(c, EC_FS_E_NOPRIV); // Should be Priv??
+> 		return;
+> 	}
+> 	reply.command_code = EC_FS_CC_DONE;
+> 	reply.return_code = EC_FS_RC_OK;
+> 	fs_reply(c, &reply, sizeof(reply));
+> }
+> 
+> static void
+Only in aund-1.03: fs_cli.c.orig
+diff aund-1.02/fs_misc.c aund-1.03/fs_misc.c
+207c207,212
+< 		reply.dir_access = FS_DIR_ACCESS_PUBLIC;
+---
+>                 if (c->client->priv == EC_FS_PRIV_SYST)
+> 		{
+> 		    reply.dir_access = FS_DIR_ACCESS_OWNER;
+> 		} else { 
+> 		    reply.dir_access = FS_DIR_ACCESS_PUBLIC;
+>                 }
+435c440,445
+< 	reply.ownership[0] = 'P';
+---
+>  	if (c->client->priv == EC_FS_PRIV_SYST) 
+> 	{
+> 	    reply.ownership[0] = 'O';
+> 	} else {
+>             reply.ownership[0] = 'P';
+>         }
+508c518
+< 		*p++ = 0;  /* all users are unprivileged */
+---
+> 		*p++ = c->client->priv;  /* all users are unprivileged */
+541c551
+< 		reply.priv = 0;  /* all users are unprivileged */
+---
+> 		reply.priv = ent->priv; /* Use priv from passwd file */  
+Only in aund-1.03: fs_misc.c.orig
+diff aund-1.02/fs_proto.h aund-1.03/fs_proto.h
+62a63,68
+> /* Priv Modes */
+> #define EC_FS_PRIV_NONE  0  /* Normal User */
+> #define EC_FS_PRIV_FIXED 1  /* Level 4 Dunno */
+> #define EC_FS_PRIV_LIMIT 2  /* MDFS Cant change passwd */
+> #define EC_FS_PRIV_SYST  3  /* System User */	
+> 
+diff aund-1.02/pw.c aund-1.03/pw.c
+129c129
+< pw_read_line(char **user, char **pw, char **urd, int *opt4)
+---
+> pw_read_line(char **user, char **pw, char **urd, char **priv, int *opt4)
+132c132
+< 	char *p, *q, *r;
+---
+> 	char *p, *q, *r, *s;
+142a143
+> 
+144c145,146
+< 	    (q = strchr(p+1, ':')) == NULL) {
+---
+> 	    (q = strchr(p+1, ':')) == NULL    || 
+> 	    (s = strchr(q+1, ':')) == NULL) {   
+148c150
+< 
+---
+>     
+150a153
+>         *s++ = '\0';
+152c155
+< 	r = strchr(q, ':');
+---
+> 	r = strchr(s, ':'); 
+163c166,167
+< 
+---
+> 	*priv = s;
+> 	
+168c172
+< pw_write_line(char *user, char *pw, char *urd, int opt4)
+---
+> pw_write_line(char *user, char *pw, char *urd, char *priv, int opt4)
+171c175
+< 	fprintf(newfp, "%s:%s:%s:%d\n", user, pw, urd, opt4);
+---
+> 	fprintf(newfp, "%s:%s:%s:%s:%d\n", user, pw, urd, priv, opt4);
+177c181
+< 	char *u, *p, *d;
+---
+> 	char *u, *p, *d, *s;
+183c187
+< 	while (pw_read_line(&u, &p, &d, opt4) == 0) {
+---
+> 	while (pw_read_line(&u, &p, &d, &s, opt4) == 0) {
+210c214
+< 	char *u, *p, *d;
+---
+> 	char *u, *p, *d, *s;
+216c220
+< 	while (pw_read_line(&u, &p, &d, &o4) == 0) {
+---
+> 	while (pw_read_line(&u, &p, &d, &s, &o4) == 0) {
+229c233
+< 	char *u, *p, *d;
+---
+> 	char *u, *p, *d, *s;
+231a236,238
+> 	char salt[64];
+> 	char *cp;
+> 	struct timeval tv;
+236c243
+< 	while (pw_read_line(&u, &p, &d, &opt4) == 0) {
+---
+> 	while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
+239,241c246,251
+< 			char salt[64];
+< 			char *cp;
+< 			struct timeval tv;
+---
+> 			ok = !strcmp(s, "L");
+>  			if (ok) {   // User isnt allowed to change passwd
+> 			        pw_close();
+> 				return -1;
+> 			}
+> 			ok = 0;
+258c268
+< 		pw_write_line(u, p, d, opt4);
+---
+> 		pw_write_line(u, p, d, s, opt4);
+267c277
+< 	char *u, *p, *d;
+---
+> 	char *u, *p, *d, *s;
+274c284
+< 	while (pw_read_line(&u, &p, &d, &opt4) == 0) {
+---
+> 	while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
+278c288
+< 		pw_write_line(u, p, d, opt4);
+---
+> 		pw_write_line(u, p, d, s, opt4);
+283a294,345
+> static int
+> pw_get_priv(const char *user)
+> {
+> 	char *u, *p, *d, *s;
+> 	int opt4;
+>         int priv = EC_FS_PRIV_NONE; /* Assume no Priv */
+> 
+> 	if (pw_open(1) < 0)
+> 		return -1;
+> 
+>         while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
+>                 if (!strcasecmp(user, u)) {
+>                         pw_close();
+> 			switch (*s) {
+>                            case 'S': priv = EC_FS_PRIV_SYST; break;
+> 			   case 'L': priv = EC_FS_PRIV_LIMIT; break;
+> 			   case 'F': priv = EC_FS_PRIV_FIXED; break;
+> 
+> 			   default : priv = EC_FS_PRIV_NONE;
+> 			}
+>   			if (debug) printf("get_priv: Priv level %d\n",priv);
+>                         return priv;
+>                 }
+>         }
+> 
+>         pw_close();
+>         return EC_FS_PRIV_NONE;
+> }
+> 
+> static int
+> pw_set_priv( struct fs_client *client, const char *user, const char *newpriv)
+> {
+>         char *u, *p, *d, *s;
+>         int opt4;
+>         int done = 0;
+> 
+> 	if (client->priv == EC_FS_PRIV_SYST) {
+>        	   if (pw_open(1) < 0)
+>           	 return -1;
+> 
+>            while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
+>                     if (!done && !strcasecmp(user, u)) {
+>                         strcpy(s, newpriv);
+>                     }
+>                     pw_write_line(u, p, d, s, opt4);
+>            }
+> 
+>            return pw_close_rename();
+>         }
+>         return -1;  // No privilege
+> }
+> 
+285c347,348
+< 	pw_validate, pw_urd, pw_change, pw_set_opt4
+---
+> 	pw_validate, pw_urd, pw_change, pw_set_opt4, pw_set_priv, pw_get_priv
+>         
+diff aund-1.02/version.h aund-1.03/version.h
+49,50c49,50
+< #define AUND_VERSION_MAJOR 0x1
+< #define AUND_VERSION_MINOR 0x02
+---
+> #define AUND_VERSION_MAJOR 0x01
+> #define AUND_VERSION_MINOR 0x03

@@ -1,0 +1,39 @@
+aund 1.04
+  * SECURITY: Fix a buffer overflow in handling of acknowledgement
+    packets.
+-- Ben Harris <bjh21@bjh21.me.uk>  Sat, 15 Jun 2013 19:42:27 +0100
+
+aund 1.03
+
+  * Add *PRIV command  (Supports the commands to LVL 4)
+    None, Fixed, Passwd and Syst
+
+-- Steve Inglis <Sai2791@mac.com>  Wed, 15 Dec 2010 13:09:00 +0100
+
+aund 1.02
+
+  * Support ':' as a magic directory name (equivalent to '$').
+  * Require disc names provided by the client to be correct.
+  * Reduce outgoing data packet size to fit within an Ethernet
+    frame.
+  * Provide a "timeout" option to control the amount of time aund
+    waits for an AUN acknowlegdment.
+  * Restrict the handle numbers we allocate to support older 8-bit
+    clients, with an option to remove this restriction.
+  * Add a *FSOPT command to change fileserver options per session.
+  * Document * Commands supported by aund.
+  * Add support for the implicit mandatory locking scheme expected
+    of Econet file servers.
+
+ -- Ben Harris <bjh21@bjh21.me.uk>  Sun, 12 Dec 2010 10:56:10 +0100
+
+aund 1.00
+
+  This first standalone release of aund is distantly derived from the
+  version distributed as part of NetBSD "othersrc".  It has been
+  heavily hacked to add support for read/write operation, BeebEm
+  virtual Econet, and older clients.  It lacks many useful features
+  and is full of bugs (especially memory leaks), but has nonetheless
+  proved to be of real utility.
+
+ -- Ben Harris <bjh21@bjh21.me.uk>  Mon, 03 May 2010 22:51:16 +0100

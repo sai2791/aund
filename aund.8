@@ -1,0 +1,233 @@
+.\" Copyright (c) 2010 Ben Harris
+.\" All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\" 3. The name of the author may not be used to endorse or promote products
+.\"    derived from this software without specific prior written permission.
+.\" 
+.\" THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+.\" IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+.\" OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+.\" IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+.\" INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+.\" NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+.\" DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+.\" THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+.\" (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+.\" THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+.Dd December 07, 2010
+.Dt AUND 8
+.Os
+.Sh NAME
+.Nm aund
+.Nd Acorn-compatible
+.No Econet/ Ns Tn AUN
+fileserver
+.Sh SYNOPSIS
+.Nm Op Fl dDfsS
+.Op Fl c Ar config
+.Op Fl p Ar pidfile
+.Sh DESCRIPTION
+.Nm
+is a fileserver for Acorn clients, either real ones over
+.Tn AUN
+or emulated ones over BeebEm's virtual Econet.
+.Nm
+runs as a single process under a single user-ID, even when presenting
+multiple user accounts to clients.
+.Pp
+The following options can be used:
+.Bl -tag -width Fl
+.It Fl c Ar config
+Use
+.Ar config
+as a configuration file instead of
+.Pa /etc/aund.conf .
+.It Fl d
+Run in debugging mode, with debugging messages going to standard output.
+Implies
+.Fl f .
+.It Fl D
+Disable debugging mode, even if it's specified in the configuration file.
+.It Fl f
+Run in the foreground rather than becoming a daemon.
+.It Fl p Ar pidfile
+Set the file in which
+.Nm
+should write its process-ID at startup.  Defaults to
+.Pa /var/run/aund.pid .
+.It Fl s
+Use
+.Xr syslog 3
+for logging even if it's disabled in the configuration file.
+.It Fl S
+Do not log using
+.Xr syslog 3 .
+.El
+.Ss Metadata
+By default,
+.Nm
+stores the Acorn load and execute addresses for each file in a sub-directory
+called
+.Pa .Acorn
+of the file's parent directory, in a symbolic link with the same name as
+the file.
+.Nm
+can also generate
+.Tn RISC OS
+file types for files based on rules in
+.Xr aund.conf 5 .
+Files can also be named with the
+.Tn RISC OS
+type in hexadecimal at the end of their names, separated by a comma.
+The file type will be removed when the file is seen from
+.Tn RISC OS ,
+so
+.Pa TextFile,fff
+appears as a text (type 0xfff) file called
+.Pa TextFile .
+.Ss "*\ Commands"
+.Nm
+implements a selection of operating system commands (known as
+.Qq *\ Commands )
+that can be used by clients.
+Many of these are shadowed by built-in commands on newer clients.
+Only the versions implemented by
+.Nm
+are documented here.
+.Bl -tag -width Ic
+.It Ic *BYE
+Logs off the file server, closing all open files.
+.It Ic *CAT Op Ar directory
+Displays a catalogue listing of the specified
+.Ar directory ,
+or of the current directory if none is specified.
+.It Ic *CDIR Ar name
+Creates a directory called
+.Ar name .
+.It Ic *DELETE Ar name
+Deletes the file or directory called
+.Ar name .
+.It Ic *DIR Op Ar dir
+Sets the current directory to the specified
+.Ar directory
+or to the user root directory if none is specified.
+.It Ic *FSOPT Li INFOFMT RISCOS | SJ
+Sets the format of responses to
+.Ql *INFO .
+.Ql RISCOS
+chooses the format specified by the
+.Tn RISC OS
+Programmer's Reference Manual, similar to that produced by Acorn fileservers.
+.Ql SJ
+chooses a format more akin to that produced by SJ Research fileservers.
+This setting persists for the current session.
+.It Ic *FSOPT Li SAFEHANDLES ON | OFF
+Controls whether
+.Nm
+restricts the file handles it issues for compatibility with older 8-bit
+clients.
+Client systems up to at least NFS 3.60 require that the file server only
+issue file handles that are powers of two.  This restricts such clients
+to at most eight open files.  Later clients support more open files, but
+have no way to indicate this to the file server.  If this option is set
+to
+.Ql ON ,
+.Nm
+will issue only handles compatible with older systems, while
+.Ql OFF
+will allow it to issue all possible handles.
+The default setting is specified in
+.Xr aund.conf 5
+.It Ic *INFO Op Ar name
+Displays detailed information about the object called
+.Ar name
+or the current directory if none is specified.
+.It Ic "*I AM" Oo Ar station Oc Ar user Op Ar password
+Log onto the file server as
+.Ar user
+whose password is
+.Ar password .
+If
+.Ar password
+is not specified it is treated as empty.
+If
+.Ar station
+is specified and starts with a digit, it is ignored.
+.It Ic *LIB Op Ar library
+Sets the current library to
+.Ar library
+or to the default library if none is specified.
+.It Ic *LOAD Ar file Op Ar addr
+Load the specified
+.Ar file
+into the client's memory at
+.Ar addr .
+If
+.Ar addr
+is not specified, the load address of the file is used.
+.It Ic *LOGOFF
+A synonym for
+.Ic *BYE .
+.It Ic *PASS Ar oldpw newpw
+Change the password of the logged-on user from
+.Ar oldpw
+to
+.Ar newpw .
+.It Ic *RENAME Ar old new
+Change the name of the object currently called
+.Ar old
+to
+.Ar new .
+.It Ic *SAVE Ar file start end Op Ar exec
+Save a section of client memory to
+.Ar file .
+The memory runs from
+.Ar start
+(inclusive) to
+.Ar end
+(exclusive).
+If
+.Ar exec
+is specified, the file's execution address is set to that.
+Otherwise it is set to
+.Ar start .
+.It Ic *SDISC Ar disc
+Reset the user environment (current directory and current library) as
+though the user had logged in again.
+The argument
+.Ar disc
+is ignored.
+.El
+.Ss Security Considerations
+The Acorn fileserver protocol is inherently insecure.  It passes both 
+login and file data over the network unencrypted, so it is trivial
+for an attacker with access to the network to intercept them.
+The protocol also has no authentication of individual requests other
+than by source address, so it is trivial for an attacker to inject
+requests that appear to be from a logged-in client.
+.Sh FILES
+.Bl -tag -width Pa
+.It Pa /etc/aund.conf
+Default configuration file location.
+.It Pa /var/run/aund.pid
+Default process-ID file.
+.El
+.Sh SEE ALSO
+.Xr beebem 1 ,
+.Xr aund.conf 5 ,
+.Xr aund.passwd 5
+.Sh BUGS
+.Nm
+is full of them.  Beware, and send patches to
+.Aq bjh21@bjh21.me.uk .
+.Sh AUTHORS
+.Nm
+was written by Ben Harris and Simon Tatham.

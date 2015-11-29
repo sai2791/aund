@@ -1,0 +1,52 @@
+aund is a program to allow a Unix system to act as an AUN or Econet
+fileserver.  It supports:
+
+* Clients from System 3 to RISC OS 3.70 (and probably later)
+* Servers running Linux, NetBSD and probably others
+* Connectivity by AUN (over UDP) or BeebEm emulated Econet
+* Read/write operation
+* Multiple virtual users (all under one Unix UID)
+
+For general installation instructions, see the INSTALL file.  aund is
+not particularly portable, and expects a BSDish or GNUish C library.
+Building it on other systems is likely to be unpleasant.
+
+aund is highly experimental and likely to have bugs.  Patches to fix
+these will be gratefully received by Ben Harris <bjh21@bjh21.me.uk>.
+aund has a Web site at <http://bjh21.me.uk/aund/>.
+
+Among aund's bugs are likely to be several that make it unsafe to run
+on an untrustworthy network.  In any case, the fileserver protocol it
+uses has serious security flaws.  In short, keep it off the Internet.
+
+aund itself is released under the following licence:
+
+Copyright (c) 1998, 2010 Ben Harris
+Copyright (c) 2010 Simon Tatham
+Copyright (c) 2010 James Woodcock
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+3. The name of the author may not be used to endorse or promote products
+   derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Various parts of its build system are derived from Automake, and these
+have their own copyright information embedded in them.

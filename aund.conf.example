@@ -1,0 +1,83 @@
+# aund.conf - configuration file for aund.
+
+# debug on
+
+root /srv/acorn
+opt4 2
+
+typemap type dir	000 # Does RISC OS care?
+typemap type lnk	fdc # SoftLink
+typemap type blk	fcc # Device
+typemap type chr	fcc
+
+typemap perm 111	fe6 # Unix Ex
+
+typemap name \.txt$	fff # Text
+typemap name \.[chsS]$	fff
+typemap name \.bas$	ffb # BASIC
+typemap name \.e?ps$	ff5 # PoScript
+typemap name \.tiff?$	ff0 # TIFF
+typemap name \.mk$	fe1 # Makefile
+typemap name ^[Mm]akefile fe1
+typemap name \.midi?$	fd4 # MIDI
+typemap name \.aif[fc]?$ fc2 # AIFF
+typemap name \.avi$	fb2 # MovieFS
+typemap name \.mov$	fb2
+typemap name \.flc$	fb2
+typemap name \.wav$	fb1 # Wave
+typemap name \.html?$	faf # HTML
+typemap name \.t?gz$	f89 # GZip
+typemap name \.csv$	dfe # CSV
+typemap name \.dxf$	dea # DXF
+typemap name \.zip$	ddc # Archive
+typemap name \.arc$	ddc
+typemap name \.spk$	ddc
+typemap name \.wk.$	db0 # Lotus123
+typemap name \.tex$	ce5 # TeX
+typemap name \.dvi$	ce4 # DVI
+typemap name \.mod$	cb6 # STModule
+typemap name \.hpgl?$	cae # HPGLPlot
+typemap name \.pk$	ca3 # PK
+typemap name \.gf$	ca2 # GF
+typemap name \.tfm$	ca1 # TFM
+typemap name \.mf$	ca0 # Metafont
+typemap name \.jpe?g$	c85 # JPEG
+typemap name \.tar$	c46 # UnixTar
+typemap name \.mpe?g$	bf8 # MPEG
+typemap name \.pcd$	be8 # PhotoCD
+typemap name \.xl.$	ba6 # Excel
+typemap name \.sna$	ba1 # SNA
+typemap name \.z80$	ba0 # Z80
+typemap name \.fli$	b9f # FLI
+typemap name \.spt$	b8c # Split
+typemap name \.xbm$	b61 # Xbitmap
+typemap name \.png$	b60 # PNG
+typemap name \.wmf$	b2f # WMF
+typemap name \.cgm$	b2b # CGM
+typemap name \.pdf$	adf # PDF
+typemap name \.latex$	aca # LaTeX (should be \.tex$, but plain TeX takes that)
+typemap name \.vf$	ac9 # VF
+typemap name \.pl$	a06 # Perl
+typemap name \.ico$	6a5 # MSIcon
+typemap name \.rle$	6a1 # RLE
+typemap name \.p[pbgn]m$ 69e # PBMPlus
+typemap name \.tga$	69d # Targa
+typemap name \.bmp$	69c # BMP
+typemap name \.mtv$	699 # MTV
+typemap name \.qrt$	698 # QRT
+typemap name \.pcx$	697 # PCX
+typemap name \.gif$	695 # GIF
+typemap name \.iff$	693 # AmigaIFF
+typemap name \.img$	692 # Img
+typemap name \.p[ic][123]$ 691 # Degas
+typemap name \.gp$	449 # G_Proj
+typemap name \.gs$	448 # G_Script
+typemap name \.tap$	11d # TAP
+typemap name \.z[1-8]$	11a # Z-Code
+typemap name \.Z$	021 # Compress
+
+
+# Default file type
+typemap default		fff # Text
+
+
