@@ -1,3 +1,6 @@
+aund 1.04 * 
+  * Checked into a git repository
+
 aund 1.04
   * SECURITY: Fix a buffer overflow in handling of acknowledgement
     packets.
