@@ -15,7 +15,7 @@
  *    documentation and/or other materials provided with the distribution.
  * 3. The name of the author may not be used to endorse or promote products
  *    derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -30,7 +30,7 @@
 /*
  * This is part of aund, an implementation of Acorn Universal
  * Networking for Unix.
- */	
+ */
 /*
  * conf_lex.l - lexer for configuration files.
  */
@@ -110,7 +110,7 @@ static void conf_cmd_typemap_type(union cfything *);
 static void conf_cmd_typemap_default(union cfything *);
 
 static void dequote(char *);
-	
+
 static int cfylex(int start, union cfything *thing);
 
 static int cfy_line;
@@ -386,7 +386,7 @@ conf_cmd_typemap_name(union cfything *thing)
 {
 	char *re;
 	int type;
-	
+
 	if (cfylex(BORING, NULL) != CF_WORD)
 		errx(1, "no re for typemap");
 	re = malloc(cfyleng + 1);
@@ -407,7 +407,7 @@ conf_cmd_typemap_perm(union cfything *thing)
 
 	if (cfylex(BORING, NULL) != CF_WORD)
 		errx(1, "no perm for typemap");
-	if (sscanf(cfytext, "%o", &perm) != 1)
+	if (sscanf(cfytext, "%ho", &perm) != 1)
 		errx(1, "bad perm for typemap");
 	if (cfylex(BORING, NULL) != CF_WORD)
 		errx(1, "no type for typemap");

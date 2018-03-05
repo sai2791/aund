@@ -53,7 +53,7 @@
 #include "fileserver.h"
 
 char *pwfile = NULL;
-char *pwtmp = NULL; 
+char *pwtmp = NULL;
 static int pwline;
 static FILE *fp, *newfp;
 
@@ -142,17 +142,17 @@ pw_read_line(char **user, char **pw, char **urd, char **priv, int *opt4)
 	buffer[strcspn(buffer, "\r\n")] = '\0';
 
 	if ((p = strchr(buffer, ':')) == NULL ||
-	    (q = strchr(p+1, ':')) == NULL    || 
-	    (s = strchr(q+1, ':')) == NULL) {   
+			(q = strchr(p+1, ':')) == NULL    ||
+			(s = strchr(q+1, ':')) == NULL) {
 		warnx("%s:%d: malformatted line\n", pwfile, pwline);
 		return -1;
 	}
-    
+
 	*p++ = '\0';
 	*q++ = '\0';
-        *s++ = '\0';
+	*s++ = '\0';
 
-	r = strchr(s, ':'); 
+	r = strchr(s, ':');
 	if (r) {
 		*r++ = '\0';
 		*opt4 = atoi(r);
@@ -164,7 +164,7 @@ pw_read_line(char **user, char **pw, char **urd, char **priv, int *opt4)
 	*pw = p;
 	*urd = q;
 	*priv = s;
-	
+
 	return 0;
 }
 
@@ -244,8 +244,8 @@ pw_change(const char *user, const char *oldpw, const char *newpw)
 		if (!done && !strcasecmp(user, u)) {
 			int ok = 0;
 			ok = !strcmp(s, "L");
- 			if (ok) {   // User isnt allowed to change passwd
-			        pw_close();
+			if (ok) {   // User isnt allowed to change passwd
+							pw_close();
 				return -1;
 			}
 			ok = 0;
@@ -283,7 +283,7 @@ pw_set_opt4(const char *user, int newopt4)
 
 	while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
 		if (!done && !strcasecmp(user, u)) {
-		    opt4 = newopt4;
+				opt4 = newopt4;
 		}
 		pw_write_line(u, p, d, s, opt4);
 	}
@@ -294,56 +294,56 @@ pw_set_opt4(const char *user, int newopt4)
 static int
 pw_get_priv(const char *user)
 {
-	char *u, *p, *d, *s;
-	int opt4;
-        int priv = EC_FS_PRIV_NONE; /* Assume no Priv */
+		char *u, *p, *d, *s;
+		int opt4;
+		int priv = EC_FS_PRIV_NONE; /* Assume no Priv */
 
 	if (pw_open(1) < 0)
 		return -1;
 
-        while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
-                if (!strcasecmp(user, u)) {
-                        pw_close();
+	while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
+				if (!strcasecmp(user, u)) {
+												pw_close();
 			switch (*s) {
-                           case 'S': priv = EC_FS_PRIV_SYST; break;
-			   case 'L': priv = EC_FS_PRIV_LIMIT; break;
-			   case 'F': priv = EC_FS_PRIV_FIXED; break;
+				 case 'S': priv = EC_FS_PRIV_SYST; break;
+				 case 'L': priv = EC_FS_PRIV_LIMIT; break;
+				 case 'F': priv = EC_FS_PRIV_FIXED; break;
 
-			   default : priv = EC_FS_PRIV_NONE;
+				 default : priv = EC_FS_PRIV_NONE;
 			}
-  			if (debug) printf("get_priv: Priv level %d\n",priv);
-                        return priv;
-                }
-        }
+				if (debug) printf("get_priv: Priv level %d\n",priv);
+												return priv;
+								}
+				}
 
-        pw_close();
-        return EC_FS_PRIV_NONE;
+				pw_close();
+				return EC_FS_PRIV_NONE;
 }
 
 static int
 pw_set_priv( struct fs_client *client, const char *user, const char *newpriv)
 {
-        char *u, *p, *d, *s;
-        int opt4;
-        int done = 0;
+				char *u, *p, *d, *s;
+				int opt4;
+				int done = 0;
 
 	if (client->priv == EC_FS_PRIV_SYST) {
-       	   if (pw_open(1) < 0)
-          	 return -1;
+					 if (pw_open(1) < 0)
+						 return -1;
 
-           while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
-                    if (!done && !strcasecmp(user, u)) {
-                        strcpy(s, newpriv);
-                    }
-                    pw_write_line(u, p, d, s, opt4);
-           }
+					 while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
+										if (!done && !strcasecmp(user, u)) {
+												strcpy(s, newpriv);
+										}
+										pw_write_line(u, p, d, s, opt4);
+					 }
 
-           return pw_close_rename();
-        }
-        return -1;  // No privilege
+					 return pw_close_rename();
+				}
+				return -1;  // No privilege
 }
 
 struct user_funcs const user_pw = {
 	pw_validate, pw_urd, pw_change, pw_set_opt4, pw_set_priv, pw_get_priv
-        
+
 };
