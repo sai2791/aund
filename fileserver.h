@@ -13,7 +13,7 @@
  *    documentation and/or other materials provided with the distribution.
  * 3. The name of the author may not be used to endorse or promote products
  *    derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -185,7 +185,7 @@ struct user_funcs {
 	int (*change)(char const *, char const *, char const *);
 	int (*set_opt4)(char const *, int);
 	int (*set_priv)(struct fs_client *, char const *, char const *);
-    int (*get_priv)(char const *);
+  int (*get_priv)(char const *);
 };
 
 extern struct user_funcs const *userfuncs;

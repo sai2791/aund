@@ -1,7 +1,15 @@
+<<<<<<< HEAD
 aund 1.04.1 *
   * Found that user's home directory can be off the root directory if we
     use a / instead of a (.) - need to correct this properly.
     
+=======
+aund 1.05*
+ * Change the password file to include group name
+ * See appnote75.txt for details
+- Steve inglis <sai2791@googlemail.com> Tue, 15 Mar 2018 16:18:00 +0000
+
+>>>>>>> password_change
 aund 1.04 *
   * Checked into a git repository
 
