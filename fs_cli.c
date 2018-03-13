@@ -286,12 +286,10 @@ fs_cmd_i_am(struct fs_context *c, char *tail)
 	/*
 	 * Initial user environment.  Note that we can't use the same
 	 * handle twice.
-	 */
-	/*
 	 *
 	 * Problem is if we have a user not in the root directory, we get the
-         * wrong urd
-         */
+    * wrong urd
+    */
         if (debug) printf("Env: URD: %s CSD: %s LIB: %s\n", oururd, oururd, lib);
 	reply.urd = fs_open_handle(c->client, oururd, O_RDONLY, false);
 	reply.csd = fs_open_handle(c->client, oururd, O_RDONLY, false);
@@ -377,7 +375,7 @@ fs_cmd_rename(struct fs_context *c, char *tail)
 	char *path_argv[2];
 	FTS *ftsp;
 	FTSENT *f;
-	
+
 	oldname = fs_cli_getarg(&tail);
 	newname = fs_cli_getarg(&tail);
 	if (debug) printf(" -> rename [%s,%s]\n", oldname, newname);
