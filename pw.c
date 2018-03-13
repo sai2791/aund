@@ -27,6 +27,8 @@
  */
 /*
  * Password file management for aund.
+ * Current format is
+ User:Password:URD:Priv:Opt4
  */
 
 #if HAVE_CONFIG_H
@@ -73,7 +75,7 @@ pw_open(int write)
 	if (write) {
 		int newfd;
 		if (!pwtmp) {
-			pwtmp = malloc(strlen(pwfile) + 10);
+			pwtmp = malloc(strlen(pwfile) + 30);
 			sprintf(pwtmp, "%s.tmp", pwfile);
 		}
 		newfd = open(pwtmp, O_WRONLY | O_CREAT | O_TRUNC, 0600);
@@ -159,6 +161,13 @@ pw_read_line(char **user, char **pw, char **urd, char **priv, int *opt4)
 	} else {
 		*opt4 = default_opt4;
 	}
+
+// Need to check if the buffer has a period "." within it
+// if so then the user is a group user
+// we need tp split that out, and append it to the URD
+// so acorn.singlis
+// user is single, group is acorn
+// urd = $.acorn.singlis
 
 	*user = buffer;
 	*pw = p;

@@ -1,4 +1,9 @@
-aund 1.04 * 
+aund 1.05*
+ * Change the password file to include group name
+ * See appnote75.txt for details
+- Steve inglis <sai2791@googlemail.com> Tue, 15 Mar 2018 16:18:00 +0000
+
+aund 1.04 *
   * Checked into a git repository
 
 aund 1.04
