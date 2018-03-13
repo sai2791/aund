@@ -1,4 +1,4 @@
-/*-
+//*-
  * Copyright (c) 2010 Simon Tatham
  * Copyright (c) 1998, 2010 Ben Harris
  * All rights reserved.
@@ -290,6 +290,7 @@ fs_cmd_i_am(struct fs_context *c, char *tail)
     * wrong urd
     */
         if (debug) printf("Env: URD: %s CSD: %s LIB: %s\n", oururd, oururd, lib);
+				
 	reply.urd = fs_open_handle(c->client, oururd, O_RDONLY, false);
 	reply.csd = fs_open_handle(c->client, oururd, O_RDONLY, false);
 	reply.lib = fs_open_handle(c->client, lib, O_RDONLY, false);
