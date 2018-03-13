@@ -1,4 +1,8 @@
-aund 1.04 * 
+aund 1.04.1 *
+  * Found that user's home directory can be off the root directory if we
+    use a / instead of a (.) - need to correct this properly.
+    
+aund 1.04 *
   * Checked into a git repository
 
 aund 1.04
