@@ -75,7 +75,7 @@ pw_open(int write)
 	if (write) {
 		int newfd;
 		if (!pwtmp) {
-			pwtmp = malloc(strlen(pwfile) + 30);
+			pwtmp = malloc(strlen(pwfile) + 10);
 			sprintf(pwtmp, "%s.tmp", pwfile);
 		}
 		newfd = open(pwtmp, O_WRONLY | O_CREAT | O_TRUNC, 0600);
