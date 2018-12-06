@@ -164,9 +164,9 @@ pw_read_line(char **user, char **pw, char **urd, char **priv, int *opt4)
 
 // Need to check if the buffer has a period "." within it
 // if so then the user is a group user
-// we need tp split that out, and append it to the URD
+// we need to split that out, and append it to the URD
 // so acorn.singlis
-// user is single, group is acorn
+// user is singlis, group is acorn
 // urd = $.acorn.singlis
 
 	*user = buffer;
