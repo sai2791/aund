@@ -50,7 +50,7 @@
 #define PACKAGE_NAME "aund"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "aund 1.05"
+#define PACKAGE_STRING "aund 0.05"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "aund"
@@ -65,7 +65,7 @@
 #define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "1.05"
+#define VERSION "0.05"
 
 /* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
    `char[]'. */
