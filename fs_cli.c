@@ -1,4 +1,4 @@
-//*-
+/*-
  * Copyright (c) 2010 Simon Tatham
  * Copyright (c) 1998, 2010 Ben Harris
  * All rights reserved.
