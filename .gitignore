@@ -1,3 +1,5 @@
 *.o
 *.a
 .deps/*.Po
+config.log
+
