@@ -1,0 +1,210 @@
+### 16th January 1992
+-----------------------------------------------------------------------------
+## Support Group Application Note
+Number: 075
+Issue: 1
+Author: CAS
+-----------------------------------------------------------------------------
+
+# Acorn Econet Level 3 File Structure.
+
+
+-----------------------------------------------------------------------------
+Applicable Hardware:
+- Econet Level 3 Fileserver
+- Acorn FileStore
+- E01/E20, E01s/E40s/E60s
+
+Related Application Notes:
+- Filestore Password Recovery
+- Level 3 Password Recovery
+
+
+-----------------------------------------------------------------------------
+Copyright (C) Acorn Computers Limited 1992
+
+> Neither whole nor any part of the information contained in this note may be
+> adapted or reproduced in any form except with the prior written approval of
+> Acorn Computers Limited.
+
+Every effort has been made to ensure that the information in this leaflet is
+true and correct at the time of printing. However, the products described in this leaflet are
+subject to continuous development and improvements and
+Acorn Computers Limited reserves the right to change its specifications at
+any time. Acorn Computers Limited cannot accept liability for any loss or
+damage arising from the use of any information or particulars in this leaflet.
+###### ACORN, ECONET and ARCHIMEDES are trademarks of Acorn Computers Limited.
+-----------------------------------------------------------------------------
+> Support Group
+> Acorn Computers Limited
+> Fulbourn Road  
+> Cherry Hinton
+> Cambridge
+> CB1 4JN
+-----------------------------------------------------------------------------
+
+
+## LEVEL 3 FILESERVER FILE STRUCTURE
+
+All sectors are uniquely numbered from the start of the disc. Sectors are
+256 bytes long. The disc is partitioned into a small ADFS part, which may be
+accessed using standard ADFS commands. The remaining part is set aside for
+network use. The ADFS partition is always an integral number of cylinders.
+The first sector on the disc (sector 0) holds a pointer to the sector on
+which the NFS partition starts. The second sector (sector 1) holds a copy of
+this pointer. These values should always be the same.
+
+        Sector zero
+                246-248         Pointer to 1st sector of NFS partition (LSB
+                                        first)
+        Sector one
+                246-248         Pointer to copy of 1st sector of NFS
+                                        partition (LSB first)
+
+On initialisation, the first sector, and the copy of the first sector,
+will always be sector 1 in a particular cylinder.
+
+
+Sector bit map
+
+The first sector in every NFS cylinder contains a bit map of that cylinder's
+sectors. If, for example, a Winchester has 132 sectors per cylinder, the
+first sector of each cylinder has a bit map containing 132 bits. There are 8
+bits to a byte, and therefore the bit relating to sector no of a cylinder
+is bit (n MOD 8) in byte (n DIV 8). If a sector is occupied, that bit is set
+to zero, otherwise the bit is set to one. Bit zero of byte zero of a map is
+always set to zero - even an empty cylinder has its first sector occupied,
+by the bit map. There are two copies of the first sector, one pointed to by
+the value in sector 0, and the other pointed to by the value in sector 1.
+Both copies of NFS sector 1 should be kept consistent, any changes should be
+done to both. i.e. changing the disc name.
+
+#### NFS Sector 1
+
+        0-3     "AFS0" - indicates a Fileserver disc
+        4-19    16 characters, containing x characters of discname followed
+                   by (16-x) spaces (character &20)
+        20-21   No. of cylinders on Winchester (LSB first)
+        22-24   No of sectors on Winchester (LSB first)
+        25        No. of physical discs in logical fileserver, should be 1
+                    (generally)
+        26-27   No. of sectors per cylinder (LSB first)
+        28        No. of sectors per bit map
+        29        Increment to drive no. to start next drive (generally unused)
+                    Unused
+        31-33   SIN of root directory (LSB first), pointer to sector on
+                    which root ($) directory JesMap is stored.
+        34-35   Date of initialisation. LSB = day in month, MSB = month +
+                    16*(year-1981)
+        36-37   1st free cylinder - LSB first
+
+All objects are referred to by SIN (System internal name). The SIN points to
+a map (JesMap) which indicates which sectors the file is stored on, or in
+the case of a directory, which sectors hold the directory link list. The
+JesMap for each entry is as follows:- MAP Sector
+
+```
+0-5     "JesMap" indicates that this is a MAP sector.
+
+6       Map chain sequence number. A map can  extend over several sectors,
+the last entry in a particular sector pointing to the next part of the map.
+The sequence number is a copy of the last byte of the current MAP sector. If
+these bytes differ, you will get FS error 42 (Broken Directory).
+
+7       unused
+
+8       LSB of object length. Objects  will always be an integral number of
+sectors long. this indicates the number of bytes used in the last sector.
+i.e if file is &1273 bytes long, this will be &73
+
+9       unused
+
+10     list of occupied sectors, each entry consisting of five bytes:
+                0-2     lowest numbered sector in contiguous group LSB first
+                3-4     number of contiguous sectors in group LSB first
+```
+
+The object's length is determined by byte 8, and the total number of sectors
+occupied.
+
+#### Directory Structure
+
+Directories contain two linked lists. One list contains the objects in the
+directory, and is maintained in alphabetical order. The other contains a
+linked list of free entries in the directory. The entries in the linked
+lists are measured relative to the start of the directory, so 50B would
+refer to an entry beginning at byte 0B in sector 05 of the directory. The
+last entry in either link list is 00.
+
+The order in which the sectors are stored is the order in which the sectors
+are counted relative to the start of the directory, starting at 0. i.e. if
+you have a group of sectors starting at &314 for 4 sectors, followed by a
+group starting at &543 for 2 sectors; the first group would be sectors 0, 1,
+2, 3, and the second group would be 4 and 5.
+
+```
+0-1     Pointer to first entry in object linked list (LSB first)
+
+2       Cycle number of directory, same as last byte in directory
+
+3-12    10 characters of directory name in the form n characters+ (10-n)
+spaces (character &20)
+
+13-14   Pointer to first entry in free entries linked list (LSB first)
+
+15-16   Number of entries in the directory (LSB first). In practice a
+directory will not be more than 255 entries long.
+
+17-     Contents of directory, 26 bytes per entry.
+        0-1     Pointer to next entry in linked list (byte - sector)
+        2-11    10 characters of object name, in the form n characters+
+                   (10-n) spaces (character &20)
+        12-15   Load address (4 bytes)
+        16-19   Exec address (4 bytes)
+
+20      attribute byte
+                b7 undefined
+                b6 undefined
+                b5 1=writable by others
+                b4 1=readable by others
+                b3 1=locked
+                b2 undefined
+                b1 1=writable by owner
+                b0 1=readable by owner
+
+21-22   Date of most recent update to entry (as per date of initialisation)
+
+23-25   SIN of object LSB first (pointer to JesMap for object/directory)
+
+```
+
+The last byte of the directory is a copy of the sequence number. This is
+used to check for broken directories.
+
+
+
+#### Password file
+
+The passwords file is stored as $.Passwords. It must be an integral number
+of sectors long (i.e. byte 8 of its JesMap must be zero.
+
+For each entry:
+```
+        0-19        Up to 10 bytes of group name, terminated by "." if less
+                        than 10, followed by up to 10 bytes of user name,
+                        terminated by <CR> if less than 10, OR up to 10
+                        bytes of user name only terminated by <CR>
+
+        20-25       Up to 6 bytes of password, terminated by <CR> if less
+                        than 6.
+
+        26-29       No. of bytes of free space available to user, LSB first.
+
+        30            Status byte :
+                        b7    Set if entry is in use (i.e. this is a user
+                                and not just free space in the password
+                                file)
+                        b6         Set if a system user
+                        b2-5       Undefined
+                        b1,0       Users !BOOT option.
+```
