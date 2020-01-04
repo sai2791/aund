@@ -13,7 +13,7 @@
  *    documentation and/or other materials provided with the distribution.
  * 3. The name of the author may not be used to endorse or promote products
  *    derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -28,7 +28,7 @@
 /*
  * This is part of aund, an implementation of Acorn Universal
  * Networking for Unix.
- */	
+ */
 /*
  * fs_misc.c - miscellaneous file server calls
  */
@@ -119,7 +119,7 @@ fs_get_info(struct fs_context *c)
 	break;
 	case EC_FS_GET_INFO_ALL: {
 		struct ec_fs_reply_info_all reply;
-		
+
 		reply.std_tx.return_code = EC_FS_RC_OK;
 		reply.std_tx.command_code = EC_FS_CC_DONE;
 		if (f->fts_info == FTS_ERR || f->fts_info == FTS_NS) {
@@ -141,7 +141,7 @@ fs_get_info(struct fs_context *c)
 	break;
 	case EC_FS_GET_INFO_CTIME: {
 		struct ec_fs_reply_info_ctime reply;
-		
+
 		reply.std_tx.return_code = EC_FS_RC_OK;
 		reply.std_tx.command_code = EC_FS_CC_DONE;
 		if (f->fts_info == FTS_ERR || f->fts_info == FTS_NS) {
@@ -156,7 +156,7 @@ fs_get_info(struct fs_context *c)
 	break;
 	case EC_FS_GET_INFO_META: {
 		struct ec_fs_reply_info_meta reply;
-		
+
 		reply.std_tx.return_code = EC_FS_RC_OK;
 		reply.std_tx.command_code = EC_FS_CC_DONE;
 		if (f->fts_info == FTS_ERR || f->fts_info == FTS_NS) {
@@ -171,7 +171,7 @@ fs_get_info(struct fs_context *c)
 	break;
 	case EC_FS_GET_INFO_SIZE: {
 		struct ec_fs_reply_info_size reply;
-		
+
 		reply.std_tx.return_code = EC_FS_RC_OK;
 		reply.std_tx.command_code = EC_FS_CC_DONE;
 		if (f->fts_info == FTS_ERR || f->fts_info == FTS_NS) {
@@ -188,7 +188,7 @@ fs_get_info(struct fs_context *c)
 	case EC_FS_GET_INFO_DIR:
 	{
 		struct ec_fs_reply_info_dir reply;
-		
+
 		if (f->fts_info == FTS_ERR || f->fts_info == FTS_NS) {
 			fs_errno(c);
 			fts_close(ftsp);
@@ -207,7 +207,7 @@ fs_get_info(struct fs_context *c)
                 if (c->client->priv == EC_FS_PRIV_SYST)
 		{
 		    reply.dir_access = FS_DIR_ACCESS_OWNER;
-		} else { 
+		} else {
 		    reply.dir_access = FS_DIR_ACCESS_PUBLIC;
                 }
 		reply.cycle = 0; /* XXX should fake */
@@ -406,6 +406,7 @@ fs_cat_header(struct fs_context *c)
 	struct ec_fs_req_cat_header *request;
 	struct ec_fs_reply_cat_header reply;
 	char *upath, *path_argv[2];
+	char *oururd;
 	FTS *ftsp;
 	FTSENT *f;
 
@@ -437,7 +438,20 @@ fs_cat_header(struct fs_context *c)
 	strpad(reply.dir_name, ' ', sizeof(reply.dir_name));
 
 	/* XXX should check ownership. See also EC_FS_GET_INFO_DIR */
- 	if (c->client->priv == EC_FS_PRIV_SYST) 
+/*
+  Need to implement this check here, if we are in or below the users URD then assume
+	that they are the owner (kludge for now).
+*/
+/*
+  This is not being called need to understand what its doing when runing *cat
+
+oururd = userfuncs->urd(c->client->login);
+fs_acornify_name(oururd);
+printf("/g users [%s], URD [%s]\n", c->client->login,oururd);
+
+*/
+
+ 	if (c->client->priv == EC_FS_PRIV_SYST)
 	{
 	    reply.ownership[0] = 'O';
 	} else {
@@ -515,7 +529,7 @@ fs_get_users_on(struct fs_context *c)
 		aunfuncs->get_stn(&ent->host, p);
 		p += 2;
 		p += sprintf(p, "%.10s\r", ent->login);
-		*p++ = c->client->priv;  /* all users are unprivileged */
+		*p++ = c->client->priv;  /* Users may now have individual priviledge flags set */
 		i++;
 	}
 	reply->nusers = i;
@@ -548,7 +562,7 @@ fs_get_user(struct fs_context *c)
 		fs_reply(c, &(reply.std_tx), sizeof(reply.std_tx));
 	} else {
 		aunfuncs->get_stn(&ent->host, reply.station);
-		reply.priv = ent->priv; /* Use priv from passwd file */  
+		reply.priv = ent->priv; /* Use priv from passwd file */
 		fs_reply(c, &(reply.std_tx), sizeof(reply));
 	}
 }
