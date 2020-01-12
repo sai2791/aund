@@ -13,7 +13,7 @@
  *    documentation and/or other materials provided with the distribution.
  * 3. The name of the author may not be used to endorse or promote products
  *    derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -28,7 +28,7 @@
 /*
  * This is part of aund, an implementation of Acorn Universal
  * Networking for Unix.
- */	
+ */
 /*
  * fs_examine.c - the Examine call (code 3) - Directory listing.
  */
@@ -65,9 +65,9 @@ fs_examine(struct fs_context *c)
 	size_t reply_size;
 	int i, rc;
 
-	request->path[strcspn(request->path, "\r")] = '\0';	
+	request->path[strcspn(request->path, "\r")] = '\0';
 	if (debug)
-		printf("examine [%d, %d/%d, %s]\n",
+		printf("examine [%d, %d/%d, {%s}]\n",
 		    request->arg, request->start, request->nentries,
 		    request->path);
 	if (c->client == NULL) {
@@ -137,7 +137,7 @@ fs_examine(struct fs_context *c)
 		if (rc == -1)
 			goto bye;
 	}
-bye:		
+bye:
 	reply->nentries = i;
 	reply->undef0 = 0; /* What is this for? */
 	reply->std_tx.command_code = EC_FS_CC_DONE;
@@ -176,7 +176,7 @@ fs_examine_read(struct fs_context *c, const char *upath, int start)
 	char *path_argv[2];
 	struct fs_dir_cache *dc;
         FTSENT *dir;
-	
+
 	dc = &(c->client->dir_cache);
 	if (dc->path && strcmp(dc->path, upath) == 0 && dc->start == start) {
 		/* Already cached */
@@ -234,7 +234,7 @@ fs_examine_all(FTSENT *ent, struct ec_fs_reply_examine **replyp,
 {
 	struct ec_fs_exall *exall;
 	void *new_reply;
-	
+
 	if ((new_reply = realloc(*replyp, *reply_sizep + sizeof(*exall)))
 	    != NULL)
 		*replyp = new_reply;
@@ -264,7 +264,7 @@ fs_examine_name(FTSENT *ent, struct ec_fs_reply_examine **replyp,
 {
 	struct ec_fs_exname *exname;
 	void *new_reply;
-	
+
 	if ((new_reply = realloc(*replyp, *reply_sizep + sizeof(*exname))) !=
 	    NULL)
 		*replyp = new_reply;
@@ -289,7 +289,7 @@ fs_examine_shorttxt(FTSENT *ent, struct ec_fs_reply_examine **replyp,
 {
 	void *new_reply;
 	char accstring[8];
-	
+
 	if ((new_reply = realloc(*replyp, *reply_sizep + 10+1+7+2)) != NULL)
 		*replyp = new_reply;
 	if (new_reply == NULL) {
@@ -313,7 +313,7 @@ fs_examine_longtxt(struct fs_context *c, FTSENT *ent,
 {
 	void *new_reply;
 	char *string;
-	
+
 	if ((new_reply = realloc(*replyp, *reply_sizep + 100)) != NULL)
 		*replyp = new_reply;
 	if (new_reply == NULL) {

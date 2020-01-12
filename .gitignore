@@ -1,5 +1,6 @@
 *.o
 *.a
 .deps/*.Po
+.deps/*.TPo
 config.log
 

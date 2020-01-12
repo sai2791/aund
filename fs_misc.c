@@ -442,14 +442,9 @@ fs_cat_header(struct fs_context *c)
   Need to implement this check here, if we are in or below the users URD then assume
 	that they are the owner (kludge for now).
 */
-/*
-  This is not being called need to understand what its doing when runing *cat
-
 oururd = userfuncs->urd(c->client->login);
 fs_acornify_name(oururd);
 printf("/g users [%s], URD [%s]\n", c->client->login,oururd);
-
-*/
 
  	if (c->client->priv == EC_FS_PRIV_SYST)
 	{
