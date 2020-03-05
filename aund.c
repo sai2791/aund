@@ -13,7 +13,7 @@
  *    documentation and/or other materials provided with the distribution.
  * 3. The name of the author may not be used to endorse or promote products
  *    derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -28,7 +28,7 @@
 /*
  * This is part of aund, an implementation of Acorn Universal
  * Networking for Unix.
- */	
+ */
 
 #include <sys/types.h>
 #include <sys/time.h>
@@ -41,6 +41,7 @@
 #include <string.h>
 #include <syslog.h>
 #include <unistd.h>
+#include <spawn.h>
 
 #include "aun.h"
 #include "extern.h"

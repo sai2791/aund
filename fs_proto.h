@@ -13,7 +13,7 @@
  *    documentation and/or other materials provided with the distribution.
  * 3. The name of the author may not be used to endorse or promote products
  *    derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -28,7 +28,7 @@
 /*
  * This is part of aund, an implementation of Acorn Universal
  * Networking for Unix.
- */	
+ */
 
 #ifndef _FS_PROTO_H
 #define _FS_PROTO_H
@@ -64,7 +64,11 @@
 #define EC_FS_PRIV_NONE  0  /* Normal User */
 #define EC_FS_PRIV_FIXED 1  /* Level 4 Dunno */
 #define EC_FS_PRIV_LIMIT 2  /* MDFS Cant change passwd */
-#define EC_FS_PRIV_SYST  3  /* System User */	
+#define EC_FS_PRIV_SYST  3  /* System User */
+
+/* Directory Access rights */
+#define FS_DIR_ACCESS_OWNER	0x00
+#define FS_DIR_ACCESS_PUBLIC	0xff
 
 /*
  * Structures common to several calls.
@@ -497,8 +501,8 @@ struct ec_fs_reply_info_dir {
 	uint8_t ten; /* these two used by Beeb NFS apparently */
 	char dir_name[10];
 	uint8_t dir_access;
-#define FS_DIR_ACCESS_OWNER	0x00
-#define FS_DIR_ACCESS_PUBLIC	0xff
+//#define FS_DIR_ACCESS_OWNER	0x00
+//#define FS_DIR_ACCESS_PUBLIC	0xff
 	uint8_t cycle; /* changes whenever dir changes */
 };
 #define EC_FS_GET_INFO_UID	7
