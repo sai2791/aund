@@ -204,7 +204,6 @@ fs_get_info(struct fs_context *c)
 		strncpy(reply.dir_name, f->fts_name, sizeof(reply.dir_name));
 		strpad(reply.dir_name, ' ', sizeof(reply.dir_name));
 		/* XXX should check ownership. See also cat_header */
-		// This never seems to be called
                 if (c->client->priv == EC_FS_PRIV_SYST)
 		{
 		    reply.dir_access = FS_DIR_ACCESS_OWNER;
@@ -445,9 +444,7 @@ fs_cat_header(struct fs_context *c)
 */
 oururd = userfuncs->urd(c->client->login);
 fs_acornify_name(oururd);
-printf(" user [%s], URD [%s]\n", c->client->login,oururd);
-
-// Ok so checked this and this is not what is setting the public access for non privilege users
+printf("/g users [%s], URD [%s]\n", c->client->login,oururd);
 
  	if (c->client->priv == EC_FS_PRIV_SYST)
 	{

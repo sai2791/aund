@@ -35,9 +35,9 @@
 #include "config.h"
 #endif
 
+#include <sys/types.h>
 #include <sys/file.h>
 #include <sys/time.h>
-#include <sys/types.h>
 
 #include <assert.h>
 #if HAVE_CRYPT_H
@@ -59,288 +59,300 @@ char *pwtmp = NULL;
 static int pwline;
 static FILE *fp, *newfp;
 
-static int pw_open(int write) {
+static int
+pw_open(int write)
+{
 
-  assert(pwfile); /* shouldn't even be called otherwise */
+	assert(pwfile);		       /* shouldn't even be called otherwise */
 
-  fp = fopen(pwfile, "r");
-  if (!fp) {
-    warn("%s: open", pwfile);
-    newfp = NULL;
-    return -1;
-  }
+	fp = fopen(pwfile, "r");
+	if (!fp) {
+		warn("%s: open", pwfile);
+		newfp = NULL;
+		return -1;
+	}
 
-  if (write) {
-    int newfd;
-    if (!pwtmp) {
-      pwtmp = malloc(strlen(pwfile) + 10);
-      sprintf(pwtmp, "%s.tmp", pwfile);
-    }
-    newfd = open(pwtmp, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-    if (newfd < 0) {
-      warn("%s: open", pwtmp);
-      fclose(fp);
-      fp = NULL;
-      return -1;
-    }
-    newfp = fdopen(newfd, "w");
-    if (!newfp) {
-      warn("%s: fdopen", pwtmp);
-      fclose(fp);
-      fp = NULL;
-      return -1;
-    }
-  } else {
-    newfp = NULL;
-  }
+	if (write) {
+		int newfd;
+		if (!pwtmp) {
+			pwtmp = malloc(strlen(pwfile) + 10);
+			sprintf(pwtmp, "%s.tmp", pwfile);
+		}
+		newfd = open(pwtmp, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+		if (newfd < 0) {
+			warn("%s: open", pwtmp);
+			fclose(fp);
+			fp = NULL;
+			return -1;
+		}
+		newfp = fdopen(newfd, "w");
+		if (!newfp) {
+			warn("%s: fdopen", pwtmp);
+			fclose(fp);
+			fp = NULL;
+			return -1;
+		}
+	} else {
+		newfp = NULL;
+	}
 
-  pwline = 0;
-  return 0;
+	pwline = 0;
+	return 0;
 }
 
-static void pw_close(void) {
+static void
+pw_close(void)
+{
 
-  fclose(fp);
-  if (newfp)
-    fclose(newfp);
-  fp = newfp = NULL;
+	fclose(fp);
+	if (newfp)
+		fclose(newfp);
+	fp = newfp = NULL;
 }
 
-static int pw_close_rename(void) {
+static int
+pw_close_rename(void)
+{
 
-  fclose(fp);
-  fp = NULL;
-  if (newfp) {
-    fclose(newfp);
-    newfp = NULL;
-    if (rename(pwtmp, pwfile) < 0) {
-      warn("%s -> %s: rename", pwfile, pwtmp);
-      return -1;
-    }
-  }
-  return 0;
+	fclose(fp);
+	fp = NULL;
+	if (newfp) {
+		fclose(newfp);
+		newfp = NULL;
+		if (rename(pwtmp, pwfile) < 0) {
+			warn("%s -> %s: rename", pwfile, pwtmp);
+			return -1;
+		}
+	}
+	return 0;
 }
 
-static int pw_read_line(char **user, char **pw, char **urd, char **priv,
-                        int *opt4) {
-  static char buffer[16384];
-  char *p, *q, *r, *s;
+static int
+pw_read_line(char **user, char **pw, char **urd, char **priv, int *opt4)
+{
+	static char buffer[16384];
+	char *p, *q, *r, *s;
 
-  errno = 0;
-  if (!fgets(buffer, sizeof(buffer), fp)) {
-    if (errno) /* distinguish clean EOF from error */
-      warn("%s", pwfile);
-    return -1;
-  }
-  pwline++;
+	errno = 0;
+	if (!fgets(buffer, sizeof(buffer), fp)) {
+		if (errno)	       /* distinguish clean EOF from error */
+			warn("%s", pwfile);
+		return -1;
+	}
+	pwline++;
 
-  buffer[strcspn(buffer, "\r\n")] = '\0';
+	buffer[strcspn(buffer, "\r\n")] = '\0';
 
-  if ((p = strchr(buffer, ':')) == NULL || (q = strchr(p + 1, ':')) == NULL ||
-      (s = strchr(q + 1, ':')) == NULL) {
-    warnx("%s:%d: malformatted line\n", pwfile, pwline);
-    return -1;
-  }
+	if ((p = strchr(buffer, ':')) == NULL ||
+			(q = strchr(p+1, ':')) == NULL    ||
+			(s = strchr(q+1, ':')) == NULL) {
+		warnx("%s:%d: malformatted line\n", pwfile, pwline);
+		return -1;
+	}
 
-  *p++ = '\0';
-  *q++ = '\0';
-  *s++ = '\0';
+	*p++ = '\0';
+	*q++ = '\0';
+	*s++ = '\0';
 
-  r = strchr(s, ':');
-  if (r) {
-    *r++ = '\0';
-    *opt4 = atoi(r);
-  } else {
-    *opt4 = default_opt4;
-  }
+	r = strchr(s, ':');
+	if (r) {
+		*r++ = '\0';
+		*opt4 = atoi(r);
+	} else {
+		*opt4 = default_opt4;
+	}
 
-  // Need to check if the buffer has a period "." within it
-  // if so then the user is a group user
-  // we need to split that out, and append it to the URD
-  // so acorn.singlis
-  // user is singlis, group is acorn
-  // urd = $.acorn.singlis
+// Need to check if the buffer has a period "." within it
+// if so then the user is a group user
+// we need to split that out, and append it to the URD
+// so acorn.singlis
+// user is singlis, group is acorn
+// urd = $.acorn.singlis
 
-  *user = buffer;
-  *pw = p;
-  *urd = q;
-  *priv = s;
+	*user = buffer;
+	*pw = p;
+	*urd = q;
+	*priv = s;
 
-  return 0;
+	return 0;
 }
 
-static void pw_write_line(char *user, char *pw, char *urd, char *priv,
-                          int opt4) {
+static void
+pw_write_line(char *user, char *pw, char *urd, char *priv, int opt4)
+{
 
-  fprintf(newfp, "%s:%s:%s:%s:%d\n", user, pw, urd, priv, opt4);
+	fprintf(newfp, "%s:%s:%s:%s:%d\n", user, pw, urd, priv, opt4);
 }
 
-static char *pw_validate(char *user, const char *pw, int *opt4) {
-  char *u, *p, *d, *s;
-  char *ret;
+static char *
+pw_validate(char *user, const char *pw, int *opt4)
+{
+	char *u, *p, *d, *s;
+	char *ret;
 
-  if (pw_open(0) < 0)
-    return NULL;
+	if (pw_open(0) < 0)
+		return NULL;
 
-  while (pw_read_line(&u, &p, &d, &s, opt4) == 0) {
-    if (!strcasecmp(user, u)) {
-      int ok = 0;
+	while (pw_read_line(&u, &p, &d, &s, opt4) == 0) {
+		if (!strcasecmp(user, u)) {
+			int ok = 0;
 
-      if (*p) {
-        char *cp = crypt(pw, p);
-        ok = !strcmp(cp, p);
-      } else {
-        ok = (!pw || !*pw);
-      }
-      if (!ok)
-        ret = NULL;
-      else
-        ret = strdup(d);
-      strcpy(user, u); /* normalise case */
-      pw_close();
-      return ret;
-    }
-  }
+			if (*p) {
+				char *cp = crypt(pw, p);
+				ok = !strcmp(cp, p);
+			} else {
+				ok = (!pw || !*pw);
+			}
+			if (!ok)
+				ret = NULL;
+			else
+				ret = strdup(d);
+			strcpy(user, u);   /* normalise case */
+			pw_close();
+			return ret;
+		}
+	}
 
-  pw_close();
-  return NULL;
+	pw_close();
+	return NULL;
 }
 
-static char *pw_urd(char const *user) {
-  char *u, *p, *d, *s;
-  int o4;
+static char *
+pw_urd(char const *user)
+{
+	char *u, *p, *d, *s;
+	int o4;
 
-  if (pw_open(1) < 0)
-    return NULL;
+	if (pw_open(1) < 0)
+		return NULL;
 
-  while (pw_read_line(&u, &p, &d, &s, &o4) == 0) {
-    if (!strcasecmp(user, u)) {
-      pw_close();
-      return strdup(d);
-    }
-  }
-  pw_close();
-  return NULL;
+	while (pw_read_line(&u, &p, &d, &s, &o4) == 0) {
+		if (!strcasecmp(user, u)) {
+			pw_close();
+			return strdup(d);
+		}
+	}
+	pw_close();
+	return NULL;
 }
 
-static int pw_change(const char *user, const char *oldpw, const char *newpw) {
-  char *u, *p, *d, *s;
-  int opt4;
-  int done = 0;
-  char salt[64];
-  char *cp;
-  struct timeval tv;
+static int
+pw_change(const char *user, const char *oldpw, const char *newpw)
+{
+	char *u, *p, *d, *s;
+	int opt4;
+	int done = 0;
+	char salt[64];
+	char *cp;
+	struct timeval tv;
 
-  if (pw_open(1) < 0)
-    return -1;
+	if (pw_open(1) < 0)
+		return -1;
 
-  while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
-    if (!done && !strcasecmp(user, u)) {
-      int ok = 0;
-      ok = !strcmp(s, "L");
-      if (ok) { // User isnt allowed to change passwd
-        pw_close();
-        return -1;
-      }
-      ok = 0;
-      if (*p) {
-        cp = crypt(oldpw, p);
-        ok = !strcmp(cp, p);
-      } else {
-        ok = (!oldpw || !*oldpw);
-      }
-      if (!ok) {
-        pw_close();
-        return -1;
-      }
-      gettimeofday(&tv, NULL);
-      sprintf(salt, "$6$%08lx%08lx$", tv.tv_sec & 0xFFFFFFFFUL,
-              tv.tv_usec & 0xFFFFFFFFUL);
-      p = crypt(newpw, salt);
-    }
-    pw_write_line(u, p, d, s, opt4);
-  }
+	while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
+		if (!done && !strcasecmp(user, u)) {
+			int ok = 0;
+			ok = !strcmp(s, "L");
+			if (ok) {   // User isnt allowed to change passwd
+							pw_close();
+				return -1;
+			}
+			ok = 0;
+			if (*p) {
+				cp = crypt(oldpw, p);
+				ok = !strcmp(cp, p);
+			} else {
+				ok = (!oldpw || !*oldpw);
+			}
+			if (!ok) {
+				pw_close();
+				return -1;
+			}
+			gettimeofday(&tv, NULL);
+			sprintf(salt, "$6$%08lx%08lx$",
+				tv.tv_sec & 0xFFFFFFFFUL,
+				tv.tv_usec & 0xFFFFFFFFUL);
+			p = crypt(newpw, salt);
+		}
+		pw_write_line(u, p, d, s, opt4);
+	}
 
-  return pw_close_rename();
+	return pw_close_rename();
 }
 
-static int pw_set_opt4(const char *user, int newopt4) {
-  char *u, *p, *d, *s;
-  int opt4;
-  int done = 0;
+static int
+pw_set_opt4(const char *user, int newopt4)
+{
+	char *u, *p, *d, *s;
+	int opt4;
+	int done = 0;
 
-  if (pw_open(1) < 0)
-    return -1;
+	if (pw_open(1) < 0)
+		return -1;
 
-  while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
-    if (!done && !strcasecmp(user, u)) {
-      opt4 = newopt4;
-    }
-    pw_write_line(u, p, d, s, opt4);
-  }
+	while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
+		if (!done && !strcasecmp(user, u)) {
+				opt4 = newopt4;
+		}
+		pw_write_line(u, p, d, s, opt4);
+	}
 
-  return pw_close_rename();
+	return pw_close_rename();
 }
 
-static int pw_get_priv(const char *user) {
-  char *u, *p, *d, *s;
-  int opt4;
-  int priv = EC_FS_PRIV_NONE; /* Assume no Priv */
+static int
+pw_get_priv(const char *user)
+{
+		char *u, *p, *d, *s;
+		int opt4;
+		int priv = EC_FS_PRIV_NONE; /* Assume no Priv */
 
-  if (pw_open(1) < 0)
-    return -1;
+	if (pw_open(1) < 0)
+		return -1;
 
-  while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
-    if (!strcasecmp(user, u)) {
-      pw_close();
-      switch (*s) {
-      case 'S':
-        priv = EC_FS_PRIV_SYST;
-        break;
-      case 'L':
-        priv = EC_FS_PRIV_LIMIT;
-        break;
-      case 'F':
-        priv = EC_FS_PRIV_FIXED;
-        break;
+	while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
+				if (!strcasecmp(user, u)) {
+												pw_close();
+			switch (*s) {
+				 case 'S': priv = EC_FS_PRIV_SYST; break;
+				 case 'L': priv = EC_FS_PRIV_LIMIT; break;
+				 case 'F': priv = EC_FS_PRIV_FIXED; break;
 
-      default:
-        priv = EC_FS_PRIV_NONE;
-      }
-      if (debug)
-        printf("get_priv: Priv level %d\n", priv);
-      return priv;
-    }
-  }
+				 default : priv = EC_FS_PRIV_NONE;
+			}
+				if (debug) printf("get_priv: Priv level %d\n",priv);
+												return priv;
+								}
+				}
 
-  pw_close();
-  return EC_FS_PRIV_NONE;
+				pw_close();
+				return EC_FS_PRIV_NONE;
 }
 
-static int pw_set_priv(struct fs_client *client, const char *user,
-                       const char *newpriv) {
-  char *u, *p, *d, *s;
-  int opt4;
-  int done = 0;
+static int
+pw_set_priv( struct fs_client *client, const char *user, const char *newpriv)
+{
+				char *u, *p, *d, *s;
+				int opt4;
+				int done = 0;
 
-  if (client->priv == EC_FS_PRIV_SYST) {
-    if (pw_open(1) < 0)
-      return -1;
+	if (client->priv == EC_FS_PRIV_SYST) {
+					 if (pw_open(1) < 0)
+						 return -1;
 
-    while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
-      if (!done && !strcasecmp(user, u)) {
-        strcpy(s, newpriv);
-      }
-      pw_write_line(u, p, d, s, opt4);
-    }
+					 while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
+										if (!done && !strcasecmp(user, u)) {
+												strcpy(s, newpriv);
+										}
+										pw_write_line(u, p, d, s, opt4);
+					 }
 
-    return pw_close_rename();
-  }
-  return -1; // No privilege
+					 return pw_close_rename();
+				}
+				return -1;  // No privilege
 }
 
 struct user_funcs const user_pw = {
-    pw_validate, pw_urd,     pw_change, pw_set_opt4,
-    pw_set_priv, pw_get_priv
+	pw_validate, pw_urd, pw_change, pw_set_opt4, pw_set_priv, pw_get_priv
 
 };
