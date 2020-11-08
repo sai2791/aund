@@ -88,6 +88,7 @@ fs_get_info(struct fs_context *c)
 	struct ec_fs_req_get_info *request;
 	FTS *ftsp;
 	FTSENT *f;
+	int match; /* string compare for path and urd */
 
 	if (c->client == NULL) {
 		fs_err(c, EC_FS_E_WHOAREYOU);
@@ -204,12 +205,24 @@ fs_get_info(struct fs_context *c)
 		strncpy(reply.dir_name, f->fts_name, sizeof(reply.dir_name));
 		strpad(reply.dir_name, ' ', sizeof(reply.dir_name));
 		/* XXX should check ownership. See also cat_header */
+		printf("user urd %s\n",userfuncs->urd(c->client->login));
+		printf("upath %s\n",upath);
+		/* if the path matches our urd then assume that we are the owner
+                   and if not, then check if the user has priv, because they own 
+		   everything.  */
+		match = strncmp(userfuncs->urd(c->client->login),upath,strlen(userfuncs->urd(c->client->login)));
+		if (match == 0) {
+			reply.dir_access = FS_DIR_ACCESS_OWNER;
+		} else {
+			reply.dir_access = FS_DIR_ACCESS_PUBLIC;
+		} 
+
                 if (c->client->priv == EC_FS_PRIV_SYST)
 		{
 		    reply.dir_access = FS_DIR_ACCESS_OWNER;
-		} else {
-		    reply.dir_access = FS_DIR_ACCESS_PUBLIC;
-                }
+		} 
+		    /* Even better would be to check the user and group ID, and see if
+                       the directory is owned by the user */
 		reply.cycle = 0; /* XXX should fake */
 		fs_reply(c, &(reply.std_tx), sizeof(reply));
 	}
@@ -411,7 +424,8 @@ fs_cat_header(struct fs_context *c)
 	FTSENT *f;
 
 	request = (struct ec_fs_req_cat_header *)c->req;
-	request->path[strcspn(request->path, "\r")] = '\0';
+	request->path[strcspn(request->path, "\r")] = '\0'; 
+	if (debug) printf("URD %s, upath %s\n", oururd, upath);
 	if (debug) printf("catalogue header [%s]\n", request->path);
 	upath = fs_unixify_path(c, request->path); /* This must be freed */
 	if (upath == NULL) return;
