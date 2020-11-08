@@ -1,15 +1,20 @@
-<<<<<<< HEAD
-aund 1.04.1 *
-  * Found that user's home directory can be off the root directory if we
-    use a / instead of a (.) - need to correct this properly.
-    
-=======
+aund 1.06 * 
+ * Change to user permissions on directories
+   If the users current path, matches the user root directory at
+   the start at least, we assume that this is owned by the user
+   otherwise you have public average
+ * If you have privilege then you will always be the directory owner
+-- Steve Inglis <sai2791@googlemail.com> Sun, 08 Nov 2020 20:34:00 +0000    
+
 aund 1.05*
  * Change the password file to include group name
  * See appnote75.txt for details
-- Steve inglis <sai2791@googlemail.com> Tue, 15 Mar 2018 16:18:00 +0000
+-- Steve inglis <sai2791@googlemail.com> Tue, 15 Mar 2018 16:18:00 +0000
 
->>>>>>> password_change
+aund 1.04.1 *
+  * Found that user's home directory can be off the root directory if we
+    use a / instead of a (.) - need to correct this properly.
+
 aund 1.04 *
   * Checked into a git repository
 
@@ -23,7 +28,7 @@ aund 1.03
   * Add *PRIV command  (Supports the commands to LVL 4)
     None, Fixed, Passwd and Syst
 
--- Steve Inglis <Sai2791@mac.com>  Wed, 15 Dec 2010 13:09:00 +0100
+-- Steve Inglis <sai2791@googlemail.com>  Wed, 15 Dec 2010 13:09:00 +0100
 
 aund 1.02
 
