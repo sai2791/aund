@@ -6,6 +6,7 @@ fileserver.  It supports:
 * Connectivity by AUN (over UDP) or BeebEm emulated Econet
 * Read/write operation
 * Multiple virtual users (all under one Unix UID)
+* Individual users (all under one Unix UID) with passwords and Privilege flags
 
 For general installation instructions, see the INSTALL file.  aund is
 not particularly portable, and expects a BSDish or GNUish C library.

@@ -44,22 +44,22 @@
 
 
 am__make_dryrun = \
-	{ \
-		am__dry=no; \
-		case $$MAKEFLAGS in \
-			*\\[\ \	]*) \
-				echo 'am--echo: ; @echo "AM"  OK' | $(MAKE) -f - 2>/dev/null \
-					| grep '^AM OK$$' >/dev/null || am__dry=yes;; \
-			*) \
-				for am__flg in $$MAKEFLAGS; do \
-					case $$am__flg in \
-						*=*|--*) ;; \
-						*n*) am__dry=yes; break;; \
-					esac; \
-				done;; \
-		esac; \
-		test $$am__dry = yes; \
-	}
+  { \
+    am__dry=no; \
+    case $$MAKEFLAGS in \
+      *\\[\ \	]*) \
+        echo 'am--echo: ; @echo "AM"  OK' | $(MAKE) -f - 2>/dev/null \
+          | grep '^AM OK$$' >/dev/null || am__dry=yes;; \
+      *) \
+        for am__flg in $$MAKEFLAGS; do \
+          case $$am__flg in \
+            *=*|--*) ;; \
+            *n*) am__dry=yes; break;; \
+          esac; \
+        done;; \
+    esac; \
+    test $$am__dry = yes; \
+  }
 pkgdatadir = $(datadir)/aund
 pkgincludedir = $(includedir)/aund
 pkglibdir = $(libdir)/aund
@@ -122,37 +122,37 @@ YLWRAP = $(top_srcdir)/ylwrap
 SOURCES = $(libconf_lex_a_SOURCES) $(aund_SOURCES)
 DIST_SOURCES = $(libconf_lex_a_SOURCES) $(aund_SOURCES)
 am__can_run_installinfo = \
-	case $$AM_UPDATE_INFO_DIR in \
-		n|no|NO) false;; \
-		*) (install-info --version) >/dev/null 2>&1;; \
-	esac
+  case $$AM_UPDATE_INFO_DIR in \
+    n|no|NO) false;; \
+    *) (install-info --version) >/dev/null 2>&1;; \
+  esac
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
-		$(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-		*) f=$$p;; \
-	esac;
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
 am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
 am__install_max = 40
 am__nobase_strip_setup = \
-	srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
+  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
 am__nobase_strip = \
-	for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
+  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
 am__nobase_list = $(am__nobase_strip_setup); \
-	for p in $$list; do echo "$$p $$p"; done | \
-	sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
-	$(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
-		if (++n[$$2] == $(am__install_max)) \
-			{ print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
-		END { for (dir in files) print dir, files[dir] }'
+  for p in $$list; do echo "$$p $$p"; done | \
+  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
+  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
+    if (++n[$$2] == $(am__install_max)) \
+      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
+    END { for (dir in files) print dir, files[dir] }'
 am__base_list = \
-	sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
-	sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
+  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
+  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
 am__uninstall_files_from_dir = { \
-	test -z "$$files" \
-		|| { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
-		|| { echo " ( cd '$$dir' && rm -f" $$files ")"; \
-				 $(am__cd) "$$dir" && rm -f $$files; }; \
-	}
+  test -z "$$files" \
+    || { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
+    || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
+         $(am__cd) "$$dir" && rm -f $$files; }; \
+  }
 man5dir = $(mandir)/man5
 man8dir = $(mandir)/man8
 NROFF = nroff
@@ -163,36 +163,36 @@ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
 am__remove_distdir = \
-	if test -d "$(distdir)"; then \
-		find "$(distdir)" -type d ! -perm -200 -exec chmod u+w {} ';' \
-			&& rm -rf "$(distdir)" \
-			|| { sleep 5 && rm -rf "$(distdir)"; }; \
-	else :; fi
+  if test -d "$(distdir)"; then \
+    find "$(distdir)" -type d ! -perm -200 -exec chmod u+w {} ';' \
+      && rm -rf "$(distdir)" \
+      || { sleep 5 && rm -rf "$(distdir)"; }; \
+  else :; fi
 DIST_ARCHIVES = $(distdir).tar.gz
 GZIP_ENV = --best
 distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
-	| sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
+  | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /Users/asnf37/aund-1.03/missing --run aclocal-1.11
+ACLOCAL = ${SHELL} /Users/steveinglis/documents/aund/missing --run aclocal-1.11
 AMTAR = $${TAR-tar}
-AUTOCONF = ${SHELL} /Users/asnf37/aund-1.03/missing --run autoconf
-AUTOHEADER = ${SHELL} /Users/asnf37/aund-1.03/missing --run autoheader
-AUTOMAKE = ${SHELL} /Users/asnf37/aund-1.03/missing --run automake-1.11
+AUTOCONF = ${SHELL} /Users/steveinglis/documents/aund/missing --run autoconf
+AUTOHEADER = ${SHELL} /Users/steveinglis/documents/aund/missing --run autoheader
+AUTOMAKE = ${SHELL} /Users/steveinglis/documents/aund/missing --run automake-1.11
 AWK = awk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -Wno-string-plus-int
+CFLAGS = -g -O2
 CPP = gcc -E
-CPPFLAGS =
+CPPFLAGS = 
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
 ECHO_C = \c
-ECHO_N =
-ECHO_T =
+ECHO_N = 
+ECHO_T = 
 EGREP = /usr/bin/grep -E
-EXEEXT =
+EXEEXT = 
 GCCFEWERWARNINGS = $(GCCWARNINGS) -Wno-old-style-definition -Wno-redundant-decls -Wno-unused
 GCCWARNINGS = -Wall -Wdeclaration-after-statement -Wold-style-definition -Wmissing-prototypes -Wredundant-decls -Wno-pointer-sign -Wno-uninitialized
 GREP = /usr/bin/grep
@@ -201,52 +201,52 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS =
+LDFLAGS = 
 LEX = flex
-LEXLIB = -lfl
+LEXLIB = -ll
 LEX_OUTPUT_ROOT = lex.yy
-LIBOBJS =
-LIBS =
-LTLIBOBJS =
-MAKEINFO = ${SHELL} /Users/asnf37/aund-1.03/missing --run makeinfo
+LIBOBJS = 
+LIBS = 
+LTLIBOBJS = 
+MAKEINFO = ${SHELL} /Users/steveinglis/documents/aund/missing --run makeinfo
 MKDIR_P = ./install-sh -c -d
 OBJEXT = o
 PACKAGE = aund
 PACKAGE_BUGREPORT = bjh21@bjh21.me.uk
 PACKAGE_NAME = aund
-PACKAGE_STRING = aund 1.04
+PACKAGE_STRING = aund 1.05
 PACKAGE_TARNAME = aund
-PACKAGE_URL =
-PACKAGE_VERSION = 1.04
+PACKAGE_URL = 
+PACKAGE_VERSION = 1.05
 PATH_SEPARATOR = :
 RANLIB = ranlib
-SET_MAKE =
+SET_MAKE = 
 SHELL = /bin/sh
-STRIP =
-VERSION = 1.04
-abs_builddir = /Users/asnf37/aund-1.03
-abs_srcdir = /Users/asnf37/aund-1.03
-abs_top_builddir = /Users/asnf37/aund-1.03
-abs_top_srcdir = /Users/asnf37/aund-1.03
+STRIP = 
+VERSION = 1.05
+abs_builddir = /Users/steveinglis/documents/aund
+abs_srcdir = /Users/steveinglis/documents/aund
+abs_top_builddir = /Users/steveinglis/documents/aund
+abs_top_srcdir = /Users/steveinglis/documents/aund
 ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
-am__quote =
+am__quote = 
 am__tar = $${TAR-tar} chof - "$$tardir"
 am__untar = $${TAR-tar} xf -
 bindir = ${exec_prefix}/bin
-build_alias =
+build_alias = 
 builddir = .
 datadir = ${datarootdir}
 datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-host_alias =
+host_alias = 
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /Users/asnf37/aund-1.03/install-sh
+install_sh = ${SHELL} /Users/steveinglis/documents/aund/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -262,8 +262,8 @@ sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 srcdir = .
 sysconfdir = ${prefix}/etc
-target_alias =
-top_build_prefix =
+target_alias = 
+top_build_prefix = 
 top_builddir = .
 top_srcdir = .
 man_MANS = aund.conf.5 aund.passwd.5 aund.8
@@ -298,26 +298,26 @@ am--refresh: Makefile
 	@:
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
-		case '$(am__configure_deps)' in \
-			*$$dep*) \
-				echo ' cd $(srcdir) && $(AUTOMAKE) --foreign'; \
-				$(am__cd) $(srcdir) && $(AUTOMAKE) --foreign \
+	  case '$(am__configure_deps)' in \
+	    *$$dep*) \
+	      echo ' cd $(srcdir) && $(AUTOMAKE) --foreign'; \
+	      $(am__cd) $(srcdir) && $(AUTOMAKE) --foreign \
 		&& exit 0; \
-				exit 1;; \
-		esac; \
+	      exit 1;; \
+	  esac; \
 	done; \
 	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-		$(AUTOMAKE) --foreign Makefile
+	  $(AUTOMAKE) --foreign Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
-		*config.status*) \
-			echo ' $(SHELL) ./config.status'; \
-			$(SHELL) ./config.status;; \
-		*) \
-			echo ' cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe)'; \
-			cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe);; \
+	  *config.status*) \
+	    echo ' $(SHELL) ./config.status'; \
+	    $(SHELL) ./config.status;; \
+	  *) \
+	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe)'; \
+	    cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe);; \
 	esac;
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
@@ -336,7 +336,7 @@ config.h: stamp-h1
 stamp-h1: $(srcdir)/config.h.in $(top_builddir)/config.status
 	@rm -f stamp-h1
 	cd $(top_builddir) && $(SHELL) ./config.status config.h
-$(srcdir)/config.h.in:  $(am__configure_deps)
+$(srcdir)/config.h.in:  $(am__configure_deps) 
 	($(am__cd) $(top_srcdir) && $(AUTOHEADER))
 	rm -f stamp-h1
 	touch $@
@@ -346,7 +346,7 @@ distclean-hdr:
 
 clean-noinstLIBRARIES:
 	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
-libconf_lex.a: $(libconf_lex_a_OBJECTS) $(libconf_lex_a_DEPENDENCIES) $(EXTRA_libconf_lex_a_DEPENDENCIES)
+libconf_lex.a: $(libconf_lex_a_OBJECTS) $(libconf_lex_a_DEPENDENCIES) $(EXTRA_libconf_lex_a_DEPENDENCIES) 
 	-rm -f libconf_lex.a
 	$(libconf_lex_a_AR) libconf_lex.a $(libconf_lex_a_OBJECTS) $(libconf_lex_a_LIBADD)
 	$(RANLIB) libconf_lex.a
@@ -354,43 +354,43 @@ install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
 	@list='$(bin_PROGRAMS)'; test -n "$(bindir)" || list=; \
 	if test -n "$$list"; then \
-		echo " $(MKDIR_P) '$(DESTDIR)$(bindir)'"; \
-		$(MKDIR_P) "$(DESTDIR)$(bindir)" || exit 1; \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(bindir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(bindir)" || exit 1; \
 	fi; \
 	for p in $$list; do echo "$$p $$p"; done | \
 	sed 's/$(EXEEXT)$$//' | \
 	while read p p1; do if test -f $$p; \
-		then echo "$$p"; echo "$$p"; else :; fi; \
+	  then echo "$$p"; echo "$$p"; else :; fi; \
 	done | \
 	sed -e 'p;s,.*/,,;n;h' -e 's|.*|.|' \
-			-e 'p;x;s,.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/' | \
+	    -e 'p;x;s,.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/' | \
 	sed 'N;N;N;s,\n, ,g' | \
 	$(AWK) 'BEGIN { files["."] = ""; dirs["."] = 1 } \
-		{ d=$$3; if (dirs[d] != 1) { print "d", d; dirs[d] = 1 } \
-			if ($$2 == $$4) files[d] = files[d] " " $$1; \
-			else { print "f", $$3 "/" $$4, $$1; } } \
-		END { for (d in files) print "f", d, files[d] }' | \
+	  { d=$$3; if (dirs[d] != 1) { print "d", d; dirs[d] = 1 } \
+	    if ($$2 == $$4) files[d] = files[d] " " $$1; \
+	    else { print "f", $$3 "/" $$4, $$1; } } \
+	  END { for (d in files) print "f", d, files[d] }' | \
 	while read type dir files; do \
-			if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
-			test -z "$$files" || { \
-				echo " $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(bindir)$$dir'"; \
-				$(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(bindir)$$dir" || exit $$?; \
-			} \
+	    if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
+	    test -z "$$files" || { \
+	      echo " $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files '$(DESTDIR)$(bindir)$$dir'"; \
+	      $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) $$files "$(DESTDIR)$(bindir)$$dir" || exit $$?; \
+	    } \
 	; done
 
 uninstall-binPROGRAMS:
 	@$(NORMAL_UNINSTALL)
 	@list='$(bin_PROGRAMS)'; test -n "$(bindir)" || list=; \
 	files=`for p in $$list; do echo "$$p"; done | \
-		sed -e 'h;s,^.*/,,;s/$(EXEEXT)$$//;$(transform)' \
-				-e 's/$$/$(EXEEXT)/' `; \
+	  sed -e 'h;s,^.*/,,;s/$(EXEEXT)$$//;$(transform)' \
+	      -e 's/$$/$(EXEEXT)/' `; \
 	test -n "$$list" || exit 0; \
 	echo " ( cd '$(DESTDIR)$(bindir)' && rm -f" $$files ")"; \
 	cd "$(DESTDIR)$(bindir)" && rm -f $$files
 
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
-aund$(EXEEXT): $(aund_OBJECTS) $(aund_DEPENDENCIES) $(EXTRA_aund_DEPENDENCIES)
+aund$(EXEEXT): $(aund_OBJECTS) $(aund_DEPENDENCIES) $(EXTRA_aund_DEPENDENCIES) 
 	@rm -f aund$(EXEEXT)
 	$(LINK) $(aund_OBJECTS) $(aund_LDADD) $(LIBS)
 
@@ -452,33 +452,33 @@ install-man5: $(man_MANS)
 	@list1=''; \
 	list2='$(man_MANS)'; \
 	test -n "$(man5dir)" \
-		&& test -n "`echo $$list1$$list2`" \
-		|| exit 0; \
+	  && test -n "`echo $$list1$$list2`" \
+	  || exit 0; \
 	echo " $(MKDIR_P) '$(DESTDIR)$(man5dir)'"; \
 	$(MKDIR_P) "$(DESTDIR)$(man5dir)" || exit 1; \
 	{ for i in $$list1; do echo "$$i"; done;  \
 	if test -n "$$list2"; then \
-		for i in $$list2; do echo "$$i"; done \
-			| sed -n '/\.5[a-z]*$$/p'; \
+	  for i in $$list2; do echo "$$i"; done \
+	    | sed -n '/\.5[a-z]*$$/p'; \
 	fi; \
 	} | while read p; do \
-		if test -f $$p; then d=; else d="$(srcdir)/"; fi; \
-		echo "$$d$$p"; echo "$$p"; \
+	  if test -f $$p; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; echo "$$p"; \
 	done | \
 	sed -e 'n;s,.*/,,;p;h;s,.*\.,,;s,^[^5][0-9a-z]*$$,5,;x' \
-				-e 's,\.[0-9a-z]*$$,,;$(transform);G;s,\n,.,' | \
+	      -e 's,\.[0-9a-z]*$$,,;$(transform);G;s,\n,.,' | \
 	sed 'N;N;s,\n, ,g' | { \
 	list=; while read file base inst; do \
-		if test "$$base" = "$$inst"; then list="$$list $$file"; else \
-			echo " $(INSTALL_DATA) '$$file' '$(DESTDIR)$(man5dir)/$$inst'"; \
-			$(INSTALL_DATA) "$$file" "$(DESTDIR)$(man5dir)/$$inst" || exit $$?; \
-		fi; \
+	  if test "$$base" = "$$inst"; then list="$$list $$file"; else \
+	    echo " $(INSTALL_DATA) '$$file' '$(DESTDIR)$(man5dir)/$$inst'"; \
+	    $(INSTALL_DATA) "$$file" "$(DESTDIR)$(man5dir)/$$inst" || exit $$?; \
+	  fi; \
 	done; \
 	for i in $$list; do echo "$$i"; done | $(am__base_list) | \
 	while read files; do \
-		test -z "$$files" || { \
-			echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(man5dir)'"; \
-			$(INSTALL_DATA) $$files "$(DESTDIR)$(man5dir)" || exit $$?; }; \
+	  test -z "$$files" || { \
+	    echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(man5dir)'"; \
+	    $(INSTALL_DATA) $$files "$(DESTDIR)$(man5dir)" || exit $$?; }; \
 	done; }
 
 uninstall-man5:
@@ -486,42 +486,42 @@ uninstall-man5:
 	@list=''; test -n "$(man5dir)" || exit 0; \
 	files=`{ for i in $$list; do echo "$$i"; done; \
 	l2='$(man_MANS)'; for i in $$l2; do echo "$$i"; done | \
-		sed -n '/\.5[a-z]*$$/p'; \
+	  sed -n '/\.5[a-z]*$$/p'; \
 	} | sed -e 's,.*/,,;h;s,.*\.,,;s,^[^5][0-9a-z]*$$,5,;x' \
-				-e 's,\.[0-9a-z]*$$,,;$(transform);G;s,\n,.,'`; \
+	      -e 's,\.[0-9a-z]*$$,,;$(transform);G;s,\n,.,'`; \
 	dir='$(DESTDIR)$(man5dir)'; $(am__uninstall_files_from_dir)
 install-man8: $(man_MANS)
 	@$(NORMAL_INSTALL)
 	@list1=''; \
 	list2='$(man_MANS)'; \
 	test -n "$(man8dir)" \
-		&& test -n "`echo $$list1$$list2`" \
-		|| exit 0; \
+	  && test -n "`echo $$list1$$list2`" \
+	  || exit 0; \
 	echo " $(MKDIR_P) '$(DESTDIR)$(man8dir)'"; \
 	$(MKDIR_P) "$(DESTDIR)$(man8dir)" || exit 1; \
 	{ for i in $$list1; do echo "$$i"; done;  \
 	if test -n "$$list2"; then \
-		for i in $$list2; do echo "$$i"; done \
-			| sed -n '/\.8[a-z]*$$/p'; \
+	  for i in $$list2; do echo "$$i"; done \
+	    | sed -n '/\.8[a-z]*$$/p'; \
 	fi; \
 	} | while read p; do \
-		if test -f $$p; then d=; else d="$(srcdir)/"; fi; \
-		echo "$$d$$p"; echo "$$p"; \
+	  if test -f $$p; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; echo "$$p"; \
 	done | \
 	sed -e 'n;s,.*/,,;p;h;s,.*\.,,;s,^[^8][0-9a-z]*$$,8,;x' \
-				-e 's,\.[0-9a-z]*$$,,;$(transform);G;s,\n,.,' | \
+	      -e 's,\.[0-9a-z]*$$,,;$(transform);G;s,\n,.,' | \
 	sed 'N;N;s,\n, ,g' | { \
 	list=; while read file base inst; do \
-		if test "$$base" = "$$inst"; then list="$$list $$file"; else \
-			echo " $(INSTALL_DATA) '$$file' '$(DESTDIR)$(man8dir)/$$inst'"; \
-			$(INSTALL_DATA) "$$file" "$(DESTDIR)$(man8dir)/$$inst" || exit $$?; \
-		fi; \
+	  if test "$$base" = "$$inst"; then list="$$list $$file"; else \
+	    echo " $(INSTALL_DATA) '$$file' '$(DESTDIR)$(man8dir)/$$inst'"; \
+	    $(INSTALL_DATA) "$$file" "$(DESTDIR)$(man8dir)/$$inst" || exit $$?; \
+	  fi; \
 	done; \
 	for i in $$list; do echo "$$i"; done | $(am__base_list) | \
 	while read files; do \
-		test -z "$$files" || { \
-			echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(man8dir)'"; \
-			$(INSTALL_DATA) $$files "$(DESTDIR)$(man8dir)" || exit $$?; }; \
+	  test -z "$$files" || { \
+	    echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(man8dir)'"; \
+	    $(INSTALL_DATA) $$files "$(DESTDIR)$(man8dir)" || exit $$?; }; \
 	done; }
 
 uninstall-man8:
@@ -529,18 +529,18 @@ uninstall-man8:
 	@list=''; test -n "$(man8dir)" || exit 0; \
 	files=`{ for i in $$list; do echo "$$i"; done; \
 	l2='$(man_MANS)'; for i in $$l2; do echo "$$i"; done | \
-		sed -n '/\.8[a-z]*$$/p'; \
+	  sed -n '/\.8[a-z]*$$/p'; \
 	} | sed -e 's,.*/,,;h;s,.*\.,,;s,^[^8][0-9a-z]*$$,8,;x' \
-				-e 's,\.[0-9a-z]*$$,,;$(transform);G;s,\n,.,'`; \
+	      -e 's,\.[0-9a-z]*$$,,;$(transform);G;s,\n,.,'`; \
 	dir='$(DESTDIR)$(man8dir)'; $(am__uninstall_files_from_dir)
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
-			if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
-		done | \
-		$(AWK) '{ files[$$0] = 1; nonempty = 1; } \
-				END { if (nonempty) { for (i in files) print i; }; }'`; \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '{ files[$$0] = 1; nonempty = 1; } \
+	      END { if (nonempty) { for (i in files) print i; }; }'`; \
 	mkid -fID $$unique
 tags: TAGS
 
@@ -550,93 +550,93 @@ TAGS:  $(HEADERS) $(SOURCES) config.h.in $(TAGS_DEPENDENCIES) \
 	here=`pwd`; \
 	list='$(SOURCES) $(HEADERS) config.h.in $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
-			if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
-		done | \
-		$(AWK) '{ files[$$0] = 1; nonempty = 1; } \
-				END { if (nonempty) { for (i in files) print i; }; }'`; \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '{ files[$$0] = 1; nonempty = 1; } \
+	      END { if (nonempty) { for (i in files) print i; }; }'`; \
 	shift; \
 	if test -z "$(ETAGS_ARGS)$$*$$unique"; then :; else \
-		test -n "$$unique" || unique=$$empty_fix; \
-		if test $$# -gt 0; then \
-			$(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
-				"$$@" $$unique; \
-		else \
-			$(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
-				$$unique; \
-		fi; \
+	  test -n "$$unique" || unique=$$empty_fix; \
+	  if test $$# -gt 0; then \
+	    $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
+	      "$$@" $$unique; \
+	  else \
+	    $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
+	      $$unique; \
+	  fi; \
 	fi
 ctags: CTAGS
 CTAGS:  $(HEADERS) $(SOURCES) config.h.in $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	list='$(SOURCES) $(HEADERS) config.h.in $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
-			if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
-		done | \
-		$(AWK) '{ files[$$0] = 1; nonempty = 1; } \
-				END { if (nonempty) { for (i in files) print i; }; }'`; \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '{ files[$$0] = 1; nonempty = 1; } \
+	      END { if (nonempty) { for (i in files) print i; }; }'`; \
 	test -z "$(CTAGS_ARGS)$$unique" \
-		|| $(CTAGS) $(CTAGSFLAGS) $(AM_CTAGSFLAGS) $(CTAGS_ARGS) \
-			 $$unique
+	  || $(CTAGS) $(CTAGSFLAGS) $(AM_CTAGSFLAGS) $(CTAGS_ARGS) \
+	     $$unique
 
 GTAGS:
 	here=`$(am__cd) $(top_builddir) && pwd` \
-		&& $(am__cd) $(top_srcdir) \
-		&& gtags -i $(GTAGS_ARGS) "$$here"
+	  && $(am__cd) $(top_srcdir) \
+	  && gtags -i $(GTAGS_ARGS) "$$here"
 
 distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
 	@list='$(MANS)'; if test -n "$$list"; then \
-		list=`for p in $$list; do \
-			if test -f $$p; then d=; else d="$(srcdir)/"; fi; \
-			if test -f "$$d$$p"; then echo "$$d$$p"; else :; fi; done`; \
-		if test -n "$$list" && \
-			grep 'ab help2man is required to generate this page' $$list >/dev/null; then \
-			echo "error: found man pages containing the \`missing help2man' replacement text:" >&2; \
-			grep -l 'ab help2man is required to generate this page' $$list | sed 's/^/         /' >&2; \
-			echo "       to fix them, install help2man, remove and regenerate the man pages;" >&2; \
-			echo "       typically \`make maintainer-clean' will remove them" >&2; \
-			exit 1; \
-		else :; fi; \
+	  list=`for p in $$list; do \
+	    if test -f $$p; then d=; else d="$(srcdir)/"; fi; \
+	    if test -f "$$d$$p"; then echo "$$d$$p"; else :; fi; done`; \
+	  if test -n "$$list" && \
+	    grep 'ab help2man is required to generate this page' $$list >/dev/null; then \
+	    echo "error: found man pages containing the \`missing help2man' replacement text:" >&2; \
+	    grep -l 'ab help2man is required to generate this page' $$list | sed 's/^/         /' >&2; \
+	    echo "       to fix them, install help2man, remove and regenerate the man pages;" >&2; \
+	    echo "       typically \`make maintainer-clean' will remove them" >&2; \
+	    exit 1; \
+	  else :; fi; \
 	else :; fi
 	$(am__remove_distdir)
 	test -d "$(distdir)" || mkdir "$(distdir)"
 	@srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
 	list='$(DISTFILES)'; \
-		dist_files=`for file in $$list; do echo $$file; done | \
-		sed -e "s|^$$srcdirstrip/||;t" \
-				-e "s|^$$topsrcdirstrip/|$(top_builddir)/|;t"`; \
+	  dist_files=`for file in $$list; do echo $$file; done | \
+	  sed -e "s|^$$srcdirstrip/||;t" \
+	      -e "s|^$$topsrcdirstrip/|$(top_builddir)/|;t"`; \
 	case $$dist_files in \
-		*/*) $(MKDIR_P) `echo "$$dist_files" | \
-				 sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,' | \
-				 sort -u` ;; \
+	  */*) $(MKDIR_P) `echo "$$dist_files" | \
+			   sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,' | \
+			   sort -u` ;; \
 	esac; \
 	for file in $$dist_files; do \
-		if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
-		if test -d $$d/$$file; then \
-			dir=`echo "/$$file" | sed -e 's,/[^/]*$$,,'`; \
-			if test -d "$(distdir)/$$file"; then \
-				find "$(distdir)/$$file" -type d ! -perm -700 -exec chmod u+rwx {} \;; \
-			fi; \
-			if test -d $(srcdir)/$$file && test $$d != $(srcdir); then \
-				cp -fpR $(srcdir)/$$file "$(distdir)$$dir" || exit 1; \
-				find "$(distdir)/$$file" -type d ! -perm -700 -exec chmod u+rwx {} \;; \
-			fi; \
-			cp -fpR $$d/$$file "$(distdir)$$dir" || exit 1; \
-		else \
-			test -f "$(distdir)/$$file" \
-			|| cp -p $$d/$$file "$(distdir)/$$file" \
-			|| exit 1; \
-		fi; \
+	  if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
+	  if test -d $$d/$$file; then \
+	    dir=`echo "/$$file" | sed -e 's,/[^/]*$$,,'`; \
+	    if test -d "$(distdir)/$$file"; then \
+	      find "$(distdir)/$$file" -type d ! -perm -700 -exec chmod u+rwx {} \;; \
+	    fi; \
+	    if test -d $(srcdir)/$$file && test $$d != $(srcdir); then \
+	      cp -fpR $(srcdir)/$$file "$(distdir)$$dir" || exit 1; \
+	      find "$(distdir)/$$file" -type d ! -perm -700 -exec chmod u+rwx {} \;; \
+	    fi; \
+	    cp -fpR $$d/$$file "$(distdir)$$dir" || exit 1; \
+	  else \
+	    test -f "$(distdir)/$$file" \
+	    || cp -p $$d/$$file "$(distdir)/$$file" \
+	    || exit 1; \
+	  fi; \
 	done
 	-test -n "$(am__skip_mode_fix)" \
 	|| find "$(distdir)" -type d ! -perm -755 \
 		-exec chmod u+rwx,go+rx {} \; -o \
-		! -type d ! -perm -444 -links 1 -exec chmod a+r {} \; -o \
-		! -type d ! -perm -400 -exec chmod a+r {} \; -o \
-		! -type d ! -perm -444 -exec $(install_sh) -c -m a+r {} {} \; \
+	  ! -type d ! -perm -444 -links 1 -exec chmod a+r {} \; -o \
+	  ! -type d ! -perm -400 -exec chmod a+r {} \; -o \
+	  ! -type d ! -perm -444 -exec $(install_sh) -c -m a+r {} {} \; \
 	|| chmod -R a+r "$(distdir)"
 dist-gzip: distdir
 	tardir=$(distdir) && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c >$(distdir).tar.gz
@@ -681,21 +681,21 @@ dist dist-all: distdir
 distcheck: dist
 	case '$(DIST_ARCHIVES)' in \
 	*.tar.gz*) \
-		GZIP=$(GZIP_ENV) gzip -dc $(distdir).tar.gz | $(am__untar) ;;\
+	  GZIP=$(GZIP_ENV) gzip -dc $(distdir).tar.gz | $(am__untar) ;;\
 	*.tar.bz2*) \
-		bzip2 -dc $(distdir).tar.bz2 | $(am__untar) ;;\
+	  bzip2 -dc $(distdir).tar.bz2 | $(am__untar) ;;\
 	*.tar.lzma*) \
-		lzma -dc $(distdir).tar.lzma | $(am__untar) ;;\
+	  lzma -dc $(distdir).tar.lzma | $(am__untar) ;;\
 	*.tar.lz*) \
-		lzip -dc $(distdir).tar.lz | $(am__untar) ;;\
+	  lzip -dc $(distdir).tar.lz | $(am__untar) ;;\
 	*.tar.xz*) \
-		xz -dc $(distdir).tar.xz | $(am__untar) ;;\
+	  xz -dc $(distdir).tar.xz | $(am__untar) ;;\
 	*.tar.Z*) \
-		uncompress -c $(distdir).tar.Z | $(am__untar) ;;\
+	  uncompress -c $(distdir).tar.Z | $(am__untar) ;;\
 	*.shar.gz*) \
-		GZIP=$(GZIP_ENV) gzip -dc $(distdir).shar.gz | unshar ;;\
+	  GZIP=$(GZIP_ENV) gzip -dc $(distdir).shar.gz | unshar ;;\
 	*.zip*) \
-		unzip $(distdir).zip ;;\
+	  unzip $(distdir).zip ;;\
 	esac
 	chmod -R a-w $(distdir); chmod u+w $(distdir)
 	mkdir $(distdir)/_build
@@ -703,70 +703,70 @@ distcheck: dist
 	chmod a-w $(distdir)
 	test -d $(distdir)/_build || exit 0; \
 	dc_install_base=`$(am__cd) $(distdir)/_inst && pwd | sed -e 's,^[^:\\/]:[\\/],/,'` \
-		&& dc_destdir="$${TMPDIR-/tmp}/am-dc-$$$$/" \
-		&& am__cwd=`pwd` \
-		&& $(am__cd) $(distdir)/_build \
-		&& ../configure --srcdir=.. --prefix="$$dc_install_base" \
-			$(AM_DISTCHECK_CONFIGURE_FLAGS) \
-			$(DISTCHECK_CONFIGURE_FLAGS) \
-		&& $(MAKE) $(AM_MAKEFLAGS) \
-		&& $(MAKE) $(AM_MAKEFLAGS) dvi \
-		&& $(MAKE) $(AM_MAKEFLAGS) check \
-		&& $(MAKE) $(AM_MAKEFLAGS) install \
-		&& $(MAKE) $(AM_MAKEFLAGS) installcheck \
-		&& $(MAKE) $(AM_MAKEFLAGS) uninstall \
-		&& $(MAKE) $(AM_MAKEFLAGS) distuninstallcheck_dir="$$dc_install_base" \
-					distuninstallcheck \
-		&& chmod -R a-w "$$dc_install_base" \
-		&& ({ \
-				 (cd ../.. && umask 077 && mkdir "$$dc_destdir") \
-				 && $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" install \
-				 && $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" uninstall \
-				 && $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" \
-							distuninstallcheck_dir="$$dc_destdir" distuninstallcheck; \
-				} || { rm -rf "$$dc_destdir"; exit 1; }) \
-		&& rm -rf "$$dc_destdir" \
-		&& $(MAKE) $(AM_MAKEFLAGS) dist \
-		&& rm -rf $(DIST_ARCHIVES) \
-		&& $(MAKE) $(AM_MAKEFLAGS) distcleancheck \
-		&& cd "$$am__cwd" \
-		|| exit 1
+	  && dc_destdir="$${TMPDIR-/tmp}/am-dc-$$$$/" \
+	  && am__cwd=`pwd` \
+	  && $(am__cd) $(distdir)/_build \
+	  && ../configure --srcdir=.. --prefix="$$dc_install_base" \
+	    $(AM_DISTCHECK_CONFIGURE_FLAGS) \
+	    $(DISTCHECK_CONFIGURE_FLAGS) \
+	  && $(MAKE) $(AM_MAKEFLAGS) \
+	  && $(MAKE) $(AM_MAKEFLAGS) dvi \
+	  && $(MAKE) $(AM_MAKEFLAGS) check \
+	  && $(MAKE) $(AM_MAKEFLAGS) install \
+	  && $(MAKE) $(AM_MAKEFLAGS) installcheck \
+	  && $(MAKE) $(AM_MAKEFLAGS) uninstall \
+	  && $(MAKE) $(AM_MAKEFLAGS) distuninstallcheck_dir="$$dc_install_base" \
+	        distuninstallcheck \
+	  && chmod -R a-w "$$dc_install_base" \
+	  && ({ \
+	       (cd ../.. && umask 077 && mkdir "$$dc_destdir") \
+	       && $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" install \
+	       && $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" uninstall \
+	       && $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" \
+	            distuninstallcheck_dir="$$dc_destdir" distuninstallcheck; \
+	      } || { rm -rf "$$dc_destdir"; exit 1; }) \
+	  && rm -rf "$$dc_destdir" \
+	  && $(MAKE) $(AM_MAKEFLAGS) dist \
+	  && rm -rf $(DIST_ARCHIVES) \
+	  && $(MAKE) $(AM_MAKEFLAGS) distcleancheck \
+	  && cd "$$am__cwd" \
+	  || exit 1
 	$(am__remove_distdir)
 	@(echo "$(distdir) archives ready for distribution: "; \
-		list='$(DIST_ARCHIVES)'; for i in $$list; do echo $$i; done) | \
-		sed -e 1h -e 1s/./=/g -e 1p -e 1x -e '$$p' -e '$$x'
+	  list='$(DIST_ARCHIVES)'; for i in $$list; do echo $$i; done) | \
+	  sed -e 1h -e 1s/./=/g -e 1p -e 1x -e '$$p' -e '$$x'
 distuninstallcheck:
 	@test -n '$(distuninstallcheck_dir)' || { \
-		echo 'ERROR: trying to run $@ with an empty' \
-				 '$$(distuninstallcheck_dir)' >&2; \
-		exit 1; \
+	  echo 'ERROR: trying to run $@ with an empty' \
+	       '$$(distuninstallcheck_dir)' >&2; \
+	  exit 1; \
 	}; \
 	$(am__cd) '$(distuninstallcheck_dir)' || { \
-		echo 'ERROR: cannot chdir into $(distuninstallcheck_dir)' >&2; \
-		exit 1; \
+	  echo 'ERROR: cannot chdir into $(distuninstallcheck_dir)' >&2; \
+	  exit 1; \
 	}; \
 	test `$(am__distuninstallcheck_listfiles) | wc -l` -eq 0 \
-		 || { echo "ERROR: files left after uninstall:" ; \
-					if test -n "$(DESTDIR)"; then \
-						echo "  (check DESTDIR support)"; \
-					fi ; \
-					$(distuninstallcheck_listfiles) ; \
-					exit 1; } >&2
+	   || { echo "ERROR: files left after uninstall:" ; \
+	        if test -n "$(DESTDIR)"; then \
+	          echo "  (check DESTDIR support)"; \
+	        fi ; \
+	        $(distuninstallcheck_listfiles) ; \
+	        exit 1; } >&2
 distcleancheck: distclean
 	@if test '$(srcdir)' = . ; then \
-		echo "ERROR: distcleancheck can only run from a VPATH build" ; \
-		exit 1 ; \
+	  echo "ERROR: distcleancheck can only run from a VPATH build" ; \
+	  exit 1 ; \
 	fi
 	@test `$(distcleancheck_listfiles) | wc -l` -eq 0 \
-		|| { echo "ERROR: files left in build directory after distclean:" ; \
-				 $(distcleancheck_listfiles) ; \
-				 exit 1; } >&2
+	  || { echo "ERROR: files left in build directory after distclean:" ; \
+	       $(distcleancheck_listfiles) ; \
+	       exit 1; } >&2
 check-am: all-am
 check: check-am
 all-am: Makefile $(LIBRARIES) $(PROGRAMS) $(MANS) config.h
 installdirs:
 	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man5dir)" "$(DESTDIR)$(man8dir)"; do \
-		test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
 install-exec: install-exec-am
@@ -779,13 +779,13 @@ install-am: all-am
 installcheck: installcheck-am
 install-strip:
 	if test -z '$(STRIP)'; then \
-		$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
-			install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
-				install; \
+	  $(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
+	    install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
+	      install; \
 	else \
-		$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
-			install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
-			"INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'" install; \
+	  $(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
+	    install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
+	    "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'" install; \
 	fi
 mostlyclean-generic:
 
