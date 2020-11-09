@@ -185,7 +185,7 @@ struct user_funcs {
 	int (*change)(char const *, char const *, char const *);
 	int (*set_opt4)(char const *, int);
 	int (*set_priv)(struct fs_client *, char const *, char const *);
-  int (*get_priv)(char const *);
+  	int (*get_priv)(char const *);
 };
 
 extern struct user_funcs const *userfuncs;

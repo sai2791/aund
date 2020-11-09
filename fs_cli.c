@@ -866,5 +866,42 @@ syntax:
 static void
 fs_cmd_access(struct fs_context *c, char *tail)
 {
+	char *name, *access;
+	int  match;
+	struct ec_fs_reply reply;
+
+	name = fs_cli_getarg(&tail);
+	access = fs_cli_getarg(&tail);
+	if (c->client == NULL) {
+		fs_err(c, EC_FS_E_WHOAREYOU);
+		return;
+	}
+	/* We need to check if we have either owner or public 
+	   access. If we have owner we will try to make the change
+	   but might still not be allowed.  If we have public owner
+           -ship then we should just say no. */	
+
+	/* This is just tempoary while to make it seem like
+	   the command succeded.  Once we have the actual result
+	   we will fix this us  */
+
+
+	if (debug) printf(" -> access [%s]\n", name);
+	if ((upath = fs_unixify_path(c, name )) == NULL) return;
+        match = strncmp(userfuncs->urd(c->client->login),name,strlen(userfuncs->urd(c->client->login)));
+            if (match == 0) {
+                    reply.command_code = EC_FS_CC_DONE;
+            } else {
+		    if (c->client->priv == EC_FS_PRIV_SYST)
+		    { 
+			reply.command_code = EC_FS_CC_DONE;
+		    } else {
+		           fs_err(c, EC_FS_E_NOACCESS);
+		           return;
+		    }
+            }
+   
+        reply.return_code = EC_FS_RC_OK;
+        fs_reply(c, &reply, sizeof(reply));
 	return;
 }
