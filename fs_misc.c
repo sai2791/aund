@@ -204,9 +204,7 @@ fs_get_info(struct fs_context *c)
 		if (f->fts_name[0] == '\0') strcpy(f->fts_name, "$");
 		strncpy(reply.dir_name, f->fts_name, sizeof(reply.dir_name));
 		strpad(reply.dir_name, ' ', sizeof(reply.dir_name));
-		/* XXX should check ownership. See also cat_header */
-		printf("user urd %s\n",userfuncs->urd(c->client->login));
-		printf("upath %s\n",upath);
+		/* We now check ownership. See also fs_cat_header */
 		/* if the path matches our urd then assume that we are the owner
                    and if not, then check if the user has priv, because they own 
 		   everything.  */
@@ -421,6 +419,7 @@ fs_cat_header(struct fs_context *c)
 	struct ec_fs_reply_cat_header reply;
 	char *upath, *path_argv[2];
 	char *oururd;
+	int match;	
 	FTS *ftsp;
 	FTSENT *f;
 
@@ -452,7 +451,7 @@ fs_cat_header(struct fs_context *c)
 	strncpy(reply.dir_name, f->fts_name, sizeof(reply.dir_name));
 	strpad(reply.dir_name, ' ', sizeof(reply.dir_name));
 
-	/* XXX should check ownership. See also EC_FS_GET_INFO_DIR */
+	/* We now check ownership. See also EC_FS_GET_INFO_DIR */
 	/*
   	   Need to implement this check here, if we are in or below the users URD then assume
 	   that they are the owner (kludge for now).
@@ -461,12 +460,17 @@ fs_cat_header(struct fs_context *c)
 	fs_acornify_name(oururd);
 	printf("/g users [%s], URD [%s]\n", c->client->login,oururd);
 
+	match = strncmp(userfuncs->urd(c->client->login),upath,strlen(userfuncs->urd(c->client->login)));
+	if (match == 0) {
+	        reply.ownership[0] = 'O';
+	} else {
+	        reply.ownership[0] = 'P';
+	}
+
  	if (c->client->priv == EC_FS_PRIV_SYST)
 	{
 	    reply.ownership[0] = 'O';
-	} else {
-            reply.ownership[0] = 'P';
-        }
+	} 
 
 	memset(reply.space, ' ', sizeof(reply.space));
 	memset(reply.spaces, ' ', sizeof(reply.spaces));
