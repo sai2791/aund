@@ -73,6 +73,7 @@ static fs_cmd_impl fs_cmd_sdisc;
 static fs_cmd_impl fs_cmd_pass;
 static fs_cmd_impl fs_cmd_priv;
 static fs_cmd_impl fs_cmd_rename;
+static fs_cmd_impl fs_cmd_access;
 
 static int fs_cli_match(char *cmdline, char **tail, const struct fs_cmd *cmd);
 static void fs_cli_unrec(struct fs_context *, char *);
@@ -94,6 +95,7 @@ static const struct fs_cmd cmd_tab[] = {
 	{"RENAME",      1, fs_cmd_rename,	},
 	{"SAVE",	1, fs_cmd_save,		},
 	{"SDISC",      	3, fs_cmd_sdisc,	},
+	{"ACCESS",	2, fs_cmd_access,	},
 };
 
 #define NCMDS (sizeof(cmd_tab) / sizeof(cmd_tab[0]))
@@ -859,4 +861,10 @@ fs_cmd_fsopt(struct fs_context *c, char *tail)
 	return;
 syntax:
 	fs_error(c, 0xff,"Syntax: FSOPT <OPTION> <VALUE>");
+}
+
+static void
+fs_cmd_access(struct fs_context *c, char *tail)
+{
+	return;
 }
