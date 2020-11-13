@@ -749,6 +749,10 @@ fs_cmd_save(struct fs_context *c, char *tail)
 	uint32_t start, end, exec;
 
 	path = fs_cli_getarg(&tail);
+	/* We need to check permissions here
+	   so we need a call to a procedure that 
+	   checks the user permissions in this path
+	*/
 	if (!*path) goto syntax;
 	reply = malloc(sizeof(*reply) + strlen(path) + 1);
 	p = fs_cli_getarg(&tail);
@@ -779,6 +783,10 @@ fs_cmd_save(struct fs_context *c, char *tail)
 syntax:
 	free(reply);
 	fs_error(c, 0xff, "Syntax");
+
+noaccess: 
+	free(reply);
+	fs_error(c, 0xdb, "Insufficient Access");
 }
 
 static void
@@ -867,6 +875,7 @@ static void
 fs_cmd_access(struct fs_context *c, char *tail)
 {
 	char *name, *access;
+	char *upath;
 	int  match;
 	struct ec_fs_reply reply;
 

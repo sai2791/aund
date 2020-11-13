@@ -425,7 +425,6 @@ fs_cat_header(struct fs_context *c)
 
 	request = (struct ec_fs_req_cat_header *)c->req;
 	request->path[strcspn(request->path, "\r")] = '\0'; 
-	if (debug) printf("URD %s, upath %s\n", oururd, upath);
 	if (debug) printf("catalogue header [%s]\n", request->path);
 	upath = fs_unixify_path(c, request->path); /* This must be freed */
 	if (upath == NULL) return;
@@ -840,3 +839,4 @@ fs_get_user_free(struct fs_context *c)
 	reply.std_tx.return_code = EC_FS_RC_OK;
 	fs_reply(c, &(reply.std_tx), sizeof(reply));
 }
+
