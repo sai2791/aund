@@ -839,4 +839,3 @@ fs_get_user_free(struct fs_context *c)
 	reply.std_tx.return_code = EC_FS_RC_OK;
 	fs_reply(c, &(reply.std_tx), sizeof(reply));
 }
-

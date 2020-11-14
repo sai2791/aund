@@ -4,7 +4,7 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-ACLOCAL	Makefile	/^ACLOCAL = ${SHELL} \/Users\/steveinglis\/documents\/aund\/missing --run aclocal-1.11$/;"	m
+ACLOCAL	Makefile	/^ACLOCAL = aclocal-1.16$/;"	m
 ACLOCAL_M4	Makefile	/^ACLOCAL_M4 = $(top_srcdir)\/aclocal.m4$/;"	m
 AMTAR	Makefile	/^AMTAR = $${TAR-tar}$/;"	m
 AM_CFLAGS	Makefile	/^AM_CFLAGS = $(GCCWARNINGS)$/;"	m
@@ -23,9 +23,9 @@ AUN_TYPE_IMMEDIATE	aun.h	/^#define AUN_TYPE_IMMEDIATE	/;"	d
 AUN_TYPE_IMM_REPLY	aun.h	/^#define AUN_TYPE_IMM_REPLY	/;"	d
 AUN_TYPE_REJ	aun.h	/^#define AUN_TYPE_REJ	/;"	d
 AUN_TYPE_UNICAST	aun.h	/^#define AUN_TYPE_UNICAST	/;"	d
-AUTOCONF	Makefile	/^AUTOCONF = ${SHELL} \/Users\/steveinglis\/documents\/aund\/missing --run autoconf$/;"	m
-AUTOHEADER	Makefile	/^AUTOHEADER = ${SHELL} \/Users\/steveinglis\/documents\/aund\/missing --run autoheader$/;"	m
-AUTOMAKE	Makefile	/^AUTOMAKE = ${SHELL} \/Users\/steveinglis\/documents\/aund\/missing --run automake-1.11$/;"	m
+AUTOCONF	Makefile	/^AUTOCONF = autoconf$/;"	m
+AUTOHEADER	Makefile	/^AUTOHEADER = autoheader$/;"	m
+AUTOMAKE	Makefile	/^AUTOMAKE = automake-1.16$/;"	m
 AWK	Makefile	/^AWK = awk$/;"	m
 BEGIN	conf_lex.c	/^#define BEGIN /;"	d	file:
 BOOLEAN	conf_lex.c	/^#define BOOLEAN /;"	d	file:
@@ -247,7 +247,7 @@ LIBRARIES	Makefile	/^LIBRARIES = $(noinst_LIBRARIES)$/;"	m
 LIBS	Makefile	/^LIBS = $/;"	m
 LINK	Makefile	/^LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@$/;"	m
 LTLIBOBJS	Makefile	/^LTLIBOBJS = $/;"	m
-MAKEINFO	Makefile	/^MAKEINFO = ${SHELL} \/Users\/steveinglis\/documents\/aund\/missing --run makeinfo$/;"	m
+MAKEINFO	Makefile	/^MAKEINFO = makeinfo$/;"	m
 MANS	Makefile	/^MANS = $(man_MANS)$/;"	m
 MAX_HANDLES	fs_handle.c	/^#define MAX_HANDLES /;"	d	file:
 MKDIR_P	Makefile	/^MKDIR_P = \/usr\/local\/bin\/gmkdir -p$/;"	m
@@ -266,13 +266,13 @@ PACKAGE_BUGREPORT	Makefile	/^PACKAGE_BUGREPORT = bjh21@bjh21.me.uk$/;"	m
 PACKAGE_BUGREPORT	config.h	/^#define PACKAGE_BUGREPORT /;"	d
 PACKAGE_NAME	Makefile	/^PACKAGE_NAME = aund$/;"	m
 PACKAGE_NAME	config.h	/^#define PACKAGE_NAME /;"	d
-PACKAGE_STRING	Makefile	/^PACKAGE_STRING = aund 1.05$/;"	m
+PACKAGE_STRING	Makefile	/^PACKAGE_STRING = aund 1.06$/;"	m
 PACKAGE_STRING	config.h	/^#define PACKAGE_STRING /;"	d
 PACKAGE_TARNAME	Makefile	/^PACKAGE_TARNAME = aund$/;"	m
 PACKAGE_TARNAME	config.h	/^#define PACKAGE_TARNAME /;"	d
 PACKAGE_URL	Makefile	/^PACKAGE_URL = $/;"	m
 PACKAGE_URL	config.h	/^#define PACKAGE_URL /;"	d
-PACKAGE_VERSION	Makefile	/^PACKAGE_VERSION = 1.05$/;"	m
+PACKAGE_VERSION	Makefile	/^PACKAGE_VERSION = 1.06$/;"	m
 PACKAGE_VERSION	config.h	/^#define PACKAGE_VERSION /;"	d
 PATH_SEPARATOR	Makefile	/^PATH_SEPARATOR = :$/;"	m
 PKTOFF	beebem.c	/^#define PKTOFF /;"	d	file:
@@ -304,7 +304,7 @@ TYPEMAP_TYPE	conf_lex.c	/^#define TYPEMAP_TYPE /;"	d	file:
 UINT16_MAX	conf_lex.c	/^#define UINT16_MAX /;"	d	file:
 UINT32_MAX	conf_lex.c	/^#define UINT32_MAX /;"	d	file:
 UINT8_MAX	conf_lex.c	/^#define UINT8_MAX /;"	d	file:
-VERSION	Makefile	/^VERSION = 1.05$/;"	m
+VERSION	Makefile	/^VERSION = 1.06$/;"	m
 VERSION	config.h	/^#define VERSION /;"	d
 YLWRAP	Makefile	/^YLWRAP = $(top_srcdir)\/ylwrap$/;"	m
 YYSTATE	conf_lex.c	/^#define YYSTATE /;"	d	file:
@@ -811,6 +811,7 @@ fs_open_handle	fs_handle.c	/^fs_open_handle(struct fs_client *client, char *path
 fs_putbyte	fs_fileio.c	/^fs_putbyte(struct fs_context *c)$/;"	f
 fs_putbytes	fs_fileio.c	/^fs_putbytes(struct fs_context *c)$/;"	f
 fs_randomio_common	fs_fileio.c	/^fs_randomio_common(struct fs_context *c, int h)$/;"	f	file:
+fs_read_access	fs_util.c	/^fs_read_access(struct fs_context *c,char *path)$/;"	f
 fs_read_val	fs_util.c	/^fs_read_val(uint8_t *p, size_t len)$/;"	f
 fs_reply	fileserver.c	/^fs_reply(struct fs_context *c, struct ec_fs_reply *reply, size_t len)$/;"	f
 fs_riscos_date	fs_util.c	/^fs_riscos_date(time_t time, unsigned csec)$/;"	f
@@ -825,7 +826,7 @@ fs_typemap	fs_filetype.c	/^struct fs_typemap {$/;"	s	file:
 fs_unhat_path	fs_nametrans.c	/^fs_unhat_path(char *path)$/;"	f	file:
 fs_unixify_path	fs_nametrans.c	/^fs_unixify_path(struct fs_context *c, char *path)$/;"	f
 fs_unrec	fileserver.c	/^fs_unrec(struct fs_context *c)$/;"	f
-fs_wr_access	fs_misc.c	/^fs_wr_access(struct fs_context *c, char *path)$/;"	f
+fs_write_access	fs_util.c	/^fs_write_access(struct fs_context *c,char *path)$/;"	f
 fs_write_date	fs_util.c	/^fs_write_date(struct ec_fs_date *date, time_t time)$/;"	f
 fs_write_val	fs_util.c	/^fs_write_val(uint8_t *p, uint64_t value, size_t len)$/;"	f
 fsnum	fs_proto.h	/^	uint8_t fsnum[2];$/;"	m	struct:ec_fs_reply_info_uid
@@ -903,7 +904,7 @@ meta	fs_proto.h	/^	struct ec_fs_meta meta;$/;"	m	struct:ec_fs_req_set_info_all	t
 minlen	fs_cli.c	/^	int	minlen;$/;"	m	struct:fs_cmd	file:
 mins	fs_proto.h	/^	uint8_t mins;$/;"	m	struct:ec_fs_reply_get_time
 mins	fs_proto.h	/^	uint8_t mins;$/;"	m	struct:ec_fs_req_set_time
-mkdir_p	Makefile	/^mkdir_p = \/usr\/local\/bin\/gmkdir -p$/;"	m
+mkdir_p	Makefile	/^mkdir_p = $(MKDIR_P)$/;"	m
 mkinstalldirs	Makefile	/^mkinstalldirs = $(install_sh) -d$/;"	m
 mode	conf_lex.c	/^		mode_t mode;$/;"	m	struct:cfything::__anon3	file:
 mode	fs_filetype.c	/^		} mode;$/;"	m	union:fs_typemap::__anon1	typeref:struct:fs_typemap::__anon1::__anon2	file:

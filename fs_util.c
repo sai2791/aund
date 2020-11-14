@@ -386,3 +386,95 @@ fs_leafname(const char *path)
 	else
 		return path;
 }
+
+bool
+fs_write_access(struct fs_context *c,char *path)
+{
+	char *oururd;
+	int match;
+	bool is_owner;  /* 0 - Owner, 1 - Public */
+
+	/* Check if owner or public 
+	   then check if we have the correct access
+	   so two blocks */
+
+	   oururd = userfuncs->urd(c->client->login);
+           fs_acornify_name(oururd);
+	/* Remove the printf once this is working */
+           printf("/g users [%s], URD [%s]\n", c->client->login,oururd);
+   
+           match = strncmp(userfuncs->urd(c->client->login),path,
+		strlen(userfuncs->urd(c->client->login)));
+           if (match == 0) {
+		   is_owner = true;
+           } else {
+		   is_owner = false;
+           }
+
+	/* now we check if they have privilege as that gives
+	   ownership access - Can still have no permission to write */
+   
+           if (c->client->priv == EC_FS_PRIV_SYST)
+           {
+		  is_owner = true;  /* Privilege gives owner access */
+            }
+
+	/* We check for write access */
+	/* TODO: based on owner permission see if we have write access */
+	if (is_owner == true) {
+		  /* We have owner access so check if we have owner write permission */
+		  
+		  return true;
+		} else {
+		  /* We have Public access so check if we have public write permission */
+
+		  return true;
+		}
+
+}
+
+bool
+fs_read_access(struct fs_context *c,char *path)
+{
+	char *oururd;
+	int match;
+	bool is_owner;  /* 0 - Owner, 1 - Public */
+
+	/* Check if owner or public 
+	   then check if we have the correct access
+	   so two blocks */
+
+	   oururd = userfuncs->urd(c->client->login);
+           fs_acornify_name(oururd);
+	/* Remove the printf once this is working */
+           printf("/g users [%s], URD [%s]\n", c->client->login,oururd);
+   
+           match = strncmp(userfuncs->urd(c->client->login),path,
+		strlen(userfuncs->urd(c->client->login)));
+           if (match == 0) {
+		   is_owner = true;
+           } else {
+		   is_owner = false;
+           }
+
+	/* now we check if they have privilege as that gives
+	   ownership access - Can still have no permission to read */
+   
+           if (c->client->priv == EC_FS_PRIV_SYST)
+           {
+		  is_owner = true;  /* Privilege gives owner access */
+            }
+
+	/* We check for read access */
+
+	/* TODO: based on owner permission see if we have read access */
+	if (is_owner == true) {
+		  /* We have owner access so check if we have owner read permission */
+		  
+		  return true;
+		} else {
+		  /* We have Public access so check if we have public read permission */
+
+		  return true;
+		}
+}
