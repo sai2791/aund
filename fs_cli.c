@@ -786,7 +786,7 @@ syntax:
 
 noaccess: 
 	free(reply);
-	fs_error(c, 0xdb, "Insufficient Access");
+	fs_error(c, EC_FS_E_NOACCESS, "Insufficient Access");
 }
 
 static void

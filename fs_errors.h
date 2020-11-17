@@ -72,7 +72,7 @@
 
 #define EC_FS_E_NOTFOUND	0xd6
 #define EC_FS_E_CHANNEL		0xde
-#define EC_FS_E_EOF		0xdf
+#define EC_FS_E_EOF	    	0xdf
 
 #define EC_FS_E_BADSTR		0xfd
 #define EC_FS_E_BADCMD		0xfe
