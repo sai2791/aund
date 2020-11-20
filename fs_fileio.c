@@ -622,6 +622,7 @@ fs_save(struct fs_context *c)
 	size_t size, got;
 	FTS *ftsp;
 	FTSENT *f;
+    bool can_write;
 
 	if (c->client == NULL) {
 		fs_err(c, EC_FS_E_WHOAREYOU);
@@ -635,11 +636,21 @@ fs_save(struct fs_context *c)
 	size = fs_read_val(request->size, sizeof(request->size));
 	upath = fs_unixify_path(c, request->path);
 	if (upath == NULL) return;
+
+    /* Check that we have owner permission in the directory we 
+       are about to save in */
+
+    can_write = fs_write_access(c , upath);
+    if (can_write == false) {
+        goto not_allowed_write;
+    }
+
 	if ((fd = open(upath, O_CREAT|O_TRUNC|O_RDWR, 0666)) == -1) {
 		fs_errno(c);
 		free(upath);
 		return;
 	}
+
 	meta = request->meta;
 	reply1.std_tx.command_code = EC_FS_CC_DONE;
 	reply1.std_tx.return_code = EC_FS_RC_OK;
@@ -672,6 +683,12 @@ fs_save(struct fs_context *c)
 		fs_reply(c, &(reply2.std_tx), sizeof(reply2));
 	}
 	free(upath);
+    return;
+
+not_allowed_write:
+    free(upath);
+    fs_err(c, EC_FS_E_NOACCESS);    
+    return;
 }
 
 void

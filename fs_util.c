@@ -428,7 +428,7 @@ fs_write_access(struct fs_context *c,char *path)
 		} else {
 		  /* We have Public access so check if we have public write permission */
 
-		  return true;
+		  return false;
 		}
 
 }
@@ -470,11 +470,9 @@ fs_read_access(struct fs_context *c,char *path)
 	/* TODO: based on owner permission see if we have read access */
 	if (is_owner == true) {
 		  /* We have owner access so check if we have owner read permission */
-		  
 		  return true;
 		} else {
-		  /* We have Public access so check if we have public read permission */
-
-		  return true;
+		  /* We only have public access, so no writing */
+          return false;
 		}
 }
