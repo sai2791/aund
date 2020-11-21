@@ -648,7 +648,20 @@ struct ec_fs_reply_get_user_free {
 	struct ec_fs_reply std_tx;
 	uint8_t free_bytes[4];
 };
+
+/* Set the user free space - code 31 */
 #define EC_FS_FUNC_SET_USER_FREE 31
+struct ec_fs_req_set_user_free {
+    struct ec_fs_reply std_rx;
+    char username[0];
+    unsigned long long set_bytes;
+};
+
+struct ec_fs_reply_set_user_free {
+    struct ec_fs_reply std_tx;
+    uint8_t free_bytes[4];
+};
+
 #define EC_FS_FUNC_WHO_AM_I	32
 #define EC_FS_FUNC_USERS_EXT	33
 #define EC_FS_FUNC_USER_INFO_EXT 34

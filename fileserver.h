@@ -133,6 +133,8 @@ extern fs_func_impl fs_cdirn;
 extern fs_func_impl fs_create;
 extern fs_func_impl fs_get_user_free;
 
+extern void fs_set_user_free(struct fs_context *,char *);
+
 extern void fs_unrec(struct fs_context *);
 extern char *fs_cli_getarg(char **);
 extern void fs_long_info(struct fs_context *, char *, FTSENT *);

@@ -41,6 +41,7 @@
 #include <string.h>
 #include <syslog.h>
 #include <unistd.h>
+#include <spawn.h>
 
 #include "aun.h"
 #include "extern.h"
@@ -101,6 +102,7 @@ main(int argc, char *argv[])
 	char const *conffile = "/etc/aund.conf";
 	char const *pidfile = "/var/run/aund.pid";
 	int c;
+    pid_t child_pid;
 	int override_debug = -1;
 	int override_syslog = -1;
 
@@ -161,7 +163,8 @@ main(int argc, char *argv[])
 		err(1, "%s: chdir", root);
 
 	if (!(debug || foreground))
-		if (daemon(1, 0) != 0)
+		//if (daemon(1, 0) != 0)
+        if (posix_spawn(&child_pid ,root, NULL, NULL, NULL, NULL) !=0)
 			err(1, "daemon");
 	if (using_syslog) {
 		openlog(progname, LOG_PID | (debug ? LOG_PERROR : 0),

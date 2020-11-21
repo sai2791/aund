@@ -155,7 +155,7 @@ fs_cli_unrec(struct fs_context *c, char *cmd)
 {
 	struct ec_fs_reply *reply;
 
-	if (debug) printf(" -> <unrecognised>\n");
+	if (debug) printf("[%s] -> <unrecognised>\n",cmd);
 	reply = malloc(sizeof(*reply) + strlen(cmd) + 1);
 	reply->command_code = EC_FS_CC_UNREC;
 	reply->return_code = EC_FS_RC_OK;

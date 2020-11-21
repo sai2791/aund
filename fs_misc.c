@@ -839,3 +839,31 @@ fs_get_user_free(struct fs_context *c)
 	reply.std_tx.return_code = EC_FS_RC_OK;
 	fs_reply(c, &(reply.std_tx), sizeof(reply));
 }
+
+void
+fs_set_user_free(struct fs_context *c, char *tail)
+{
+	struct ec_fs_reply_get_user_free reply;
+	struct ec_fs_req_get_user_free *request;
+	struct statvfs f;
+	unsigned long long bavail;
+
+	request = (struct ec_fs_req_set_user_free *)(c->req);
+	request->username[strcspn(request->username, "\r")] = '\0';
+	if (debug) printf("get user free [%s]", request->username);
+	/*
+	 * XXX In an ideal world, we might look at quotas here, but in
+	 * an ideal world there'd be a standardised way of doing that.
+	 */
+	if (statvfs(".", &f) != 0) {
+		fs_errno(c);
+		return;
+	}
+	/* XXX Handle overflow? */
+	bavail = f.f_bavail * f.f_frsize;
+	if (bavail > 0xffffffff) bavail = 0xffffffff;
+	fs_write_val(reply.free_bytes, bavail, sizeof(reply.free_bytes));
+	reply.std_tx.command_code = EC_FS_CC_DONE;
+	reply.std_tx.return_code = EC_FS_RC_OK;
+	fs_reply(c, &(reply.std_tx), sizeof(reply));
+}
