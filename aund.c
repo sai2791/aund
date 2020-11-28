@@ -163,9 +163,8 @@ main(int argc, char *argv[])
 		err(1, "%s: chdir", root);
 
 	if (!(debug || foreground))
-		//if (daemon(1, 0) != 0)
         if (posix_spawn(&child_pid ,root, NULL, NULL, NULL, NULL) !=0)
-			err(1, "daemon");
+			err(1, "posix_spawn");
 	if (using_syslog) {
 		openlog(progname, LOG_PID | (debug ? LOG_PERROR : 0),
 			LOG_DAEMON);
