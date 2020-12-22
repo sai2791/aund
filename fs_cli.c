@@ -567,6 +567,7 @@ fs_long_info(struct fs_context *c, char *string, FTSENT *f)
 	char accstring[8], accstr2[8];
 	mode_t currumask;
 	char *acornname;
+    const char *p = "janfebmaraprmayjunjulaugsepoctnovdec"; 
 	int entries;
 
 	acornname = strdup(f->fts_name);
@@ -642,12 +643,10 @@ fs_long_info(struct fs_context *c, char *string, FTSENT *f)
 			    "000 (000)\r\x80",
 			    acornname, entries, accstr2, accstring,
 			    btm.tm_mday,
-			    "janfebmaraprmayjunjulaugsepoctnovdec" +
-			        3*btm.tm_mon,
+			    &p [ 3*btm.tm_mon],
 			    btm.tm_year % 100,
 			    mtm.tm_mday,
-			    "janfebmaraprmayjunjulaugsepoctnovdec" +
-			        3*mtm.tm_mon,
+			    &p [ 3*mtm.tm_mon],
 			    mtm.tm_year % 100,
 			    mtm.tm_hour,
 			    mtm.tm_min);
@@ -663,12 +662,10 @@ fs_long_info(struct fs_context *c, char *string, FTSENT *f)
 			    acornname, load, exec,
 			    (uintmax_t)f->fts_statp->st_size, accstring,
 			    btm.tm_mday,
-			    "janfebmaraprmayjunjulaugsepoctnovdec" +
-			        3*btm.tm_mon,
+			    &p [ 3*btm.tm_mon],
 			    btm.tm_year % 100,
 			    mtm.tm_mday,
-			    "janfebmaraprmayjunjulaugsepoctnovdec" +
-			        3*mtm.tm_mon,
+			    &p [ 3*mtm.tm_mon],
 			    mtm.tm_year % 100,
 			    mtm.tm_hour,
 			    mtm.tm_min);
