@@ -843,8 +843,8 @@ fs_get_user_free(struct fs_context *c)
 void
 fs_set_user_free(struct fs_context *c, char *tail)
 {
-	struct ec_fs_reply_get_user_free reply;
-	struct ec_fs_req_get_user_free *request;
+	struct ec_fs_reply_set_user_free reply;
+	struct ec_fs_req_set_user_free *request;
 	struct statvfs f;
 	unsigned long long bavail;
 
