@@ -685,10 +685,10 @@ fs_save(struct fs_context *c)
 	free(upath);
     return;
 
-not_allowed_write:
-    free(upath);
-    fs_err(c, EC_FS_E_NOACCESS);    
-    return;
+    not_allowed_write:
+        free(upath);
+        fs_err(c, EC_FS_E_NOACCESS);    
+        return;
 }
 
 void
