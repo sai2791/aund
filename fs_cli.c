@@ -888,7 +888,7 @@ fs_cmd_access(struct fs_context *c, char *tail)
 	   we will fix this us  */
 
 
-	if (debug) printf(" -> access [%s]\n", name);
+	if (debug) printf(" -> access [%s], permissons [%s]\n", name, access);
 	if ((upath = fs_unixify_path(c, name )) == NULL) return;
         match = strncmp(userfuncs->urd(c->client->login),name,strlen(userfuncs->urd(c->client->login)));
             if (match == 0) {
@@ -899,11 +899,13 @@ fs_cmd_access(struct fs_context *c, char *tail)
 			reply.command_code = EC_FS_CC_DONE;
 		    } else {
 		           fs_err(c, EC_FS_E_NOACCESS);
+                   free(upath);
 		           return;
 		    }
             }
    
         reply.return_code = EC_FS_RC_OK;
         fs_reply(c, &reply, sizeof(reply));
+        free(upath);
 	return;
 }
