@@ -122,11 +122,13 @@ EC_FS_E_NOMEM	fs_errors.h	/^#define EC_FS_E_NOMEM	/;"	d
 EC_FS_E_NOPRIV	fs_errors.h	/^#define EC_FS_E_NOPRIV	/;"	d
 EC_FS_E_NOTDIR	fs_errors.h	/^#define EC_FS_E_NOTDIR	/;"	d
 EC_FS_E_NOTFOUND	fs_errors.h	/^#define EC_FS_E_NOTFOUND	/;"	d
+EC_FS_E_OBJNOTFILE	fs_errors.h	/^#define EC_FS_E_OBJNOTFILE /;"	d
 EC_FS_E_OPEN	fs_errors.h	/^#define EC_FS_E_OPEN	/;"	d
 EC_FS_E_OUTSIDEFILE	fs_errors.h	/^#define EC_FS_E_OUTSIDEFILE	/;"	d
 EC_FS_E_PWFFULL	fs_errors.h	/^#define EC_FS_E_PWFFULL	/;"	d
 EC_FS_E_RDONLY	fs_errors.h	/^#define EC_FS_E_RDONLY	/;"	d
 EC_FS_E_RENXDEV	fs_errors.h	/^#define EC_FS_E_RENXDEV	/;"	d
+EC_FS_E_TYPENMATC	fs_errors.h	/^#define EC_FS_E_TYPENMATC /;"	d
 EC_FS_E_USEREXIST	fs_errors.h	/^#define EC_FS_E_USEREXIST	/;"	d
 EC_FS_E_USERNOTON	fs_errors.h	/^#define EC_FS_E_USERNOTON	/;"	d
 EC_FS_E_WHOAREYOU	fs_errors.h	/^#define EC_FS_E_WHOAREYOU	/;"	d
