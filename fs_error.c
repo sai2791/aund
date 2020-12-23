@@ -74,7 +74,7 @@ const static struct {
 } errmsgtab[] = {
 	{EC_FS_E_BADEXAMINE,	"Bad EXAMINE argument"},
 
-	{0x69, "Object not a file"},
+	{EC_FS_E_OBJNOTFILE, "Object not a file"},
 
 	{EC_FS_E_BADINFO,	"Bad INFO argument"},
 	{EC_FS_E_BADARGS,	"Bad RDARGS argument"},
@@ -82,7 +82,7 @@ const static struct {
 	{EC_FS_E_NOMEM, "Server out of memory"},
 
 	{EC_FS_E_USERNOTON, "User not logged on"},
-	{0xaf, "Types don't match"},
+	{EC_FS_E_TYPENMATC, "Types don't match"},
 
 	{EC_FS_E_RENXDEV, "Renaming across two discs"},
 	{EC_FS_E_USEREXIST, "User id. already exists"},
