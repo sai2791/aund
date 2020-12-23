@@ -35,12 +35,15 @@
 
 #define EC_FS_E_BADEXAMINE	0x4f
 
+#define EC_FS_E_OBJNOTFILE  0x69
+
 #define EC_FS_E_BADINFO		0x8e
 #define EC_FS_E_BADARGS		0x8f
 
 #define EC_FS_E_NOMEM		0x90
 
 #define EC_FS_E_USERNOTON	0xae
+#define EC_FS_E_TYPENMATC   0xaf
 
 #define EC_FS_E_RENXDEV		0xb0
 #define EC_FS_E_USEREXIST	0xb1
