@@ -567,7 +567,7 @@ fs_long_info(struct fs_context *c, char *string, FTSENT *f)
 	char accstring[8], accstr2[8];
 	mode_t currumask;
 	char *acornname;
-    const char *p = "janfebmaraprmayjunjulaugsepoctnovdec"; 
+    const char *months = "janfebmaraprmayjunjulaugsepoctnovdec"; 
 	int entries;
 
 	acornname = strdup(f->fts_name);
@@ -643,10 +643,10 @@ fs_long_info(struct fs_context *c, char *string, FTSENT *f)
 			    "000 (000)\r\x80",
 			    acornname, entries, accstr2, accstring,
 			    btm.tm_mday,
-			    &p [ 3*btm.tm_mon],
+			    &months[ 3*btm.tm_mon],
 			    btm.tm_year % 100,
 			    mtm.tm_mday,
-			    &p [ 3*mtm.tm_mon],
+			    &months[ 3*mtm.tm_mon],
 			    mtm.tm_year % 100,
 			    mtm.tm_hour,
 			    mtm.tm_min);
@@ -662,10 +662,10 @@ fs_long_info(struct fs_context *c, char *string, FTSENT *f)
 			    acornname, load, exec,
 			    (uintmax_t)f->fts_statp->st_size, accstring,
 			    btm.tm_mday,
-			    &p [ 3*btm.tm_mon],
+			    &months[ 3*btm.tm_mon],
 			    btm.tm_year % 100,
 			    mtm.tm_mday,
-			    &p [ 3*mtm.tm_mon],
+			    &months[ 3*mtm.tm_mon],
 			    mtm.tm_year % 100,
 			    mtm.tm_hour,
 			    mtm.tm_min);
@@ -780,10 +780,6 @@ fs_cmd_save(struct fs_context *c, char *tail)
 syntax:
 	free(reply);
 	fs_error(c, 0xff, "Syntax");
-
-noaccess: 
-	free(reply);
-	fs_error(c, EC_FS_E_NOACCESS, "Insufficient Access");
 }
 
 static void
