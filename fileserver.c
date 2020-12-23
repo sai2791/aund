@@ -132,7 +132,6 @@ fs_func_impl * const fs_dispatch[] = {
 	[EC_FS_FUNC_CDIRN] = fs_cdirn,
 	[EC_FS_FUNC_CREATE] = fs_create,
 	[EC_FS_FUNC_GET_USER_FREE] = fs_get_user_free,
-    [EC_FS_FUNC_SET_USER_FREE] = fs_set_user_free,
 };
 #define NFUNC (sizeof(fs_dispatch) / sizeof(fs_dispatch[0]))
 
