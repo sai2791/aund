@@ -33,6 +33,7 @@
  * fs_fileio.c - File server file I/O calls
  */
 
+#include <fts.h>
 #include <sys/types.h>
 #include <sys/file.h>
 #include <sys/stat.h>
@@ -118,7 +119,7 @@ fs_open(struct fs_context *c)
 		else
 #endif
 			fs_errno(c);
-		free(upath);
+		    free(upath);
 		return;
 	}
 	free(upath);
@@ -170,8 +171,8 @@ fs_close(struct fs_context *c)
 	} else
 		error = fs_close1(c, request->handle);
 	if (error)
-		fs_errno(c);
-        else {
+	    fs_errno(c);
+    else {
 		reply.command_code = EC_FS_CC_DONE;
 		reply.return_code = EC_FS_RC_OK;
 		fs_reply(c, &reply, sizeof(reply));
@@ -622,6 +623,7 @@ fs_save(struct fs_context *c)
 	size_t size, got;
 	FTS *ftsp;
 	FTSENT *f;
+    bool is_owner;
     bool can_write;
 
 	if (c->client == NULL) {
@@ -640,16 +642,52 @@ fs_save(struct fs_context *c)
     /* Check that we have owner permission in the directory we 
        are about to save in */
 
-    can_write = fs_write_access(c , upath);
-    if (can_write == false) {
-        goto not_allowed_write;
-    }
+    is_owner = fs_write_access(c , upath);
 
 	if ((fd = open(upath, O_CREAT|O_TRUNC|O_RDWR, 0666)) == -1) {
 		fs_errno(c);
 		free(upath);
 		return;
 	}
+
+    // Now if the data exists we need to check if we actually 
+    // have the correct write permisson
+    
+    can_write = false; // Assume we dont have access
+	path_argv[0] = upath;
+	path_argv[1] = NULL;
+	ftsp = fts_open(path_argv, FTS_LOGICAL, NULL);
+	f = fts_read(ftsp);
+    if (f->fts_statp->st_mode & S_IWUSR)
+    {
+        // Owner permission to write
+        if (is_owner == true)
+        {
+            if (debug) printf("file has Owner Write Access\n");
+            can_write = true;
+        }
+    }
+    if (f->fts_statp->st_mode & S_IWOTH)
+    {
+        // Public permission to write
+        if (is_owner == false) 
+        {
+            if (debug) printf("file has Public Write Access\n");
+            can_write = true;
+        }
+    }
+    // We can now decide if writing the file is allowed.
+    // if is_owner and can_write then ok
+    // is is_owner = false and can_write then ok
+
+    if (can_write == false) {
+        // need to delete the file we just created
+        close(fd);
+        remove(upath); 
+        fts_close(ftsp);
+        goto not_allowed_write;
+    }
+    fts_close(ftsp);
 
 	meta = request->meta;
 	reply1.std_tx.command_code = EC_FS_CC_DONE;
@@ -686,9 +724,9 @@ fs_save(struct fs_context *c)
     return;
 
 not_allowed_write:
-    free(upath);
-    fs_err(c, EC_FS_E_NOACCESS);    
-    return;
+free(upath);
+fs_err(c, EC_FS_E_NOACCESS);    
+return;
 }
 
 void
