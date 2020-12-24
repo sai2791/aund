@@ -3,6 +3,4 @@
 .deps/*.Po
 .deps/*.TPo
 config.log
-.nvimrc
-
 
