@@ -82,7 +82,7 @@ extern bool default_safehandles;
 
 struct fs_client {
 	LIST_ENTRY(fs_client) link;
-	struct aun_srcaddr *host;
+	struct aun_srcaddr host;
 	int nhandles;
 	struct fs_handle **handles; /* array of handles for this client */
 	char *login;

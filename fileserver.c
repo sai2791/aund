@@ -197,7 +197,7 @@ fs_new_client(struct aun_srcaddr *from)
 		return NULL;
 	}
 	client->nhandles = 4;
-	client->host = from;
+	client->host = *from;
 	client->login = NULL;
 	client->dir_cache.path = NULL;
 	client->dir_cache.ftsp = NULL;
@@ -234,6 +234,6 @@ fs_delete_client(struct fs_client *client)
 		fts_close(client->dir_cache.ftsp);
 	if (using_syslog)
 		syslog(LOG_INFO, "logout from %s",
-		    aunfuncs->ntoa(client->host));
+		    aunfuncs->ntoa(&client->host));
 	free(client);
 }

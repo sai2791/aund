@@ -539,7 +539,7 @@ fs_get_users_on(struct fs_context *c)
 		 * My (SGT's) old software that ran on Beebs
 		 * expected the latter, so I've gone with that.
 		 */
-		aunfuncs->get_stn(ent->host, p);
+		aunfuncs->get_stn(&ent->host, p);
 		p += 2;
 		p += sprintf(p, "%.10s\r", ent->login);
 		*p++ = c->client->priv;  /* Users may now have individual priviledge flags set */
@@ -574,7 +574,7 @@ fs_get_user(struct fs_context *c)
 		reply.std_tx.return_code = EC_FS_E_USERNOTON;
 		fs_reply(c, &(reply.std_tx), sizeof(reply.std_tx));
 	} else {
-		aunfuncs->get_stn(ent->host, reply.station);
+		aunfuncs->get_stn(&ent->host, reply.station);
 		reply.priv = ent->priv; /* Use priv from passwd file */
 		fs_reply(c, &(reply.std_tx), sizeof(reply));
 	}
