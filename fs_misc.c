@@ -33,6 +33,7 @@
  * fs_misc.c - miscellaneous file server calls
  */
 
+#include <fts.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/statvfs.h>
@@ -597,6 +598,7 @@ fs_delete1(struct fs_context *c, char *path)
 	char *upath, *acornpath, *path_argv[2];
 	FTS *ftsp;
 	FTSENT *f;
+    bool is_owner;
 
 	if (c->client == NULL) {
 		fs_err(c, EC_FS_E_WHOAREYOU);
@@ -610,10 +612,31 @@ fs_delete1(struct fs_context *c, char *path)
 		return;
 	}
 	sprintf(acornpath, "%s/.Acorn", upath);
+
+    is_owner = fs_write_access(c, upath); // Check for ownership
+
 	path_argv[0] = upath;
 	path_argv[1] = NULL;
 	ftsp = fts_open(path_argv, FTS_LOGICAL, NULL);
 	f = fts_read(ftsp);
+    if (f->fts_statp->st_mode & S_IXUSR)
+    {
+        // File is locked so report error and exit
+        goto nodeleteallowed;
+    }
+    if (is_owner)
+    {
+        // Check we have write access to delete
+        if (!(f->fts_statp->st_mode & S_IWUSR))
+        {
+            goto noaccess;
+        }
+    } else {  // Not Owner so check if we have world write permissions
+        if (!(f->fts_statp->st_mode & S_IWOTH))
+        {
+            goto noaccess;
+        }
+    }
 	if (f->fts_info == FTS_ERR || f->fts_info == FTS_NS) {
 		fs_errno(c);
 		goto out;
@@ -655,6 +678,21 @@ out:
 	fts_close(ftsp);
 	free(acornpath);
 	free(upath);
+    return;
+
+nodeleteallowed:
+    fts_close(ftsp);
+    free(acornpath);
+    free(upath);
+    fs_err(c, EC_FS_E_LOCKED);
+    return;    
+
+noaccess:
+    fts_close(ftsp);
+    free(acornpath);
+    free(upath);
+    fs_err(c, EC_FS_E_NOACCESS);
+    return;    
 }
 
 void
