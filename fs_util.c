@@ -77,12 +77,20 @@ fs_mode_to_type(mode_t mode)
  * public permissions when changed by an Acorn client.
  */
 
+ // Now using user execute permission to hold the 'L' flag,
+ // fs_delete will check if this is set and wont delete if 
+ // the flag is set.
+
 uint8_t
 fs_mode_to_access(mode_t mode)
 {
 	unsigned char access;
 
 	access = 0;
+	if (!S_ISDIR(mode)) 
+    {
+        if (mode & S_IXUSR) access |= EC_FS_ACCESS_L;
+    }
 	if (mode & S_IRUSR) access |= EC_FS_ACCESS_UR;
 	if (mode & S_IWUSR) access |= EC_FS_ACCESS_UW;
 	if (mode & S_IROTH) access |= EC_FS_ACCESS_OR;
@@ -101,6 +109,8 @@ fs_access_to_mode(unsigned char access, int usergroup)
 		mode |= S_IRUSR | (usergroup ? S_IRGRP : 0);
 	if (access & EC_FS_ACCESS_UW)
 		mode |= S_IWUSR | (usergroup ? S_IWGRP : 0);
+    if (access & EC_FS_ACCESS_L)
+        mode |= S_IXUSR | (usergroup ? S_IXGRP : 0);
 	if (access & EC_FS_ACCESS_OR)
 		mode |= S_IROTH | (usergroup ? 0 : S_IRGRP);
 	if (access & EC_FS_ACCESS_OW)
