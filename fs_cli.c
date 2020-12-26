@@ -874,17 +874,34 @@ fs_cmd_access(struct fs_context *c, char *tail)
     bool is_owner;
 
 	name = fs_cli_getarg(&tail);
+    if (strcmp(name, ".\0"))  name = fs_cli_getarg(&tail);
 	access = fs_cli_getarg(&tail);
 	if (c->client == NULL) {
 		fs_err(c, EC_FS_E_WHOAREYOU);
 		return;
 	}
+
+    if (debug) printf("\nAccess File [%s] -> permissions [%s]\n", name, access);
+    
+    if (name == NULL ) {
+        // what file did you mean?
+        fs_err(c, EC_FS_E_BADNAME);
+        return;
+        }
+
+    if (access == NULL ) {
+        // this is not valid
+        fs_err(c, EC_FS_E_BADARGS);
+        return;
+    }
+
 	/* We need to check if we have either owner or public 
 	   access. If we have owner we will try to make the change
 	   but might still not be allowed.  If we have public owner
            -ship then we should just say no. */	
    
-   is_owner = fs_is_owner(c , upath);        
+	if ((upath = fs_unixify_path(c, name )) == NULL) return;
+    is_owner = fs_is_owner(c , upath);        
 
 	/* This is just tempoary while to make it seem like
 	   the command succeded.  Once we have the actual result
