@@ -874,7 +874,11 @@ fs_cmd_access(struct fs_context *c, char *tail)
     bool is_owner;
 
 	name = fs_cli_getarg(&tail);
-    if (strcmp(name, ".\0"))  name = fs_cli_getarg(&tail);
+    // FIXME: 
+    // bug here - if user uses access. name permissions the . is used
+    // as the filename but the command expansion process seems to leave
+    // it in the buffer
+
 	access = fs_cli_getarg(&tail);
 	if (c->client == NULL) {
 		fs_err(c, EC_FS_E_WHOAREYOU);
