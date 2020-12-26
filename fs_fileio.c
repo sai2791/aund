@@ -642,13 +642,22 @@ fs_save(struct fs_context *c)
     /* Check that we have owner permission in the directory we 
        are about to save in */
 
-    is_owner = fs_write_access(c , upath);
+    is_owner = fs_is_owner(c , upath);
 
-	if ((fd = open(upath, O_CREAT|O_TRUNC|O_RDWR, 0666)) == -1) {
-		fs_errno(c);
-		free(upath);
-		return;
-	}
+    if (is_owner)
+    {
+	    if ((fd = open(upath, O_CREAT|O_TRUNC|O_RDWR, 0666)) == -1) {
+		    fs_errno(c);
+		    free(upath);
+		    return;
+	    }
+    } else {
+    if ((fd = open(upath, O_TRUNC|O_RDWR, 0666)) == -1) {
+            fs_errno(c);
+            free(upath);
+        return;
+        }
+    }
 
     // Now if the data exists we need to check if we actually 
     // have the correct write permisson
@@ -683,7 +692,6 @@ fs_save(struct fs_context *c)
     if (can_write == false) {
         // need to delete the file we just created
         close(fd);
-        remove(upath); 
         fts_close(ftsp);
         goto not_allowed_write;
     }

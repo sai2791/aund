@@ -398,7 +398,7 @@ fs_leafname(const char *path)
 }
 
 bool
-fs_write_access(struct fs_context *c,char *path)
+fs_is_owner(struct fs_context *c,char *path)
 {
 	char *oururd;
 	int match;
@@ -428,19 +428,7 @@ fs_write_access(struct fs_context *c,char *path)
            {
 		  is_owner = true;  /* Privilege gives owner access */
             }
-
-	/* We check for write access */
-	/* TODO: based on owner permission see if we have write access */
-	if (is_owner == true) {
-		  /* We have owner access so check if we have owner write permission */
-		  
-		  return true;
-		} else {
-		  /* We have Public access so check if we have public write permission */
-
-		  return false;
-		}
-
+    return is_owner;
 }
 
 bool

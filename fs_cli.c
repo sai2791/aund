@@ -871,6 +871,7 @@ fs_cmd_access(struct fs_context *c, char *tail)
 	char *upath;
 	int  match;
 	struct ec_fs_reply reply;
+    bool is_owner;
 
 	name = fs_cli_getarg(&tail);
 	access = fs_cli_getarg(&tail);
@@ -882,6 +883,8 @@ fs_cmd_access(struct fs_context *c, char *tail)
 	   access. If we have owner we will try to make the change
 	   but might still not be allowed.  If we have public owner
            -ship then we should just say no. */	
+   
+   is_owner = fs_is_owner(c , upath);        
 
 	/* This is just tempoary while to make it seem like
 	   the command succeded.  Once we have the actual result

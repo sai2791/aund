@@ -613,7 +613,7 @@ fs_delete1(struct fs_context *c, char *path)
 	}
 	sprintf(acornpath, "%s/.Acorn", upath);
 
-    is_owner = fs_write_access(c, upath); // Check for ownership
+    is_owner = fs_is_owner(c, upath); // Check for ownership
 
 	path_argv[0] = upath;
 	path_argv[1] = NULL;

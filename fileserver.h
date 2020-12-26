@@ -171,7 +171,7 @@ extern time_t fs_get_birthtime(FTSENT *);
 extern void fs_write_date(struct ec_fs_date *, time_t);
 extern int fs_stat(const char *, struct stat *);
 extern const char *fs_leafname(const char *);
-extern bool fs_write_access(struct fs_context *c,char *path);
+extern bool fs_is_owner(struct fs_context *c,char *path);
 extern bool fs_read_access(struct fs_context *c,char *path);
 
 extern char *fs_acornify_name(char *);
