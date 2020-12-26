@@ -847,6 +847,7 @@ fs_handle_type	fileserver.h	/^enum fs_handle_type { FS_HANDLE_FILE, FS_HANDLE_DI
 fs_hidden_name	fs_nametrans.c	/^fs_hidden_name(char *name)$/;"	f
 fs_info_format	fileserver.h	/^extern enum fs_info_format { FS_INFO_RISCOS, FS_INFO_SJ } default_infoformat;$/;"	g
 fs_init	fileserver.c	/^fs_init(void)$/;"	f
+fs_is_owner	fs_util.c	/^fs_is_owner(struct fs_context *c,char *path)$/;"	f
 fs_leafname	fs_util.c	/^fs_leafname(const char *path)$/;"	f
 fs_load	fs_fileio.c	/^fs_load(struct fs_context *c)$/;"	f
 fs_logoff	fs_misc.c	/^fs_logoff(struct fs_context *c)$/;"	f
@@ -878,7 +879,6 @@ fs_typemap	fs_filetype.c	/^struct fs_typemap {$/;"	s	file:
 fs_unhat_path	fs_nametrans.c	/^fs_unhat_path(char *path)$/;"	f	file:
 fs_unixify_path	fs_nametrans.c	/^fs_unixify_path(struct fs_context *c, char *path)$/;"	f
 fs_unrec	fileserver.c	/^fs_unrec(struct fs_context *c)$/;"	f
-fs_write_access	fs_util.c	/^fs_write_access(struct fs_context *c,char *path)$/;"	f
 fs_write_date	fs_util.c	/^fs_write_date(struct ec_fs_date *date, time_t time)$/;"	f
 fs_write_val	fs_util.c	/^fs_write_val(uint8_t *p, uint64_t value, size_t len)$/;"	f
 fsnum	fs_proto.h	/^	uint8_t fsnum[2];$/;"	m	struct:ec_fs_reply_info_uid
