@@ -1,3 +1,16 @@
+aund 1.06.3
+ * Added user permissions check when writing a file. If the file does
+   not have the correct permissions then you cannot write the file if
+   it already exists.  If its a new file we check if you are the owner
+   of the directory.
+ * Deleting a file will now check for the Locked attribute and error
+   if this is set.  You can remove this using the access command (not 
+   implemented yet).
+ * Delete will also check if you have the correct write permissions
+   for either the owner or public, depending on what access we decide
+   you have.      
+-- Steve Inglis <sai2791@googlemail.com> Sun, 27 Dec 2020 12:54:00 +0000   
+
 aund 1.06 * 
  * Change to user permissions on directories
    If the users current path, matches the user root directory at
