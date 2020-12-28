@@ -869,11 +869,21 @@ fs_cmd_access(struct fs_context *c, char *tail)
 {
 	char *name, *access;
 	char *upath;
+	char *path_argv[2];
 	int  match;
 	struct ec_fs_reply reply;
+    mode_t mode;
+    uint8_t loop_count;
     bool is_owner;
-
-	name = fs_cli_getarg(&tail);
+    bool is_locked = false;
+    bool is_owner_write = false;
+    bool is_owner_read = false;
+    bool is_public_write = false;
+    bool is_public_read = false;
+    bool found_slash = false;
+    int usergroup = 0;
+	
+    name = fs_cli_getarg(&tail);
     // FIXME: 
     // bug here - if user uses access. name permissions the . is used
     // as the filename but the command expansion process seems to leave
@@ -885,36 +895,124 @@ fs_cmd_access(struct fs_context *c, char *tail)
 		return;
 	}
 
+	if ((upath = fs_unixify_path(c, name )) == NULL) return;
+    is_owner = fs_is_owner(c, fs_unixify_path(c, name));
+    if (is_owner == false)
+    {
+        // We do not have owner access in this directory
+        // so cannot change permissions
+        if (debug)
+            printf("Ownership check failed\n");
+        fs_err(c, EC_FS_E_NOACCESS);
+        return;
+    }
+
     if (debug) printf("\nAccess File [%s] -> permissions [%s]\n", name, access);
+    // FIXME:
+    // Bug here *ACCESS "" WR/R is permitted
     
-    if (name == NULL ) {
+    if (strcmp(name,"") == 0) {
         // what file did you mean?
+        if (debug) printf("Name has an empty string '%s'\n", name);
         fs_err(c, EC_FS_E_BADNAME);
         return;
         }
 
-    if (access == NULL ) {
-        // this is not valid
-        fs_err(c, EC_FS_E_BADARGS);
+    if (strlen(name) > 10) {
+        // Name is too long
+        if (debug) printf("Name was too long '%s'\n", name);
+        fs_err(c, EC_FS_E_BADNAME);
         return;
     }
+
+    if (strcmp(access,"") == 0) {    
+        // this is not valid
+        fs_err(c, EC_FS_E_BADACCESS);
+        return;
+    }
+
+    if (strlen(access) > 6) 
+    {
+        // Access list is too long
+        fs_err(c, EC_FS_E_BADACCESS);
+        return;
+    }
+
+
+    // The access string is not empty so now we must figure out
+    // what the user gave us
+    
+    for (loop_count = 0; (loop_count < strlen(access)); loop_count++) 
+    {
+        switch (access[loop_count])
+        {
+            case 'L':
+            is_locked = true;
+            break;
+
+            case 'W':
+            if  (found_slash == false)
+            {
+                is_owner_write = true;
+            }
+            if (found_slash == true)
+            {
+                is_public_write = true;
+            }
+            break;
+
+            case 'R':
+            if (found_slash == false)
+            {
+                is_owner_read = true;
+            }
+            if (found_slash == true)
+            {
+                is_public_read = true;
+            }
+            break;
+
+            case '/':
+            found_slash = true;
+            break;
+
+            default:
+            fs_err(c, EC_FS_E_BADACCESS);
+            return;
+        }
+    }
+
+    mode = 0;
+    if (is_locked)
+        {
+            mode |= S_IXUSR | (usergroup ? S_IXGRP : 0);
+        }
+    if (is_owner_write)
+        {
+            mode |= S_IWUSR | (usergroup ? S_IWGRP : 0);
+        }
+    if (is_owner_read)
+        {
+            mode |= S_IRUSR | (usergroup ? S_IRGRP : 0);
+        }
+    if (is_public_read)
+        {
+            mode |= S_IROTH | (usergroup ? 0 : S_IRGRP);
+        }
+    if (is_public_write)
+        {
+            mode |= S_IWOTH | (usergroup ? 0 : S_IWGRP);
+        }
 
 	/* We need to check if we have either owner or public 
 	   access. If we have owner we will try to make the change
 	   but might still not be allowed.  If we have public owner
            -ship then we should just say no. */	
-   
+
+	if (debug) printf(" -> name [%s], permissons [%s]\n", name, access);
 	if ((upath = fs_unixify_path(c, name )) == NULL) return;
-    is_owner = fs_is_owner(c , upath);        
-
-	/* This is just tempoary while to make it seem like
-	   the command succeded.  Once we have the actual result
-	   we will fix this us  */
-
-
-	if (debug) printf(" -> access [%s], permissons [%s]\n", name, access);
-	if ((upath = fs_unixify_path(c, name )) == NULL) return;
-        match = strncmp(userfuncs->urd(c->client->login),name,strlen(userfuncs->urd(c->client->login)));
+    // this next bit needs to be updated to use fs_is_owner 
+        match = strncmp(userfuncs->urd(c->client->login),upath,strlen(userfuncs->urd(c->client->login)));
             if (match == 0) {
                     reply.command_code = EC_FS_CC_DONE;
             } else {
@@ -925,7 +1023,7 @@ fs_cmd_access(struct fs_context *c, char *tail)
 		           fs_err(c, EC_FS_E_NOACCESS);
                    free(upath);
 		           return;
-		    }
+		        }
             }
    
         reply.return_code = EC_FS_RC_OK;

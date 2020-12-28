@@ -411,10 +411,11 @@ fs_is_owner(struct fs_context *c,char *path)
 	   oururd = userfuncs->urd(c->client->login);
            fs_acornify_name(oururd);
 	/* Remove the printf once this is working */
-           printf("/g users [%s], URD [%s]\n", c->client->login,oururd);
-   
+           printf("/g users [%s], URD [%s] PATH [%s]\n", 
+                c->client->login,userfuncs->urd(c->client->login), path);
            match = strncmp(userfuncs->urd(c->client->login),path,
 		strlen(userfuncs->urd(c->client->login)));
+           printf("Strlen %lu\n",strlen(userfuncs->urd(c->client->login)));
            if (match == 0) {
 		   is_owner = true;
            } else {
