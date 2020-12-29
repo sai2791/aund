@@ -868,9 +868,9 @@ static void
 fs_cmd_access(struct fs_context *c, char *tail)
 {
 	char *name, *access;
+    char new_permissions;
 	char *upath;
 	char *path_argv[2];
-	int  match;
 	struct ec_fs_reply reply;
     mode_t mode;
     uint8_t loop_count;
@@ -882,6 +882,8 @@ fs_cmd_access(struct fs_context *c, char *tail)
     bool is_public_read = false;
     bool found_slash = false;
     int usergroup = 0;
+	FTS *ftsp;
+	FTSENT *f;
 	
     name = fs_cli_getarg(&tail);
     // FIXME: 
@@ -982,52 +984,63 @@ fs_cmd_access(struct fs_context *c, char *tail)
         }
     }
 
-    mode = 0;
+    new_permissions = 0;
     if (is_locked)
         {
-            mode |= S_IXUSR | (usergroup ? S_IXGRP : 0);
+            new_permissions |= S_IXUSR | (usergroup ? S_IXGRP : 0);
+            if (debug) printf("Permission [%d]\n",new_permissions);
         }
     if (is_owner_write)
         {
-            mode |= S_IWUSR | (usergroup ? S_IWGRP : 0);
+            new_permissions |= S_IWUSR | (usergroup ? S_IWGRP : 0);
+            if (debug) printf("Permission [%d]\n",new_permissions);
         }
     if (is_owner_read)
         {
-            mode |= S_IRUSR | (usergroup ? S_IRGRP : 0);
+            new_permissions |= S_IRUSR | (usergroup ? S_IRGRP : 0);
+            if (debug) printf("Permission [%d]\n",new_permissions);
         }
     if (is_public_read)
         {
-            mode |= S_IROTH | (usergroup ? 0 : S_IRGRP);
+            new_permissions |= S_IROTH | (usergroup ? 0 : S_IRGRP);
+            if (debug) printf("Permission [%d]\n",new_permissions);
         }
     if (is_public_write)
         {
             mode |= S_IWOTH | (usergroup ? 0 : S_IWGRP);
+            if (debug) printf("Permission [%d]\n",new_permissions);
         }
 
-	/* We need to check if we have either owner or public 
-	   access. If we have owner we will try to make the change
-	   but might still not be allowed.  If we have public owner
-           -ship then we should just say no. */	
+
+	upath = fs_unixify_path(c, name); /* This must be freed */
+	if (upath == NULL) return;
+	path_argv[0] = upath;
+	path_argv[1] = NULL;
+	ftsp = fts_open(path_argv, FTS_LOGICAL, NULL);
+	f = fts_read(ftsp);
+	if (f->fts_info == FTS_ERR || f->fts_info == FTS_NS) {
+		fs_errno(c);
+		goto out;
+    }
+
+	if (!S_ISDIR(f->fts_statp->st_mode)) {
+		/* XXX Should chose usergroup sensibly */
+		if (chmod(f->fts_accpath, fs_access_to_mode(new_permissions, 0)) != 0) {
+			fs_errno(c);
+			goto out;
+		}
+	}
 
 	if (debug) printf(" -> name [%s], permissons [%s]\n", name, access);
-	if ((upath = fs_unixify_path(c, name )) == NULL) return;
-    // this next bit needs to be updated to use fs_is_owner 
-        match = strncmp(userfuncs->urd(c->client->login),upath,strlen(userfuncs->urd(c->client->login)));
-            if (match == 0) {
-                    reply.command_code = EC_FS_CC_DONE;
-            } else {
-		    if (c->client->priv == EC_FS_PRIV_SYST)
-		    { 
-			reply.command_code = EC_FS_CC_DONE;
-		    } else {
-		           fs_err(c, EC_FS_E_NOACCESS);
-                   free(upath);
-		           return;
-		        }
-            }
-   
-        reply.return_code = EC_FS_RC_OK;
-        fs_reply(c, &reply, sizeof(reply));
-        free(upath);
+    reply.command_code = EC_FS_CC_DONE; 
+    reply.return_code = EC_FS_RC_OK;
+    fs_reply(c, &reply, sizeof(reply));
+    fts_close(ftsp);
+    free(upath);
 	return;
+
+out:
+	fts_close(ftsp);
+    free(upath);
+    return;
 }
