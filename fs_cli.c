@@ -872,7 +872,6 @@ fs_cmd_access(struct fs_context *c, char *tail)
 	char *upath;
 	char *path_argv[2];
 	struct ec_fs_reply reply;
-    mode_t mode;
     uint8_t loop_count;
     bool is_owner;
     bool is_locked = false;
@@ -881,7 +880,6 @@ fs_cmd_access(struct fs_context *c, char *tail)
     bool is_public_write = false;
     bool is_public_read = false;
     bool found_slash = false;
-    int usergroup = 0;
 	FTS *ftsp;
 	FTSENT *f;
 	
