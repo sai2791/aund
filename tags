@@ -4,23 +4,23 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-ACLOCAL	Makefile	/^ACLOCAL = aclocal-1.16$/;"	m
-ACLOCAL_M4	Makefile	/^ACLOCAL_M4 = $(top_srcdir)\/aclocal.m4$/;"	m
-AMTAR	Makefile	/^AMTAR = $${TAR-tar}$/;"	m
-AM_CFLAGS	Makefile	/^AM_CFLAGS = $(GCCWARNINGS)$/;"	m
-AM_DEFAULT_VERBOSITY	Makefile	/^AM_DEFAULT_VERBOSITY = 1$/;"	m
-AM_DISTCHECK_DVI_TARGET	Makefile	/^AM_DISTCHECK_DVI_TARGET = dvi$/;"	m
-AM_RECURSIVE_TARGETS	Makefile	/^AM_RECURSIVE_TARGETS = cscope$/;"	m
-AM_V_AR	Makefile	/^AM_V_AR = $(am__v_AR_$(V))$/;"	m
-AM_V_CC	Makefile	/^AM_V_CC = $(am__v_CC_$(V))$/;"	m
-AM_V_CCLD	Makefile	/^AM_V_CCLD = $(am__v_CCLD_$(V))$/;"	m
-AM_V_GEN	Makefile	/^AM_V_GEN = $(am__v_GEN_$(V))$/;"	m
-AM_V_LEX	Makefile	/^AM_V_LEX = $(am__v_LEX_$(V))$/;"	m
-AM_V_P	Makefile	/^AM_V_P = $(am__v_P_$(V))$/;"	m
-AM_V_at	Makefile	/^AM_V_at = $(am__v_at_$(V))$/;"	m
-AM_V_lt	Makefile	/^AM_V_lt = $(am__v_lt_$(V))$/;"	m
-AR	Makefile	/^AR = ar$/;"	m
-ARFLAGS	Makefile	/^ARFLAGS = cru$/;"	m
+ACLOCAL	makefile	/^ACLOCAL = aclocal-1.16$/;"	m
+ACLOCAL_M4	makefile	/^ACLOCAL_M4 = $(top_srcdir)\/aclocal.m4$/;"	m
+AMTAR	makefile	/^AMTAR = $${TAR-tar}$/;"	m
+AM_CFLAGS	makefile	/^AM_CFLAGS = $(GCCWARNINGS)$/;"	m
+AM_DEFAULT_VERBOSITY	makefile	/^AM_DEFAULT_VERBOSITY = 1$/;"	m
+AM_DISTCHECK_DVI_TARGET	makefile	/^AM_DISTCHECK_DVI_TARGET = dvi$/;"	m
+AM_RECURSIVE_TARGETS	makefile	/^AM_RECURSIVE_TARGETS = cscope$/;"	m
+AM_V_AR	makefile	/^AM_V_AR = $(am__v_AR_$(V))$/;"	m
+AM_V_CC	makefile	/^AM_V_CC = $(am__v_CC_$(V))$/;"	m
+AM_V_CCLD	makefile	/^AM_V_CCLD = $(am__v_CCLD_$(V))$/;"	m
+AM_V_GEN	makefile	/^AM_V_GEN = $(am__v_GEN_$(V))$/;"	m
+AM_V_LEX	makefile	/^AM_V_LEX = $(am__v_LEX_$(V))$/;"	m
+AM_V_P	makefile	/^AM_V_P = $(am__v_P_$(V))$/;"	m
+AM_V_at	makefile	/^AM_V_at = $(am__v_at_$(V))$/;"	m
+AM_V_lt	makefile	/^AM_V_lt = $(am__v_lt_$(V))$/;"	m
+AR	makefile	/^AR = ar$/;"	m
+ARFLAGS	makefile	/^ARFLAGS = cru$/;"	m
 AUND_FS_DESCR	version.h	/^#define AUND_FS_DESCR /;"	d
 AUND_MACHINE_PEEK_HI	version.h	/^#define AUND_MACHINE_PEEK_HI /;"	d
 AUND_MACHINE_PEEK_LO	version.h	/^#define AUND_MACHINE_PEEK_LO /;"	d
@@ -34,43 +34,43 @@ AUN_TYPE_IMMEDIATE	aun.h	/^#define AUN_TYPE_IMMEDIATE	/;"	d
 AUN_TYPE_IMM_REPLY	aun.h	/^#define AUN_TYPE_IMM_REPLY	/;"	d
 AUN_TYPE_REJ	aun.h	/^#define AUN_TYPE_REJ	/;"	d
 AUN_TYPE_UNICAST	aun.h	/^#define AUN_TYPE_UNICAST	/;"	d
-AUTOCONF	Makefile	/^AUTOCONF = autoconf$/;"	m
-AUTOHEADER	Makefile	/^AUTOHEADER = autoheader$/;"	m
-AUTOMAKE	Makefile	/^AUTOMAKE = automake-1.16$/;"	m
-AWK	Makefile	/^AWK = awk$/;"	m
+AUTOCONF	makefile	/^AUTOCONF = autoconf$/;"	m
+AUTOHEADER	makefile	/^AUTOHEADER = autoheader$/;"	m
+AUTOMAKE	makefile	/^AUTOMAKE = automake-1.16$/;"	m
+AWK	makefile	/^AWK = awk$/;"	m
 BEGIN	conf_lex.c	/^#define BEGIN /;"	d	file:
 BOOLEAN	conf_lex.c	/^#define BOOLEAN /;"	d	file:
 BORING	conf_lex.c	/^#define BORING /;"	d	file:
-CC	Makefile	/^CC = gcc$/;"	m
-CCDEPMODE	Makefile	/^CCDEPMODE = depmode=gcc3$/;"	m
-CCLD	Makefile	/^CCLD = $(CC)$/;"	m
-CFLAGS	Makefile	/^CFLAGS = -g -O2$/;"	m
+CC	makefile	/^CC = gcc$/;"	m
+CCDEPMODE	makefile	/^CCDEPMODE = depmode=gcc3$/;"	m
+CCLD	makefile	/^CCLD = $(CC)$/;"	m
+CFLAGS	makefile	/^CFLAGS = -g -O2$/;"	m
 CF_BOOLEAN	conf_lex.c	/^#define CF_BOOLEAN /;"	d	file:
 CF_EOF	conf_lex.c	/^#define CF_EOF /;"	d	file:
 CF_FUNC	conf_lex.c	/^#define CF_FUNC /;"	d	file:
 CF_NEWLINE	conf_lex.c	/^#define CF_NEWLINE /;"	d	file:
 CF_WORD	conf_lex.c	/^#define CF_WORD /;"	d	file:
-COMPILE	Makefile	/^COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \\$/;"	m
-CONFIG_CLEAN_FILES	Makefile	/^CONFIG_CLEAN_FILES =$/;"	m
-CONFIG_CLEAN_VPATH_FILES	Makefile	/^CONFIG_CLEAN_VPATH_FILES =$/;"	m
-CONFIG_HEADER	Makefile	/^CONFIG_HEADER = config.h$/;"	m
-CPP	Makefile	/^CPP = gcc -E$/;"	m
-CPPFLAGS	Makefile	/^CPPFLAGS = $/;"	m
-CSCOPE	Makefile	/^CSCOPE = cscope$/;"	m
-CTAGS	Makefile	/^CTAGS = ctags$/;"	m
-CYGPATH_W	Makefile	/^CYGPATH_W = echo$/;"	m
-DEFAULT_INCLUDES	Makefile	/^DEFAULT_INCLUDES = -I.$/;"	m
-DEFS	Makefile	/^DEFS = -DHAVE_CONFIG_H$/;"	m
-DEPDIR	Makefile	/^DEPDIR = .deps$/;"	m
-DISTFILES	Makefile	/^DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)$/;"	m
-DIST_ARCHIVES	Makefile	/^DIST_ARCHIVES = $(distdir).tar.gz$/;"	m
-DIST_COMMON	Makefile	/^DIST_COMMON = $(srcdir)\/Makefile.am $(top_srcdir)\/configure \\$/;"	m
-DIST_SOURCES	Makefile	/^DIST_SOURCES = $(libconf_lex_a_SOURCES) $(aund_SOURCES)$/;"	m
-DIST_TARGETS	Makefile	/^DIST_TARGETS = dist-gzip$/;"	m
+COMPILE	makefile	/^COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \\$/;"	m
+CONFIG_CLEAN_FILES	makefile	/^CONFIG_CLEAN_FILES =$/;"	m
+CONFIG_CLEAN_VPATH_FILES	makefile	/^CONFIG_CLEAN_VPATH_FILES =$/;"	m
+CONFIG_HEADER	makefile	/^CONFIG_HEADER = config.h$/;"	m
+CPP	makefile	/^CPP = gcc -E$/;"	m
+CPPFLAGS	makefile	/^CPPFLAGS = $/;"	m
+CSCOPE	makefile	/^CSCOPE = cscope$/;"	m
+CTAGS	makefile	/^CTAGS = ctags$/;"	m
+CYGPATH_W	makefile	/^CYGPATH_W = echo$/;"	m
+DEFAULT_INCLUDES	makefile	/^DEFAULT_INCLUDES = -I.$/;"	m
+DEFS	makefile	/^DEFS = -DHAVE_CONFIG_H$/;"	m
+DEPDIR	makefile	/^DEPDIR = .deps$/;"	m
+DISTFILES	makefile	/^DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)$/;"	m
+DIST_ARCHIVES	makefile	/^DIST_ARCHIVES = $(distdir).tar.gz$/;"	m
+DIST_COMMON	makefile	/^DIST_COMMON = $(srcdir)\/Makefile.am $(top_srcdir)\/configure \\$/;"	m
+DIST_SOURCES	makefile	/^DIST_SOURCES = $(libconf_lex_a_SOURCES) $(aund_SOURCES)$/;"	m
+DIST_TARGETS	makefile	/^DIST_TARGETS = dist-gzip$/;"	m
 ECHO	conf_lex.c	/^#define ECHO /;"	d	file:
-ECHO_C	Makefile	/^ECHO_C = \\c$/;"	m
-ECHO_N	Makefile	/^ECHO_N = $/;"	m
-ECHO_T	Makefile	/^ECHO_T = $/;"	m
+ECHO_C	makefile	/^ECHO_C = \\c$/;"	m
+ECHO_N	makefile	/^ECHO_N = $/;"	m
+ECHO_T	makefile	/^ECHO_T = $/;"	m
 EC_FS_ACCESS_D	fs_proto.h	/^#define EC_FS_ACCESS_D	/;"	d
 EC_FS_ACCESS_L	fs_proto.h	/^#define EC_FS_ACCESS_L	/;"	d
 EC_FS_ACCESS_OR	fs_proto.h	/^#define EC_FS_ACCESS_OR	/;"	d
@@ -200,13 +200,13 @@ EC_PORT_FS	aund.c	/^#define EC_PORT_FS /;"	d	file:
 EC_PORT_PS_JOB	aun.h	/^#define EC_PORT_PS_JOB	/;"	d
 EC_PORT_PS_STATUS_ENQ	aun.h	/^#define EC_PORT_PS_STATUS_ENQ /;"	d
 EC_PORT_PS_STATUS_REPLY	aun.h	/^#define EC_PORT_PS_STATUS_REPLY /;"	d
-EGREP	Makefile	/^EGREP = \/usr\/bin\/grep -E$/;"	m
+EGREP	makefile	/^EGREP = \/usr\/bin\/grep -E$/;"	m
 EOB_ACT_CONTINUE_SCAN	conf_lex.c	/^#define EOB_ACT_CONTINUE_SCAN /;"	d	file:
 EOB_ACT_END_OF_FILE	conf_lex.c	/^#define EOB_ACT_END_OF_FILE /;"	d	file:
 EOB_ACT_LAST_MATCH	conf_lex.c	/^#define EOB_ACT_LAST_MATCH /;"	d	file:
-ETAGS	Makefile	/^ETAGS = etags$/;"	m
-EXEEXT	Makefile	/^EXEEXT = $/;"	m
-EXTRA_DIST	Makefile	/^EXTRA_DIST = contrib aund.conf.example $(man_MANS)$/;"	m
+ETAGS	makefile	/^ETAGS = etags$/;"	m
+EXEEXT	makefile	/^EXEEXT = $/;"	m
+EXTRA_DIST	makefile	/^EXTRA_DIST = contrib aund.conf.example $(man_MANS)$/;"	m
 FLEXINT_H	conf_lex.c	/^#define FLEXINT_H$/;"	d	file:
 FLEX_BETA	conf_lex.c	/^#define FLEX_BETA$/;"	d	file:
 FLEX_SCANNER	conf_lex.c	/^#define FLEX_SCANNER$/;"	d	file:
@@ -224,10 +224,10 @@ FT_DEVICE	fs_filetype.c	/^#define FT_DEVICE	/;"	d	file:
 FT_SOFTLINK	fs_filetype.c	/^#define FT_SOFTLINK	/;"	d	file:
 FT_TEXT	fs_filetype.c	/^#define FT_TEXT	/;"	d	file:
 FT_UNIXEX	fs_filetype.c	/^#define FT_UNIXEX	/;"	d	file:
-GCCFEWERWARNINGS	Makefile	/^GCCFEWERWARNINGS = $(GCCWARNINGS) -Wno-old-style-definition -Wno-redundant-decls -Wno-unused$/;"	m
-GCCWARNINGS	Makefile	/^GCCWARNINGS = -Wall -Wdeclaration-after-statement -Wold-style-definition -Wmissing-prototypes -Wredundant-decls -Wno-pointer-sign -Wno-uninitialized$/;"	m
-GREP	Makefile	/^GREP = \/usr\/bin\/grep$/;"	m
-GZIP_ENV	Makefile	/^GZIP_ENV = --best$/;"	m
+GCCFEWERWARNINGS	makefile	/^GCCFEWERWARNINGS = $(GCCWARNINGS) -Wno-old-style-definition -Wno-redundant-decls -Wno-unused$/;"	m
+GCCWARNINGS	makefile	/^GCCWARNINGS = -Wall -Wdeclaration-after-statement -Wold-style-definition -Wmissing-prototypes -Wredundant-decls -Wno-pointer-sign -Wno-uninitialized$/;"	m
+GREP	makefile	/^GREP = \/usr\/bin\/grep$/;"	m
+GZIP_ENV	makefile	/^GZIP_ENV = --best$/;"	m
 HAVE_INTTYPES_H	config.h	/^#define HAVE_INTTYPES_H /;"	d
 HAVE_MEMORY_H	config.h	/^#define HAVE_MEMORY_H /;"	d
 HAVE_O_xxLOCK	fs_fileio.c	/^#define HAVE_O_xxLOCK$/;"	d	file:
@@ -240,72 +240,72 @@ HAVE_SYS_STAT_H	config.h	/^#define HAVE_SYS_STAT_H /;"	d
 HAVE_SYS_TYPES_H	config.h	/^#define HAVE_SYS_TYPES_H /;"	d
 HAVE_UNISTD_H	config.h	/^#define HAVE_UNISTD_H /;"	d
 INITIAL	conf_lex.c	/^#define INITIAL /;"	d	file:
-INSTALL	Makefile	/^INSTALL = \/usr\/local\/bin\/ginstall -c$/;"	m
-INSTALL_DATA	Makefile	/^INSTALL_DATA = ${INSTALL} -m 644$/;"	m
-INSTALL_HEADER	Makefile	/^INSTALL_HEADER = $(INSTALL_DATA)$/;"	m
-INSTALL_PROGRAM	Makefile	/^INSTALL_PROGRAM = ${INSTALL}$/;"	m
-INSTALL_SCRIPT	Makefile	/^INSTALL_SCRIPT = ${INSTALL}$/;"	m
-INSTALL_STRIP_PROGRAM	Makefile	/^INSTALL_STRIP_PROGRAM = $(install_sh) -c -s$/;"	m
+INSTALL	makefile	/^INSTALL = \/usr\/local\/bin\/ginstall -c$/;"	m
+INSTALL_DATA	makefile	/^INSTALL_DATA = ${INSTALL} -m 644$/;"	m
+INSTALL_HEADER	makefile	/^INSTALL_HEADER = $(INSTALL_DATA)$/;"	m
+INSTALL_PROGRAM	makefile	/^INSTALL_PROGRAM = ${INSTALL}$/;"	m
+INSTALL_SCRIPT	makefile	/^INSTALL_SCRIPT = ${INSTALL}$/;"	m
+INSTALL_STRIP_PROGRAM	makefile	/^INSTALL_STRIP_PROGRAM = $(install_sh) -c -s$/;"	m
 INT16_MAX	conf_lex.c	/^#define INT16_MAX /;"	d	file:
 INT16_MIN	conf_lex.c	/^#define INT16_MIN /;"	d	file:
 INT32_MAX	conf_lex.c	/^#define INT32_MAX /;"	d	file:
 INT32_MIN	conf_lex.c	/^#define INT32_MIN /;"	d	file:
 INT8_MAX	conf_lex.c	/^#define INT8_MAX /;"	d	file:
 INT8_MIN	conf_lex.c	/^#define INT8_MIN /;"	d	file:
-LDFLAGS	Makefile	/^LDFLAGS = $/;"	m
-LEX	Makefile	/^LEX = flex$/;"	m
-LEXCOMPILE	Makefile	/^LEXCOMPILE = $(LEX) $(AM_LFLAGS) $(LFLAGS)$/;"	m
-LEXLIB	Makefile	/^LEXLIB = -ll$/;"	m
-LEX_OUTPUT_ROOT	Makefile	/^LEX_OUTPUT_ROOT = lex.yy$/;"	m
-LIBOBJS	Makefile	/^LIBOBJS = $/;"	m
-LIBRARIES	Makefile	/^LIBRARIES = $(noinst_LIBRARIES)$/;"	m
-LIBS	Makefile	/^LIBS = $/;"	m
-LINK	Makefile	/^LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@$/;"	m
-LTLIBOBJS	Makefile	/^LTLIBOBJS = $/;"	m
-MAKEINFO	Makefile	/^MAKEINFO = makeinfo$/;"	m
-MANS	Makefile	/^MANS = $(man_MANS)$/;"	m
+LDFLAGS	makefile	/^LDFLAGS = $/;"	m
+LEX	makefile	/^LEX = flex$/;"	m
+LEXCOMPILE	makefile	/^LEXCOMPILE = $(LEX) $(AM_LFLAGS) $(LFLAGS)$/;"	m
+LEXLIB	makefile	/^LEXLIB = -ll$/;"	m
+LEX_OUTPUT_ROOT	makefile	/^LEX_OUTPUT_ROOT = lex.yy$/;"	m
+LIBOBJS	makefile	/^LIBOBJS = $/;"	m
+LIBRARIES	makefile	/^LIBRARIES = $(noinst_LIBRARIES)$/;"	m
+LIBS	makefile	/^LIBS = $/;"	m
+LINK	makefile	/^LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@$/;"	m
+LTLIBOBJS	makefile	/^LTLIBOBJS = $/;"	m
+MAKEINFO	makefile	/^MAKEINFO = makeinfo$/;"	m
+MANS	makefile	/^MANS = $(man_MANS)$/;"	m
 MAX_HANDLES	fs_handle.c	/^#define MAX_HANDLES /;"	d	file:
-MKDIR_P	Makefile	/^MKDIR_P = \/usr\/local\/bin\/gmkdir -p$/;"	m
+MKDIR_P	makefile	/^MKDIR_P = \/usr\/local\/bin\/gmkdir -p$/;"	m
 NCMDS	fs_cli.c	/^#define NCMDS /;"	d	file:
 NERRNOS	fs_error.c	/^#define NERRNOS /;"	d	file:
 NFUNC	fileserver.c	/^#define NFUNC /;"	d	file:
 NMSGS	fs_error.c	/^#define NMSGS /;"	d	file:
-NORMAL_INSTALL	Makefile	/^NORMAL_INSTALL = :$/;"	m
-NORMAL_UNINSTALL	Makefile	/^NORMAL_UNINSTALL = :$/;"	m
-NROFF	Makefile	/^NROFF = nroff$/;"	m
-OBJEXT	Makefile	/^OBJEXT = o$/;"	m
+NORMAL_INSTALL	makefile	/^NORMAL_INSTALL = :$/;"	m
+NORMAL_UNINSTALL	makefile	/^NORMAL_UNINSTALL = :$/;"	m
+NROFF	makefile	/^NROFF = nroff$/;"	m
+OBJEXT	makefile	/^OBJEXT = o$/;"	m
 OUR_DATA_PORT	fs_fileio.c	/^#define OUR_DATA_PORT /;"	d	file:
-PACKAGE	Makefile	/^PACKAGE = aund$/;"	m
 PACKAGE	config.h	/^#define PACKAGE /;"	d
-PACKAGE_BUGREPORT	Makefile	/^PACKAGE_BUGREPORT = bjh21@bjh21.me.uk$/;"	m
+PACKAGE	makefile	/^PACKAGE = aund$/;"	m
 PACKAGE_BUGREPORT	config.h	/^#define PACKAGE_BUGREPORT /;"	d
-PACKAGE_NAME	Makefile	/^PACKAGE_NAME = aund$/;"	m
+PACKAGE_BUGREPORT	makefile	/^PACKAGE_BUGREPORT = bjh21@bjh21.me.uk$/;"	m
 PACKAGE_NAME	config.h	/^#define PACKAGE_NAME /;"	d
-PACKAGE_STRING	Makefile	/^PACKAGE_STRING = aund 0.06$/;"	m
+PACKAGE_NAME	makefile	/^PACKAGE_NAME = aund$/;"	m
 PACKAGE_STRING	config.h	/^#define PACKAGE_STRING /;"	d
-PACKAGE_TARNAME	Makefile	/^PACKAGE_TARNAME = aund$/;"	m
+PACKAGE_STRING	makefile	/^PACKAGE_STRING = aund 0.06$/;"	m
 PACKAGE_TARNAME	config.h	/^#define PACKAGE_TARNAME /;"	d
-PACKAGE_URL	Makefile	/^PACKAGE_URL = $/;"	m
+PACKAGE_TARNAME	makefile	/^PACKAGE_TARNAME = aund$/;"	m
 PACKAGE_URL	config.h	/^#define PACKAGE_URL /;"	d
-PACKAGE_VERSION	Makefile	/^PACKAGE_VERSION = 0.06$/;"	m
+PACKAGE_URL	makefile	/^PACKAGE_URL = $/;"	m
 PACKAGE_VERSION	config.h	/^#define PACKAGE_VERSION /;"	d
-PATH_SEPARATOR	Makefile	/^PATH_SEPARATOR = :$/;"	m
+PACKAGE_VERSION	makefile	/^PACKAGE_VERSION = 0.06$/;"	m
+PATH_SEPARATOR	makefile	/^PATH_SEPARATOR = :$/;"	m
 PKTOFF	beebem.c	/^#define PKTOFF /;"	d	file:
 PORT_AUN	aun.h	/^#define PORT_AUN /;"	d
-POST_INSTALL	Makefile	/^POST_INSTALL = :$/;"	m
-POST_UNINSTALL	Makefile	/^POST_UNINSTALL = :$/;"	m
-PRE_INSTALL	Makefile	/^PRE_INSTALL = :$/;"	m
-PRE_UNINSTALL	Makefile	/^PRE_UNINSTALL = :$/;"	m
-PROGRAMS	Makefile	/^PROGRAMS = $(bin_PROGRAMS)$/;"	m
-RANLIB	Makefile	/^RANLIB = ranlib$/;"	m
+POST_INSTALL	makefile	/^POST_INSTALL = :$/;"	m
+POST_UNINSTALL	makefile	/^POST_UNINSTALL = :$/;"	m
+PRE_INSTALL	makefile	/^PRE_INSTALL = :$/;"	m
+PRE_UNINSTALL	makefile	/^PRE_UNINSTALL = :$/;"	m
+PROGRAMS	makefile	/^PROGRAMS = $(bin_PROGRAMS)$/;"	m
+RANLIB	makefile	/^RANLIB = ranlib$/;"	m
 REJECT	conf_lex.c	/^#define REJECT /;"	d	file:
-SET_MAKE	Makefile	/^SET_MAKE = $/;"	m
-SHELL	Makefile	/^SHELL = \/bin\/sh$/;"	m
+SET_MAKE	makefile	/^SET_MAKE = $/;"	m
+SHELL	makefile	/^SHELL = \/bin\/sh$/;"	m
 SIZEOF_ec_fs_reply_discs	fs_proto.h	/^#define SIZEOF_ec_fs_reply_discs(/;"	d
 SIZEOF_ec_fs_reply_examine_all	fs_proto.h	/^#define SIZEOF_ec_fs_reply_examine_all(/;"	d
-SOURCES	Makefile	/^SOURCES = $(libconf_lex_a_SOURCES) $(aund_SOURCES)$/;"	m
+SOURCES	makefile	/^SOURCES = $(libconf_lex_a_SOURCES) $(aund_SOURCES)$/;"	m
 STDC_HEADERS	config.h	/^#define STDC_HEADERS /;"	d
-STRIP	Makefile	/^STRIP = $/;"	m
+STRIP	makefile	/^STRIP = $/;"	m
 S_IFBLK	conf_lex.c	/^#define S_IFBLK /;"	d	file:
 S_IFCHR	conf_lex.c	/^#define S_IFCHR /;"	d	file:
 S_IFDIR	conf_lex.c	/^#define S_IFDIR /;"	d	file:
@@ -319,9 +319,9 @@ TYPEMAP_TYPE	conf_lex.c	/^#define TYPEMAP_TYPE /;"	d	file:
 UINT16_MAX	conf_lex.c	/^#define UINT16_MAX /;"	d	file:
 UINT32_MAX	conf_lex.c	/^#define UINT32_MAX /;"	d	file:
 UINT8_MAX	conf_lex.c	/^#define UINT8_MAX /;"	d	file:
-VERSION	Makefile	/^VERSION = 0.06$/;"	m
 VERSION	config.h	/^#define VERSION /;"	d
-YLWRAP	Makefile	/^YLWRAP = $(top_srcdir)\/ylwrap$/;"	m
+VERSION	makefile	/^VERSION = 0.06$/;"	m
+YLWRAP	makefile	/^YLWRAP = $(top_srcdir)\/ylwrap$/;"	m
 YYSTATE	conf_lex.c	/^#define YYSTATE /;"	d	file:
 YYTABLES_NAME	conf_lex.c	/^#define YYTABLES_NAME /;"	d	file:
 YYTEXT_POINTER	config.h	/^#define YYTEXT_POINTER /;"	d
@@ -373,11 +373,11 @@ _FILESERVER_H	fileserver.h	/^#define _FILESERVER_H$/;"	d
 _FS_ERRORS_H	fs_errors.h	/^#define _FS_ERRORS_H$/;"	d
 _FS_PROTO_H	fs_proto.h	/^#define _FS_PROTO_H$/;"	d
 __STDC_LIMIT_MACROS	conf_lex.c	/^#define __STDC_LIMIT_MACROS /;"	d	file:
-abs_builddir	Makefile	/^abs_builddir = \/Users\/steveinglis\/documents\/aund$/;"	m
-abs_srcdir	Makefile	/^abs_srcdir = \/Users\/steveinglis\/documents\/aund$/;"	m
-abs_top_builddir	Makefile	/^abs_top_builddir = \/Users\/steveinglis\/documents\/aund$/;"	m
-abs_top_srcdir	Makefile	/^abs_top_srcdir = \/Users\/steveinglis\/documents\/aund$/;"	m
-ac_ct_CC	Makefile	/^ac_ct_CC = gcc$/;"	m
+abs_builddir	makefile	/^abs_builddir = \/Users\/steveinglis\/documents\/aund$/;"	m
+abs_srcdir	makefile	/^abs_srcdir = \/Users\/steveinglis\/documents\/aund$/;"	m
+abs_top_builddir	makefile	/^abs_top_builddir = \/Users\/steveinglis\/documents\/aund$/;"	m
+abs_top_srcdir	makefile	/^abs_top_srcdir = \/Users\/steveinglis\/documents\/aund$/;"	m
+ac_ct_CC	makefile	/^ac_ct_CC = gcc$/;"	m
 ac_fn_c_check_header_compile	configure	/^ac_fn_c_check_header_compile ()$/;"	f
 ac_fn_c_check_header_mongrel	configure	/^ac_fn_c_check_header_mongrel ()$/;"	f
 ac_fn_c_check_member	configure	/^ac_fn_c_check_member ()$/;"	f
@@ -394,66 +394,66 @@ access	fs_proto.h	/^	uint8_t access;$/;"	m	struct:ec_fs_reply_save2
 access	fs_proto.h	/^	uint8_t access;$/;"	m	struct:ec_fs_req_set_info_access
 access	fs_proto.h	/^	uint8_t access;$/;"	m	struct:ec_fs_req_set_info_all
 addr	beebem.c	/^	struct in_addr addr;$/;"	m	struct:ipport	typeref:struct:ipport::in_addr	file:
-am__CONFIG_DISTCLEAN_FILES	Makefile	/^am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \\$/;"	m
-am__DIST_COMMON	Makefile	/^am__DIST_COMMON = $(srcdir)\/Makefile.in $(srcdir)\/config.h.in INSTALL \\$/;"	m
-am__aclocal_m4_deps	Makefile	/^am__aclocal_m4_deps = $(top_srcdir)\/configure.ac$/;"	m
-am__base_list	Makefile	/^am__base_list = \\$/;"	m
-am__can_run_installinfo	Makefile	/^am__can_run_installinfo = \\$/;"	m
-am__cd	Makefile	/^am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd$/;"	m
-am__configure_deps	Makefile	/^am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \\$/;"	m
-am__define_uniq_tagged_files	Makefile	/^am__define_uniq_tagged_files = \\$/;"	m
-am__depfiles_remade	Makefile	/^am__depfiles_remade = .\/$(DEPDIR)\/aun.Po .\/$(DEPDIR)\/aund.Po \\$/;"	m
-am__distuninstallcheck_listfiles	Makefile	/^am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \\$/;"	m
-am__include	Makefile	/^am__include = include$/;"	m
-am__install_max	Makefile	/^am__install_max = 40$/;"	m
-am__installdirs	Makefile	/^am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man5dir)" \\$/;"	m
-am__is_gnu_make	Makefile	/^am__is_gnu_make = { \\$/;"	m
-am__leading_dot	Makefile	/^am__leading_dot = .$/;"	m
-am__make_dryrun	Makefile	/^am__make_dryrun = (target_option=n; $(am__make_running_with_option))$/;"	m
-am__make_keepgoing	Makefile	/^am__make_keepgoing = (target_option=k; $(am__make_running_with_option))$/;"	m
-am__make_running_with_option	Makefile	/^am__make_running_with_option = \\$/;"	m
-am__maybe_remake_depfiles	Makefile	/^am__maybe_remake_depfiles = depfiles$/;"	m
-am__mv	Makefile	/^am__mv = mv -f$/;"	m
-am__nobase_list	Makefile	/^am__nobase_list = $(am__nobase_strip_setup); \\$/;"	m
-am__nobase_strip	Makefile	/^am__nobase_strip = \\$/;"	m
-am__nobase_strip_setup	Makefile	/^am__nobase_strip_setup = \\$/;"	m
-am__post_remove_distdir	Makefile	/^am__post_remove_distdir = $(am__remove_distdir)$/;"	m
-am__quote	Makefile	/^am__quote = $/;"	m
-am__remove_distdir	Makefile	/^am__remove_distdir = \\$/;"	m
-am__strip_dir	Makefile	/^am__strip_dir = f=`echo $$p | sed -e 's|^.*\/||'`;$/;"	m
-am__tagged_files	Makefile	/^am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP) \\$/;"	m
-am__tar	Makefile	/^am__tar = $${TAR-tar} chof - "$$tardir"$/;"	m
-am__uninstall_files_from_dir	Makefile	/^am__uninstall_files_from_dir = { \\$/;"	m
-am__uniquify_input	Makefile	/^am__uniquify_input = $(AWK) '\\$/;"	m
-am__untar	Makefile	/^am__untar = $${TAR-tar} xf -$/;"	m
-am__v_AR_	Makefile	/^am__v_AR_ = $(am__v_AR_$(AM_DEFAULT_VERBOSITY))$/;"	m
-am__v_AR_0	Makefile	/^am__v_AR_0 = @echo "  AR      " $@;$/;"	m
-am__v_AR_1	Makefile	/^am__v_AR_1 = $/;"	m
-am__v_CCLD_	Makefile	/^am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))$/;"	m
-am__v_CCLD_0	Makefile	/^am__v_CCLD_0 = @echo "  CCLD    " $@;$/;"	m
-am__v_CCLD_1	Makefile	/^am__v_CCLD_1 = $/;"	m
-am__v_CC_	Makefile	/^am__v_CC_ = $(am__v_CC_$(AM_DEFAULT_VERBOSITY))$/;"	m
-am__v_CC_0	Makefile	/^am__v_CC_0 = @echo "  CC      " $@;$/;"	m
-am__v_CC_1	Makefile	/^am__v_CC_1 = $/;"	m
-am__v_GEN_	Makefile	/^am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))$/;"	m
-am__v_GEN_0	Makefile	/^am__v_GEN_0 = @echo "  GEN     " $@;$/;"	m
-am__v_GEN_1	Makefile	/^am__v_GEN_1 = $/;"	m
-am__v_LEX_	Makefile	/^am__v_LEX_ = $(am__v_LEX_$(AM_DEFAULT_VERBOSITY))$/;"	m
-am__v_LEX_0	Makefile	/^am__v_LEX_0 = @echo "  LEX     " $@;$/;"	m
-am__v_LEX_1	Makefile	/^am__v_LEX_1 = $/;"	m
-am__v_P_	Makefile	/^am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))$/;"	m
-am__v_P_0	Makefile	/^am__v_P_0 = false$/;"	m
-am__v_P_1	Makefile	/^am__v_P_1 = :$/;"	m
-am__v_at_	Makefile	/^am__v_at_ = $(am__v_at_$(AM_DEFAULT_VERBOSITY))$/;"	m
-am__v_at_0	Makefile	/^am__v_at_0 = @$/;"	m
-am__v_at_1	Makefile	/^am__v_at_1 = $/;"	m
-am__v_lt_	Makefile	/^am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))$/;"	m
-am__v_lt_0	Makefile	/^am__v_lt_0 = --silent$/;"	m
-am__v_lt_1	Makefile	/^am__v_lt_1 = $/;"	m
-am__vpath_adj	Makefile	/^am__vpath_adj = case $$p in \\$/;"	m
-am__vpath_adj_setup	Makefile	/^am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;$/;"	m
-am_aund_OBJECTS	Makefile	/^am_aund_OBJECTS = aund.$(OBJEXT) fileserver.$(OBJEXT) fs_cli.$(OBJEXT) \\$/;"	m
-am_libconf_lex_a_OBJECTS	Makefile	/^am_libconf_lex_a_OBJECTS = libconf_lex_a-conf_lex.$(OBJEXT)$/;"	m
+am__CONFIG_DISTCLEAN_FILES	makefile	/^am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \\$/;"	m
+am__DIST_COMMON	makefile	/^am__DIST_COMMON = $(srcdir)\/Makefile.in $(srcdir)\/config.h.in INSTALL \\$/;"	m
+am__aclocal_m4_deps	makefile	/^am__aclocal_m4_deps = $(top_srcdir)\/configure.ac$/;"	m
+am__base_list	makefile	/^am__base_list = \\$/;"	m
+am__can_run_installinfo	makefile	/^am__can_run_installinfo = \\$/;"	m
+am__cd	makefile	/^am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd$/;"	m
+am__configure_deps	makefile	/^am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \\$/;"	m
+am__define_uniq_tagged_files	makefile	/^am__define_uniq_tagged_files = \\$/;"	m
+am__depfiles_remade	makefile	/^am__depfiles_remade = .\/$(DEPDIR)\/aun.Po .\/$(DEPDIR)\/aund.Po \\$/;"	m
+am__distuninstallcheck_listfiles	makefile	/^am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \\$/;"	m
+am__include	makefile	/^am__include = include$/;"	m
+am__install_max	makefile	/^am__install_max = 40$/;"	m
+am__installdirs	makefile	/^am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man5dir)" \\$/;"	m
+am__is_gnu_make	makefile	/^am__is_gnu_make = { \\$/;"	m
+am__leading_dot	makefile	/^am__leading_dot = .$/;"	m
+am__make_dryrun	makefile	/^am__make_dryrun = (target_option=n; $(am__make_running_with_option))$/;"	m
+am__make_keepgoing	makefile	/^am__make_keepgoing = (target_option=k; $(am__make_running_with_option))$/;"	m
+am__make_running_with_option	makefile	/^am__make_running_with_option = \\$/;"	m
+am__maybe_remake_depfiles	makefile	/^am__maybe_remake_depfiles = depfiles$/;"	m
+am__mv	makefile	/^am__mv = mv -f$/;"	m
+am__nobase_list	makefile	/^am__nobase_list = $(am__nobase_strip_setup); \\$/;"	m
+am__nobase_strip	makefile	/^am__nobase_strip = \\$/;"	m
+am__nobase_strip_setup	makefile	/^am__nobase_strip_setup = \\$/;"	m
+am__post_remove_distdir	makefile	/^am__post_remove_distdir = $(am__remove_distdir)$/;"	m
+am__quote	makefile	/^am__quote = $/;"	m
+am__remove_distdir	makefile	/^am__remove_distdir = \\$/;"	m
+am__strip_dir	makefile	/^am__strip_dir = f=`echo $$p | sed -e 's|^.*\/||'`;$/;"	m
+am__tagged_files	makefile	/^am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP) \\$/;"	m
+am__tar	makefile	/^am__tar = $${TAR-tar} chof - "$$tardir"$/;"	m
+am__uninstall_files_from_dir	makefile	/^am__uninstall_files_from_dir = { \\$/;"	m
+am__uniquify_input	makefile	/^am__uniquify_input = $(AWK) '\\$/;"	m
+am__untar	makefile	/^am__untar = $${TAR-tar} xf -$/;"	m
+am__v_AR_	makefile	/^am__v_AR_ = $(am__v_AR_$(AM_DEFAULT_VERBOSITY))$/;"	m
+am__v_AR_0	makefile	/^am__v_AR_0 = @echo "  AR      " $@;$/;"	m
+am__v_AR_1	makefile	/^am__v_AR_1 = $/;"	m
+am__v_CCLD_	makefile	/^am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))$/;"	m
+am__v_CCLD_0	makefile	/^am__v_CCLD_0 = @echo "  CCLD    " $@;$/;"	m
+am__v_CCLD_1	makefile	/^am__v_CCLD_1 = $/;"	m
+am__v_CC_	makefile	/^am__v_CC_ = $(am__v_CC_$(AM_DEFAULT_VERBOSITY))$/;"	m
+am__v_CC_0	makefile	/^am__v_CC_0 = @echo "  CC      " $@;$/;"	m
+am__v_CC_1	makefile	/^am__v_CC_1 = $/;"	m
+am__v_GEN_	makefile	/^am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))$/;"	m
+am__v_GEN_0	makefile	/^am__v_GEN_0 = @echo "  GEN     " $@;$/;"	m
+am__v_GEN_1	makefile	/^am__v_GEN_1 = $/;"	m
+am__v_LEX_	makefile	/^am__v_LEX_ = $(am__v_LEX_$(AM_DEFAULT_VERBOSITY))$/;"	m
+am__v_LEX_0	makefile	/^am__v_LEX_0 = @echo "  LEX     " $@;$/;"	m
+am__v_LEX_1	makefile	/^am__v_LEX_1 = $/;"	m
+am__v_P_	makefile	/^am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))$/;"	m
+am__v_P_0	makefile	/^am__v_P_0 = false$/;"	m
+am__v_P_1	makefile	/^am__v_P_1 = :$/;"	m
+am__v_at_	makefile	/^am__v_at_ = $(am__v_at_$(AM_DEFAULT_VERBOSITY))$/;"	m
+am__v_at_0	makefile	/^am__v_at_0 = @$/;"	m
+am__v_at_1	makefile	/^am__v_at_1 = $/;"	m
+am__v_lt_	makefile	/^am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))$/;"	m
+am__v_lt_0	makefile	/^am__v_lt_0 = --silent$/;"	m
+am__v_lt_1	makefile	/^am__v_lt_1 = $/;"	m
+am__vpath_adj	makefile	/^am__vpath_adj = case $$p in \\$/;"	m
+am__vpath_adj_setup	makefile	/^am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;$/;"	m
+am_aund_OBJECTS	makefile	/^am_aund_OBJECTS = aund.$(OBJEXT) fileserver.$(OBJEXT) fs_cli.$(OBJEXT) \\$/;"	m
+am_libconf_lex_a_OBJECTS	makefile	/^am_libconf_lex_a_OBJECTS = libconf_lex_a-conf_lex.$(OBJEXT)$/;"	m
 arg	fs_proto.h	/^	uint8_t arg;$/;"	m	struct:ec_fs_req_examine
 arg	fs_proto.h	/^	uint8_t arg;$/;"	m	struct:ec_fs_req_get_args
 arg	fs_proto.h	/^	uint8_t arg;$/;"	m	struct:ec_fs_req_get_info
@@ -492,10 +492,10 @@ aun_recv	aun.c	/^aun_recv(ssize_t *outsize, struct aun_srcaddr *vfrom, int want_
 aun_setup	aun.c	/^aun_setup(void)$/;"	f	file:
 aun_srcaddr	extern.h	/^struct aun_srcaddr {$/;"	s
 aun_xmit	aun.c	/^aun_xmit(struct aun_packet *pkt, size_t len, struct aun_srcaddr *vto)$/;"	f	file:
-aund_DEPENDENCIES	Makefile	/^aund_DEPENDENCIES = libconf_lex.a $(LIBOBJS)$/;"	m
-aund_LDADD	Makefile	/^aund_LDADD = libconf_lex.a $(LIBOBJS)$/;"	m
-aund_OBJECTS	Makefile	/^aund_OBJECTS = $(am_aund_OBJECTS)$/;"	m
-aund_SOURCES	Makefile	/^aund_SOURCES = extern.h aund.c \\$/;"	m
+aund_DEPENDENCIES	makefile	/^aund_DEPENDENCIES = libconf_lex.a $(LIBOBJS)$/;"	m
+aund_LDADD	makefile	/^aund_LDADD = libconf_lex.a $(LIBOBJS)$/;"	m
+aund_OBJECTS	makefile	/^aund_OBJECTS = $(am_aund_OBJECTS)$/;"	m
+aund_SOURCES	makefile	/^aund_SOURCES = extern.h aund.c \\$/;"	m
 aunfuncs	aund.c	/^const struct aun_funcs *aunfuncs = &aun;$/;"	v	typeref:struct:aun_funcs
 beebem	beebem.c	/^const struct aun_funcs beebem = {$/;"	v	typeref:struct:aun_funcs
 beebem_cfg_file	aund.c	/^char *beebem_cfg_file = NULL;$/;"	v
@@ -507,14 +507,14 @@ beebem_recv	beebem.c	/^beebem_recv(ssize_t *outsize, struct aun_srcaddr *vfrom, 
 beebem_send	beebem.c	/^static void beebem_send(const void *data, ssize_t len)$/;"	f	file:
 beebem_setup	beebem.c	/^beebem_setup(void)$/;"	f	file:
 beebem_xmit	beebem.c	/^beebem_xmit(struct aun_packet *spkt, size_t len, struct aun_srcaddr *vto)$/;"	f	file:
-bin_PROGRAMS	Makefile	/^bin_PROGRAMS = aund$(EXEEXT)$/;"	m
-bindir	Makefile	/^bindir = ${exec_prefix}\/bin$/;"	m
+bin_PROGRAMS	makefile	/^bin_PROGRAMS = aund$(EXEEXT)$/;"	m
+bindir	makefile	/^bindir = ${exec_prefix}\/bin$/;"	m
 block_size	fs_proto.h	/^	uint8_t block_size[2];$/;"	m	struct:ec_fs_reply_putbytes1
 block_size	fs_proto.h	/^	uint8_t block_size[2];$/;"	m	struct:ec_fs_reply_save1
 boolean	conf_lex.c	/^	int boolean;$/;"	m	union:cfything	file:
 buf	aun.c	/^unsigned char buf[65536];$/;"	v
-build_alias	Makefile	/^build_alias = $/;"	m
-builddir	Makefile	/^builddir = .$/;"	m
+build_alias	makefile	/^build_alias = $/;"	m
+builddir	makefile	/^builddir = .$/;"	m
 byte	fs_proto.h	/^	uint8_t byte;$/;"	m	struct:ec_fs_reply_getbyte
 byte	fs_proto.h	/^	uint8_t byte;$/;"	m	struct:ec_fs_req_putbyte
 bytes	extern.h	/^	uint8_t bytes[4];$/;"	m	struct:aun_srcaddr
@@ -594,8 +594,8 @@ data	fs_proto.h	/^	uint8_t data[0]; \/* more *\/$/;"	m	struct:ec_fs_req
 data	fs_proto.h	/^	uint8_t data[0];$/;"	m	struct:ec_fs_req_set_info
 data_port	fs_proto.h	/^	uint8_t data_port;$/;"	m	struct:ec_fs_reply_putbytes1
 data_port	fs_proto.h	/^	uint8_t data_port;$/;"	m	struct:ec_fs_reply_save1
-datadir	Makefile	/^datadir = ${datarootdir}$/;"	m
-datarootdir	Makefile	/^datarootdir = ${prefix}\/share$/;"	m
+datadir	makefile	/^datadir = ${datarootdir}$/;"	m
+datarootdir	makefile	/^datarootdir = ${prefix}\/share$/;"	m
 date	fs_proto.h	/^	struct ec_fs_date date;$/;"	m	struct:ec_fs_exall	typeref:struct:ec_fs_exall::ec_fs_date
 date	fs_proto.h	/^	struct ec_fs_date date;$/;"	m	struct:ec_fs_reply_create	typeref:struct:ec_fs_reply_create::ec_fs_date
 date	fs_proto.h	/^	struct ec_fs_date date;$/;"	m	struct:ec_fs_reply_get_time	typeref:struct:ec_fs_reply_get_time::ec_fs_date
@@ -610,7 +610,7 @@ default_infoformat	fileserver.c	/^enum fs_info_format default_infoformat = FS_IN
 default_opt4	fileserver.c	/^int default_opt4 = 0;$/;"	v
 default_safehandles	fileserver.c	/^bool default_safehandles = true;$/;"	v
 default_timeout	aun.c	/^int default_timeout = 100000;$/;"	v
-depcomp	Makefile	/^depcomp = $(SHELL) $(top_srcdir)\/depcomp$/;"	m
+depcomp	makefile	/^depcomp = $(SHELL) $(top_srcdir)\/depcomp$/;"	m
 dequote	conf_lex.c	/^dequote(char *str)$/;"	f	file:
 dest_port	aun.h	/^	uint8_t dest_port;$/;"	m	struct:aun_packet
 dir_access	fs_proto.h	/^	uint8_t dir_access;$/;"	m	struct:ec_fs_reply_info_dir
@@ -621,13 +621,13 @@ disc	fs_proto.h	/^	uint8_t disc;$/;"	m	struct:ec_fs_reply_info_uid
 discname	fileserver.c	/^char discname[17];$/;"	v
 discname	fs_proto.h	/^	char discname[0];$/;"	m	struct:ec_fs_req_get_disc_free
 discnamelen	fs_proto.h	/^	uint8_t discnamelen; 	\/* Disc name length max *\/$/;"	m	struct:ec_fs_reply_get_uenv
-distcleancheck_listfiles	Makefile	/^distcleancheck_listfiles = find . -type f -print$/;"	m
-distdir	Makefile	/^distdir = $(PACKAGE)-$(VERSION)$/;"	m
-distuninstallcheck_listfiles	Makefile	/^distuninstallcheck_listfiles = find . -type f -print$/;"	m
-docdir	Makefile	/^docdir = ${datarootdir}\/doc\/${PACKAGE_TARNAME}$/;"	m
+distcleancheck_listfiles	makefile	/^distcleancheck_listfiles = find . -type f -print$/;"	m
+distdir	makefile	/^distdir = $(PACKAGE)-$(VERSION)$/;"	m
+distuninstallcheck_listfiles	makefile	/^distuninstallcheck_listfiles = find . -type f -print$/;"	m
+docdir	makefile	/^docdir = ${datarootdir}\/doc\/${PACKAGE_TARNAME}$/;"	m
 dopidfile	aund.c	/^dopidfile(char const *pidfile)$/;"	f	file:
 drives	fs_proto.h	/^	struct ec_fs_disc drives[0];$/;"	m	struct:ec_fs_reply_get_discs	typeref:struct:ec_fs_reply_get_discs::ec_fs_disc
-dvidir	Makefile	/^dvidir = ${docdir}$/;"	m
+dvidir	makefile	/^dvidir = ${docdir}$/;"	m
 eaddr	beebem.c	/^	struct econet_addr eaddr;$/;"	m	union:internal_addr	typeref:struct:internal_addr::econet_addr	file:
 ec2ip	beebem.c	/^} ec2ip[256*256];		       \/* index is network*256+station *\/$/;"	v	typeref:struct:ipport	file:
 ec_fs_date	fs_proto.h	/^struct ec_fs_date {$/;"	s
@@ -715,7 +715,7 @@ errnotab	fs_error.c	/^} errnotab[] = {$/;"	v	typeref:struct:__anon4	file:
 errnoval	fs_error.c	/^	int errnoval;$/;"	m	struct:__anon4	file:
 exec_addr	fs_proto.h	/^	uint8_t exec_addr[4];$/;"	m	struct:ec_fs_meta
 exec_addr	fs_proto.h	/^	uint8_t exec_addr[4];$/;"	m	struct:ec_fs_req_set_info_exec
-exec_prefix	Makefile	/^exec_prefix = ${prefix}$/;"	m
+exec_prefix	makefile	/^exec_prefix = ${prefix}$/;"	m
 f	fileserver.h	/^	FTSENT *f; \/* Result of fts_children on path *\/$/;"	m	struct:fs_dir_cache
 fd	fileserver.h	/^	int	fd;$/;"	m	struct:fs_handle
 file_server	fileserver.c	/^file_server(struct aun_packet *pkt, ssize_t len, struct aun_srcaddr *from)$/;"	f
@@ -905,18 +905,18 @@ handle	fs_proto.h	/^	uint8_t handle;$/;"	m	struct:ec_fs_req_putbytes
 handle	fs_proto.h	/^	uint8_t handle;$/;"	m	struct:ec_fs_req_set_args
 handles	fileserver.h	/^	struct fs_handle **handles; \/* array of handles for this client *\/$/;"	m	struct:fs_client	typeref:struct:fs_client::fs_handle
 host	fileserver.h	/^	struct aun_srcaddr host;$/;"	m	struct:fs_client	typeref:struct:fs_client::aun_srcaddr
-host_alias	Makefile	/^host_alias = $/;"	m
+host_alias	makefile	/^host_alias = $/;"	m
 hours	fs_proto.h	/^	uint8_t hours;$/;"	m	struct:ec_fs_reply_get_time
 hours	fs_proto.h	/^	uint8_t hours;$/;"	m	struct:ec_fs_req_set_time
-htmldir	Makefile	/^htmldir = ${docdir}$/;"	m
+htmldir	makefile	/^htmldir = ${docdir}$/;"	m
 impl	fs_cli.c	/^	fs_cmd_impl	*impl;$/;"	m	struct:fs_cmd	file:
-includedir	Makefile	/^includedir = ${prefix}\/include$/;"	m
-infodir	Makefile	/^infodir = ${datarootdir}\/info$/;"	m
+includedir	makefile	/^includedir = ${prefix}\/include$/;"	m
+infodir	makefile	/^infodir = ${datarootdir}\/info$/;"	m
 infoformat	fileserver.h	/^	enum fs_info_format infoformat;$/;"	m	struct:fs_client	typeref:enum:fs_client::fs_info_format
-install_sh	Makefile	/^install_sh = ${SHELL} \/Users\/steveinglis\/documents\/aund\/install-sh$/;"	m
-install_sh_DATA	Makefile	/^install_sh_DATA = $(install_sh) -c -m 644$/;"	m
-install_sh_PROGRAM	Makefile	/^install_sh_PROGRAM = $(install_sh) -c$/;"	m
-install_sh_SCRIPT	Makefile	/^install_sh_SCRIPT = $(install_sh) -c$/;"	m
+install_sh	makefile	/^install_sh = ${SHELL} \/Users\/steveinglis\/documents\/aund\/install-sh$/;"	m
+install_sh_DATA	makefile	/^install_sh_DATA = $(install_sh) -c -m 644$/;"	m
+install_sh_PROGRAM	makefile	/^install_sh_PROGRAM = $(install_sh) -c$/;"	m
+install_sh_SCRIPT	makefile	/^install_sh_SCRIPT = $(install_sh) -c$/;"	m
 internal_addr	aun.c	/^union internal_addr {$/;"	u	file:
 internal_addr	beebem.c	/^union internal_addr {$/;"	u	file:
 ipport	beebem.c	/^static struct ipport {$/;"	s	file:
@@ -926,26 +926,26 @@ lib	fs_proto.h	/^	uint8_t lib;$/;"	m	struct:ec_fs_reply_logon
 lib	fs_proto.h	/^	uint8_t lib;$/;"	m	struct:ec_fs_reply_sdisc
 lib	fs_proto.h	/^	uint8_t lib;$/;"	m	struct:ec_fs_req
 lib_leafname	fs_proto.h	/^	char lib_leafname[10];	\/* Leaf name of lib *\/$/;"	m	struct:ec_fs_reply_get_uenv
-libconf_lex_a_AR	Makefile	/^libconf_lex_a_AR = $(AR) $(ARFLAGS)$/;"	m
-libconf_lex_a_CFLAGS	Makefile	/^libconf_lex_a_CFLAGS = $(GCCFEWERWARNINGS)$/;"	m
-libconf_lex_a_LIBADD	Makefile	/^libconf_lex_a_LIBADD =$/;"	m
-libconf_lex_a_OBJECTS	Makefile	/^libconf_lex_a_OBJECTS = $(am_libconf_lex_a_OBJECTS)$/;"	m
-libconf_lex_a_SOURCES	Makefile	/^libconf_lex_a_SOURCES = conf_lex.l$/;"	m
-libdir	Makefile	/^libdir = ${exec_prefix}\/lib$/;"	m
-libexecdir	Makefile	/^libexecdir = ${exec_prefix}\/libexec$/;"	m
+libconf_lex_a_AR	makefile	/^libconf_lex_a_AR = $(AR) $(ARFLAGS)$/;"	m
+libconf_lex_a_CFLAGS	makefile	/^libconf_lex_a_CFLAGS = $(GCCFEWERWARNINGS)$/;"	m
+libconf_lex_a_LIBADD	makefile	/^libconf_lex_a_LIBADD =$/;"	m
+libconf_lex_a_OBJECTS	makefile	/^libconf_lex_a_OBJECTS = $(am_libconf_lex_a_OBJECTS)$/;"	m
+libconf_lex_a_SOURCES	makefile	/^libconf_lex_a_SOURCES = conf_lex.l$/;"	m
+libdir	makefile	/^libdir = ${exec_prefix}\/lib$/;"	m
+libexecdir	makefile	/^libexecdir = ${exec_prefix}\/libexec$/;"	m
 link	fileserver.h	/^	LIST_ENTRY(fs_client) link;$/;"	m	struct:fs_client
 load_addr	fs_proto.h	/^	uint8_t load_addr[4];$/;"	m	struct:ec_fs_meta
 load_addr	fs_proto.h	/^	uint8_t load_addr[4];$/;"	m	struct:ec_fs_reply_cli_load
 load_addr	fs_proto.h	/^	uint8_t load_addr[4];$/;"	m	struct:ec_fs_req_set_info_load
 load_addr_found	fs_proto.h	/^	uint8_t load_addr_found;$/;"	m	struct:ec_fs_reply_cli_load
-localedir	Makefile	/^localedir = ${datarootdir}\/locale$/;"	m
-localstatedir	Makefile	/^localstatedir = ${prefix}\/var$/;"	m
+localedir	makefile	/^localedir = ${datarootdir}\/locale$/;"	m
+localstatedir	makefile	/^localstatedir = ${prefix}\/var$/;"	m
 login	fileserver.h	/^	char *login;$/;"	m	struct:fs_client
 main	aund.c	/^main(int argc, char *argv[])$/;"	f
-man5dir	Makefile	/^man5dir = $(mandir)\/man5$/;"	m
-man8dir	Makefile	/^man8dir = $(mandir)\/man8$/;"	m
-man_MANS	Makefile	/^man_MANS = aund.conf.5 aund.passwd.5 aund.8$/;"	m
-mandir	Makefile	/^mandir = ${datarootdir}\/man$/;"	m
+man5dir	makefile	/^man5dir = $(mandir)\/man5$/;"	m
+man8dir	makefile	/^man8dir = $(mandir)\/man8$/;"	m
+man_MANS	makefile	/^man_MANS = aund.conf.5 aund.passwd.5 aund.8$/;"	m
+mandir	makefile	/^mandir = ${datarootdir}\/man$/;"	m
 mask	fs_filetype.c	/^			mode_t mask;$/;"	m	struct:fs_typemap::__anon1::__anon2	file:
 max_block	extern.h	/^	int max_block;$/;"	m	struct:aun_funcs
 meta	fs_proto.h	/^	struct ec_fs_meta meta;$/;"	m	struct:ec_fs_exall	typeref:struct:ec_fs_exall::ec_fs_meta
@@ -960,8 +960,8 @@ meta	fs_proto.h	/^	struct ec_fs_meta meta;$/;"	m	struct:ec_fs_req_set_info_all	t
 minlen	fs_cli.c	/^	int	minlen;$/;"	m	struct:fs_cmd	file:
 mins	fs_proto.h	/^	uint8_t mins;$/;"	m	struct:ec_fs_reply_get_time
 mins	fs_proto.h	/^	uint8_t mins;$/;"	m	struct:ec_fs_req_set_time
-mkdir_p	Makefile	/^mkdir_p = $(MKDIR_P)$/;"	m
-mkinstalldirs	Makefile	/^mkinstalldirs = $(install_sh) -d$/;"	m
+mkdir_p	makefile	/^mkdir_p = $(MKDIR_P)$/;"	m
+mkinstalldirs	makefile	/^mkinstalldirs = $(install_sh) -d$/;"	m
 mode	conf_lex.c	/^		mode_t mode;$/;"	m	struct:cfything::__anon3	file:
 mode	fs_filetype.c	/^		} mode;$/;"	m	union:fs_typemap::__anon1	typeref:struct:fs_typemap::__anon1::__anon2	file:
 msg	fs_error.c	/^	char *msg;$/;"	m	struct:__anon5	file:
@@ -986,7 +986,7 @@ network	beebem.c	/^	uint8_t network;$/;"	m	struct:econet_addr	file:
 new_handle	fs_proto.h	/^	uint8_t new_handle;$/;"	m	struct:ec_fs_reply_dir
 newfp	pw.c	/^static FILE *fp, *newfp;$/;"	v	file:
 nhandles	fileserver.h	/^	int nhandles;$/;"	m	struct:fs_client
-noinst_LIBRARIES	Makefile	/^noinst_LIBRARIES = libconf_lex.a$/;"	m
+noinst_LIBRARIES	makefile	/^noinst_LIBRARIES = libconf_lex.a$/;"	m
 ntoa	extern.h	/^	char *(*ntoa)(struct aun_srcaddr *addr);$/;"	m	struct:aun_funcs
 null_change	user_null.c	/^null_change(char const *user, char const *oldpw, char const *newpw)$/;"	f	file:
 null_set_opt4	user_null.c	/^null_set_opt4(char const *user, int opt4)$/;"	f	file:
@@ -997,7 +997,7 @@ nusers	fs_proto.h	/^	uint8_t nusers;$/;"	m	struct:ec_fs_reply_get_users_on
 nusers	fs_proto.h	/^	uint8_t nusers;$/;"	m	struct:ec_fs_req_get_users_on
 offset	fs_proto.h	/^	uint8_t offset[3]; \/* only if use_ptr != 0 *\/$/;"	m	struct:ec_fs_req_getbytes
 offset	fs_proto.h	/^	uint8_t offset[3]; \/* only if use_ptr != 0 *\/$/;"	m	struct:ec_fs_req_putbytes
-oldincludedir	Makefile	/^oldincludedir = \/usr\/include$/;"	m
+oldincludedir	makefile	/^oldincludedir = \/usr\/include$/;"	m
 oldoffset	fileserver.h	/^	off_t	oldoffset; \/* files only *\/$/;"	m	struct:fs_handle
 opt4	fs_proto.h	/^	uint8_t opt4;$/;"	m	struct:ec_fs_reply_logon
 opt4	fs_proto.h	/^	uint8_t opt4;$/;"	m	struct:ec_fs_req_set_opt4
@@ -1021,22 +1021,22 @@ path	fs_proto.h	/^	char path[0];$/;"	m	struct:ec_fs_req_set_info_access
 path	fs_proto.h	/^	char path[0];$/;"	m	struct:ec_fs_req_set_info_all
 path	fs_proto.h	/^	char path[0];$/;"	m	struct:ec_fs_req_set_info_exec
 path	fs_proto.h	/^	char path[0];$/;"	m	struct:ec_fs_req_set_info_load
-pdfdir	Makefile	/^pdfdir = ${docdir}$/;"	m
-pkgdatadir	Makefile	/^pkgdatadir = $(datadir)\/aund$/;"	m
-pkgincludedir	Makefile	/^pkgincludedir = $(includedir)\/aund$/;"	m
-pkglibdir	Makefile	/^pkglibdir = $(libdir)\/aund$/;"	m
-pkglibexecdir	Makefile	/^pkglibexecdir = $(libexecdir)\/aund$/;"	m
+pdfdir	makefile	/^pdfdir = ${docdir}$/;"	m
+pkgdatadir	makefile	/^pkgdatadir = $(datadir)\/aund$/;"	m
+pkgincludedir	makefile	/^pkgincludedir = $(includedir)\/aund$/;"	m
+pkglibdir	makefile	/^pkglibdir = $(libdir)\/aund$/;"	m
+pkglibexecdir	makefile	/^pkglibexecdir = $(libexecdir)\/aund$/;"	m
 pkt	fs_proto.h	/^	struct aun_packet pkt;$/;"	m	struct:ec_fs_req_getbyte	typeref:struct:ec_fs_req_getbyte::aun_packet
 pkt	fs_proto.h	/^	struct aun_packet pkt;$/;"	m	struct:ec_fs_req_putbyte	typeref:struct:ec_fs_req_putbyte::aun_packet
 port	beebem.c	/^	int port;$/;"	m	struct:ipport	file:
-prefix	Makefile	/^prefix = \/usr\/local$/;"	m
+prefix	makefile	/^prefix = \/usr\/local$/;"	m
 priv	fileserver.h	/^	int priv;$/;"	m	struct:fs_client
 priv	fs_proto.h	/^	uint8_t priv;$/;"	m	struct:ec_fs_reply_get_user
 priv	fs_proto.h	/^	uint8_t priv;$/;"	m	struct:ec_fs_user_on
 progname	aund.c	/^char *progname;$/;"	v
-program_transform_name	Makefile	/^program_transform_name = s,x,x,$/;"	m
+program_transform_name	makefile	/^program_transform_name = s,x,x,$/;"	m
 prototypes	configure	/^   function prototypes and stuff, but not '\\xHH' hex character constants.$/;"	f
-psdir	Makefile	/^psdir = ${docdir}$/;"	m
+psdir	makefile	/^psdir = ${docdir}$/;"	m
 pw_change	pw.c	/^pw_change(const char *user, const char *oldpw, const char *newpw)$/;"	f	file:
 pw_close	pw.c	/^pw_close(void)$/;"	f	file:
 pw_close_rename	pw.c	/^pw_close_rename(void)$/;"	f	file:
@@ -1064,7 +1064,7 @@ return_code	fs_proto.h	/^	uint8_t return_code;$/;"	m	struct:ec_fs_reply
 root	fileserver.c	/^char *root = NULL;		       \/* must specify this in config *\/$/;"	v
 rpkt	beebem.c	/^static struct aun_packet *const rpkt = (struct aun_packet *)rbuf;$/;"	v	file:
 safehandles	fileserver.h	/^	bool safehandles;$/;"	m	struct:fs_client
-sbindir	Makefile	/^sbindir = ${exec_prefix}\/sbin$/;"	m
+sbindir	makefile	/^sbindir = ${exec_prefix}\/sbin$/;"	m
 sbuf	beebem.c	/^static unsigned char sbuf[65536];$/;"	v	file:
 sdrive	fs_proto.h	/^	uint8_t sdrive;$/;"	m	struct:ec_fs_req_get_discs
 secs	fs_proto.h	/^	uint8_t secs;$/;"	m	struct:ec_fs_reply_get_time
@@ -1075,7 +1075,7 @@ set_bytes	fs_proto.h	/^    unsigned long long set_bytes;$/;"	m	struct:ec_fs_req_
 set_opt4	fileserver.h	/^	int (*set_opt4)(char const *, int);$/;"	m	struct:user_funcs
 set_priv	fileserver.h	/^	int (*set_priv)(struct fs_client *, char const *, char const *);$/;"	m	struct:user_funcs
 setup	extern.h	/^	void (*setup)(void);$/;"	m	struct:aun_funcs
-sharedstatedir	Makefile	/^sharedstatedir = ${prefix}\/com$/;"	m
+sharedstatedir	makefile	/^sharedstatedir = ${prefix}\/com$/;"	m
 sig_init	aund.c	/^sig_init(void)$/;"	f	file:
 sigcatcher	aund.c	/^sigcatcher(int s)$/;"	f	file:
 sin	fs_proto.h	/^	uint8_t sin[3];$/;"	m	struct:ec_fs_exall
@@ -1096,7 +1096,7 @@ space	fs_proto.h	/^	char space[1];		       \/* just a space *\/$/;"	m	struct:ec_
 spaces	fs_proto.h	/^	char spaces[3];		       \/* spaces *\/$/;"	m	struct:ec_fs_reply_cat_header
 srcaddr	aun.c	/^	struct aun_srcaddr srcaddr;$/;"	m	union:internal_addr	typeref:struct:internal_addr::aun_srcaddr	file:
 srcaddr	beebem.c	/^	struct aun_srcaddr srcaddr;$/;"	m	union:internal_addr	typeref:struct:internal_addr::aun_srcaddr	file:
-srcdir	Makefile	/^srcdir = .$/;"	m
+srcdir	makefile	/^srcdir = .$/;"	m
 start	fileserver.h	/^	int start; \/* position in the directory this list starts at *\/$/;"	m	struct:fs_dir_cache
 start	fs_proto.h	/^	uint8_t start;$/;"	m	struct:ec_fs_req_examine
 start	fs_proto.h	/^	uint8_t start;$/;"	m	struct:ec_fs_req_get_users_on
@@ -1171,23 +1171,23 @@ std_tx	fs_proto.h	/^	struct ec_fs_reply std_tx;$/;"	m	struct:ec_fs_reply_save2	t
 std_tx	fs_proto.h	/^	struct ec_fs_reply std_tx;$/;"	m	struct:ec_fs_reply_sdisc	typeref:struct:ec_fs_reply_sdisc::ec_fs_reply
 std_tx	fs_proto.h	/^    struct ec_fs_reply std_tx;$/;"	m	struct:ec_fs_reply_set_user_free	typeref:struct:ec_fs_reply_set_user_free::ec_fs_reply
 strpad	fs_util.c	/^strpad(char *s, int c, size_t len)$/;"	f
-subdir	Makefile	/^subdir = .$/;"	m
-sysconfdir	Makefile	/^sysconfdir = ${prefix}\/etc$/;"	m
-tardir	Makefile	/^	tardir=$(distdir) && $(am__tar) | BZIP2=$${BZIP2--9} bzip2 -c >$(distdir).tar.bz2$/;"	m
-tardir	Makefile	/^	tardir=$(distdir) && $(am__tar) | XZ_OPT=$${XZ_OPT--e} xz -c >$(distdir).tar.xz$/;"	m
-tardir	Makefile	/^	tardir=$(distdir) && $(am__tar) | compress -c >$(distdir).tar.Z$/;"	m
-tardir	Makefile	/^	tardir=$(distdir) && $(am__tar) | eval GZIP= gzip $(GZIP_ENV) -c >$(distdir).tar.gz$/;"	m
-tardir	Makefile	/^	tardir=$(distdir) && $(am__tar) | lzip -c $${LZIP_OPT--9} >$(distdir).tar.lz$/;"	m
-tardir	Makefile	/^	tardir=$(distdir) && $(am__tar) | zstd -c $${ZSTD_CLEVEL-$${ZSTD_OPT--19}} >$(distdir).tar.zst$/;"	m
-target_alias	Makefile	/^target_alias = $/;"	m
+subdir	makefile	/^subdir = .$/;"	m
+sysconfdir	makefile	/^sysconfdir = ${prefix}\/etc$/;"	m
+tardir	makefile	/^	tardir=$(distdir) && $(am__tar) | BZIP2=$${BZIP2--9} bzip2 -c >$(distdir).tar.bz2$/;"	m
+tardir	makefile	/^	tardir=$(distdir) && $(am__tar) | XZ_OPT=$${XZ_OPT--e} xz -c >$(distdir).tar.xz$/;"	m
+tardir	makefile	/^	tardir=$(distdir) && $(am__tar) | compress -c >$(distdir).tar.Z$/;"	m
+tardir	makefile	/^	tardir=$(distdir) && $(am__tar) | eval GZIP= gzip $(GZIP_ENV) -c >$(distdir).tar.gz$/;"	m
+tardir	makefile	/^	tardir=$(distdir) && $(am__tar) | lzip -c $${LZIP_OPT--9} >$(distdir).tar.lz$/;"	m
+tardir	makefile	/^	tardir=$(distdir) && $(am__tar) | zstd -c $${ZSTD_CLEVEL-$${ZSTD_OPT--19}} >$(distdir).tar.zst$/;"	m
+target_alias	makefile	/^target_alias = $/;"	m
 ten	fs_proto.h	/^	uint8_t ten; \/* these two used by Beeb NFS apparently *\/$/;"	m	struct:ec_fs_reply_info_dir
 test_varargs_macros	configure	/^  test_varargs_macros ();$/;"	f
-top_build_prefix	Makefile	/^top_build_prefix = $/;"	m
-top_builddir	Makefile	/^top_builddir = .$/;"	m
-top_distdir	Makefile	/^top_distdir = $(distdir)$/;"	m
-top_srcdir	Makefile	/^top_srcdir = .$/;"	m
+top_build_prefix	makefile	/^top_build_prefix = $/;"	m
+top_builddir	makefile	/^top_builddir = .$/;"	m
+top_distdir	makefile	/^top_distdir = $(distdir)$/;"	m
+top_srcdir	makefile	/^top_srcdir = .$/;"	m
 total_blocks	fs_proto.h	/^	uint8_t total_blocks[3]; \/* ditto *\/$/;"	m	struct:ec_fs_reply_get_disc_free
-transform	Makefile	/^transform = $(program_transform_name)$/;"	m
+transform	makefile	/^transform = $(program_transform_name)$/;"	m
 type	aun.h	/^	uint8_t type;$/;"	m	struct:aun_packet
 type	fileserver.h	/^	enum 	fs_handle_type type;$/;"	m	struct:fs_handle	typeref:enum:fs_handle::fs_handle_type
 type	fs_filetype.c	/^	int type;$/;"	m	struct:fs_typemap	file:
