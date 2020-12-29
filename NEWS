@@ -1,3 +1,9 @@
+aund 1.06.4
+ * The access command now works and changes permission on files in the
+   file server as expected. Supported are LWR/WR, sorry no E for the 
+   moment. 
+   - Outstanding: Getting load to honor the permissions like save does, 
+     and check that get and put byte(s) does the same.
 aund 1.06.3
  * Added user permissions check when writing a file. If the file does
    not have the correct permissions then you cannot write the file if
