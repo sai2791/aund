@@ -543,6 +543,8 @@ fs_load(struct fs_context *c)
 	size_t got;
 	FTS *ftsp;
 	FTSENT *f;
+    bool is_owner = false;
+    bool can_read = false;
 
 	if (c->client == NULL) {
 		fs_err(c, EC_FS_E_WHOAREYOU);
@@ -560,6 +562,9 @@ fs_load(struct fs_context *c)
 	request->path[strcspn(request->path, " ")] = '\0';
 	upath = fs_unixify_path(c, request->path);
 	if (upath == NULL) return;
+
+    is_owner = fs_is_owner(c, upath);
+
 	path_argv[0] = upath;
 	path_argv[1] = NULL;
 	if (as_command) {
@@ -584,10 +589,34 @@ fs_load(struct fs_context *c)
 		fs_err(c, EC_FS_E_ISDIR);
 		goto out;
 	}
+
 	if ((fd = open(f->fts_accpath, O_RDONLY)) == -1) {
 		fs_errno(c);
 		goto out;
 	}
+
+    if (is_owner == true) 
+    {
+        if (f->fts_statp->st_mode & S_IRUSR)
+        {
+            can_read = true;
+            if (debug) printf("Owner Read\n");
+        } 
+    }
+    if (is_owner == false)
+    {
+        if (f->fts_statp->st_mode & S_IROTH) 
+        {
+            can_read = true;
+            if (debug) printf("Public Read\n");
+        }
+    }
+
+    if (can_read == false) {
+        fs_err(c, EC_FS_E_NOACCESS);
+        goto notallowedread;
+    }
+
 	fs_get_meta(f, &(reply1.meta));
 	fs_write_val(reply1.size, f->fts_statp->st_size, sizeof(reply1.size));
 	reply1.access = fs_mode_to_access(f->fts_statp->st_mode);
@@ -609,6 +638,13 @@ out:
 	fts_close(ftsp);
 	free(upath);
 	if (as_command) free(upathlib);
+    return;
+
+notallowedread:
+    fts_close(ftsp);
+    free(upath);
+    if (as_command) free(upathlib);
+    return;    
 }
 
 void
