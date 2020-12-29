@@ -901,8 +901,6 @@ fs_cmd_access(struct fs_context *c, char *tail)
     {
         // We do not have owner access in this directory
         // so cannot change permissions
-        if (debug)
-            printf("Ownership check failed\n");
         fs_err(c, EC_FS_E_NOACCESS);
         return;
     }
@@ -913,14 +911,12 @@ fs_cmd_access(struct fs_context *c, char *tail)
     
     if (strcmp(name,"") == 0) {
         // what file did you mean?
-        if (debug) printf("Name has an empty string '%s'\n", name);
         fs_err(c, EC_FS_E_BADNAME);
         return;
         }
 
     if (strlen(name) > 10) {
         // Name is too long
-        if (debug) printf("Name was too long '%s'\n", name);
         fs_err(c, EC_FS_E_BADNAME);
         return;
     }
@@ -986,27 +982,22 @@ fs_cmd_access(struct fs_context *c, char *tail)
     if (is_locked)
         {
             new_permissions |= EC_FS_ACCESS_L;
-            if (debug) printf("Permission [%d]\n",new_permissions);
         }
     if (is_owner_write)
         {
             new_permissions |= EC_FS_ACCESS_UW; 
-            if (debug) printf("Permission [%d]\n",new_permissions);
         }
     if (is_owner_read)
         {
             new_permissions |= EC_FS_ACCESS_UR;
-            if (debug) printf("Permission [%d]\n",new_permissions);
         }
     if (is_public_read)
         {
             new_permissions |= EC_FS_ACCESS_OR;
-            if (debug) printf("Permission [%d]\n",new_permissions);
         }
     if (is_public_write)
         {
             new_permissions |= EC_FS_ACCESS_OW;
-            if (debug) printf("Permission [%d]\n",new_permissions);
         }
 
 
