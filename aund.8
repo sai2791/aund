@@ -173,6 +173,16 @@ into the client's memory at
 If
 .Ar addr
 is not specified, the load address of the file is used.
+.It Ic *ACCESS Ar file Ar permission
+Change the 
+.Ar permission
+of a
+.Ar file .
+Current permissions
+accepted are LWR/WR, with owner permission to the left
+of the slash. You must own the directory to change the
+.Ar permission 
+on a file.
 .It Ic *LOGOFF
 A synonym for
 .Ic *BYE .
