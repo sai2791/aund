@@ -895,16 +895,6 @@ fs_cmd_access(struct fs_context *c, char *tail)
 		return;
 	}
 
-	if ((upath = fs_unixify_path(c, name )) == NULL) return;
-    is_owner = fs_is_owner(c, fs_unixify_path(c, name));
-    if (is_owner == false)
-    {
-        // We do not have owner access in this directory
-        // so cannot change permissions
-        fs_err(c, EC_FS_E_NOACCESS);
-        return;
-    }
-
     if (debug) printf("\nAccess File [%s] -> permissions [%s]\n", name, access);
     // FIXME:
     // Bug here *ACCESS "" WR/R is permitted
@@ -943,7 +933,10 @@ fs_cmd_access(struct fs_context *c, char *tail)
         switch (access[loop_count])
         {
             case 'L':
+            if (found_slash == false)
+            {    
             is_locked = true;
+            }
             break;
 
             case 'W':
@@ -976,6 +969,16 @@ fs_cmd_access(struct fs_context *c, char *tail)
             fs_err(c, EC_FS_E_BADACCESS);
             return;
         }
+    }
+
+	if ((upath = fs_unixify_path(c, name )) == NULL) return;
+    is_owner = fs_is_owner(c, fs_unixify_path(c, name));
+    if (is_owner == false)
+    {
+        // We do not have owner access in this directory
+        // so cannot change permissions
+        fs_err(c, EC_FS_E_NOACCESS);
+        return;
     }
 
     new_permissions = 0;
