@@ -868,7 +868,7 @@ static void
 fs_cmd_access(struct fs_context *c, char *tail)
 {
 	char *name, *access;
-    char new_permissions;
+    unsigned char new_permissions;
 	char *upath;
 	char *path_argv[2];
 	struct ec_fs_reply reply;
@@ -987,27 +987,27 @@ fs_cmd_access(struct fs_context *c, char *tail)
     new_permissions = 0;
     if (is_locked)
         {
-            new_permissions |= S_IXUSR | (usergroup ? S_IXGRP : 0);
+            new_permissions |= EC_FS_ACCESS_L;
             if (debug) printf("Permission [%d]\n",new_permissions);
         }
     if (is_owner_write)
         {
-            new_permissions |= S_IWUSR | (usergroup ? S_IWGRP : 0);
+            new_permissions |= EC_FS_ACCESS_UW; 
             if (debug) printf("Permission [%d]\n",new_permissions);
         }
     if (is_owner_read)
         {
-            new_permissions |= S_IRUSR | (usergroup ? S_IRGRP : 0);
+            new_permissions |= EC_FS_ACCESS_UR;
             if (debug) printf("Permission [%d]\n",new_permissions);
         }
     if (is_public_read)
         {
-            new_permissions |= S_IROTH | (usergroup ? 0 : S_IRGRP);
+            new_permissions |= EC_FS_ACCESS_OR;
             if (debug) printf("Permission [%d]\n",new_permissions);
         }
     if (is_public_write)
         {
-            mode |= S_IWOTH | (usergroup ? 0 : S_IWGRP);
+            new_permissions |= EC_FS_ACCESS_OW;
             if (debug) printf("Permission [%d]\n",new_permissions);
         }
 
