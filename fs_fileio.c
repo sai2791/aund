@@ -90,6 +90,10 @@ fs_open(struct fs_context *c)
     bool is_owner  = false;
     bool can_read  = false;
     bool can_write = false;
+    bool file_exists = false;
+	FTS *ftsp;
+	FTSENT *f;
+	char *path_argv[3];
 
 	if (c->client == NULL) {
 		fs_err(c, EC_FS_E_WHOAREYOU);
@@ -104,42 +108,142 @@ fs_open(struct fs_context *c)
 	if (upath == NULL) return;
 
     is_owner = fs_is_owner(c, upath);
+
+    if( access( f->fts_accpath, F_OK ) == 0 ) {
+	    file_exists = true;
+    } else {
+	    file_exists = false;
+    }
+
     if (debug)
     {
         printf("is owner [%d]\n", is_owner);
         printf("must exist [%d]\n",request->must_exist);
         printf("read only [%d]\n", request->read_only);
+        printf("file exists already [%d]\n", file_exists);
     }
+
 
 	openopt = 0;
 	if (!request->must_exist) 
     {
         openopt |= O_CREAT;
-        if (is_owner == false)
+        if ((is_owner == false) && (file_exists == false))
             {
+                if (debug) printf("Owner is false, and file does not exist\n");
                 fs_err(c, EC_FS_E_NOACCESS);
                 free(upath);
                 return;
             }
     }
 
+	path_argv[0] = upath;
+	path_argv[1] = NULL;
+	ftsp = fts_open(path_argv, FTS_LOGICAL, NULL);
+	f = fts_read(ftsp);
+    if (f->fts_statp->st_mode & S_IWUSR)
+    {
+        // Assumption here is that the file existed
+        // Owner permission to write
+        if (is_owner == true)
+        {
+            if (debug) printf("file has Owner Write Access\n");
+            can_write = true;
+        }
+    }
+
+    // file did not exist we assume write_access
+    if (file_exists == false)
+    {
+        if (is_owner == true) can_write = true; 
+    }
+
+
 	if (request->read_only) {
+    // if the file existed then we    
     // need to check if we have read access here    
-    // owner
-    // public
-		openopt |= O_RDONLY;
+        if (is_owner == true)
+        {
+            if (f->fts_statp->st_mode & S_IRUSR)
+            {
+                can_read = true;
+            }
+        } else {
+            if (f->fts_statp->st_mode & S_IROTH)
+            {
+                can_read = true;
+            }
+        }
+
+        // if the file did not exist
+        if ((is_owner == true) && (file_exists == false))    
+        {
+            can_read = true;
+        }
+
+        if (can_read == false) 
+        {
+            if (debug) printf("can read was no\n");
+            fs_err(c, EC_FS_E_NOACCESS);
+            fts_close(ftsp);
+            free(upath);
+            return;
+        }
+
+ 		openopt |= O_RDONLY;
 #ifdef HAVE_O_xxLOCK
 		openopt |= O_SHLOCK | O_NONBLOCK;
 #endif
 	} else {
 		openopt |= O_RDWR;
         // need to check if we have read/write access here
-        // owner
-        // public
+        if (is_owner == true)
+        {
+            if (f->fts_statp->st_mode & S_IRUSR)
+            {
+                can_read = true;
+            }
+        } else {
+            if (f->fts_statp->st_mode & S_IROTH)
+            {
+                can_read = true;
+            }
+        }
+        if (is_owner == true)
+        {
+            if (f->fts_statp->st_mode & S_IWUSR)
+            {
+                can_write = true;
+            }
+        } else {
+            if (f->fts_statp->st_mode & S_IWOTH)
+            {
+                can_write = true;
+            }
+        }
+        if ((is_owner == true) && (file_exists == false))
+        {
+            can_write = true;
+            can_read  = true;
+        }
+
+        if ((can_read == false) || (can_write == false)) 
+        {
+            if (debug) printf("Write and Read were no\n");
+            fs_err(c, EC_FS_E_NOACCESS);
+            fts_close(ftsp);
+            free(upath);
+            return;
+            // might need to check if the file exists and owner
+            // and give no such file error instead
+        }
+
+ 		openopt |= O_RDONLY;
 #ifdef HAVE_O_xxLOCK
 		openopt |= O_EXLOCK | O_NONBLOCK;
 #endif
 	}
+	fts_close(ftsp);
 	if ((h = fs_open_handle(c->client, upath, openopt, true)) == 0) {
 #ifdef HAVE_O_xxLOCK
 		if (errno == EAGAIN)
