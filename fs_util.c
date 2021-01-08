@@ -415,7 +415,6 @@ fs_is_owner(struct fs_context *c,char *path)
                 c->client->login,userfuncs->urd(c->client->login), path);
            match = strncmp(userfuncs->urd(c->client->login),path,
 		strlen(userfuncs->urd(c->client->login)));
-           printf("Strlen %lu\n",strlen(userfuncs->urd(c->client->login)));
            if (match == 0) {
 		   is_owner = true;
            } else {
