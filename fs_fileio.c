@@ -87,6 +87,7 @@ fs_open(struct fs_context *c)
 	char *upath;
 	int openopt;
 	uint8_t h;
+    bool is_owner  = false;
 
 	if (c->client == NULL) {
 		fs_err(c, EC_FS_E_WHOAREYOU);
@@ -99,15 +100,40 @@ fs_open(struct fs_context *c)
 	    request->read_only ? "read":"rdwr", request->path);
 	upath = fs_unixify_path(c, request->path);
 	if (upath == NULL) return;
+
+    is_owner = fs_is_owner(c, upath);
+    if (debug)
+    {
+        printf("is owner [%d]\n", is_owner);
+        printf("must exist [%d]\n",request->must_exist);
+        printf("read only [%d]\n", request->read_only);
+    }
+
 	openopt = 0;
-	if (!request->must_exist) openopt |= O_CREAT;
+	if (!request->must_exist) 
+    {
+        openopt |= O_CREAT;
+        if (is_owner == false)
+            {
+                fs_err(c, EC_FS_E_NOACCESS);
+                free(upath);
+                return;
+            }
+    }
+
 	if (request->read_only) {
+    // need to check if we have read access here    
+    // owner
+    // public
 		openopt |= O_RDONLY;
 #ifdef HAVE_O_xxLOCK
 		openopt |= O_SHLOCK | O_NONBLOCK;
 #endif
 	} else {
 		openopt |= O_RDWR;
+        // need to check if we have read/write access here
+        // owner
+        // public
 #ifdef HAVE_O_xxLOCK
 		openopt |= O_EXLOCK | O_NONBLOCK;
 #endif
