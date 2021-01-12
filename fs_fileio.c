@@ -102,12 +102,6 @@ fs_open(struct fs_context *c)
 	if (upath == NULL) return;
 
     is_owner = fs_is_owner(c, upath);
-    if (debug)
-    {
-        printf("is owner [%d]\n", is_owner);
-        printf("must exist [%d]\n",request->must_exist);
-        printf("read only [%d]\n", request->read_only);
-    }
 
 	openopt = 0;
 	if (!request->must_exist) 
