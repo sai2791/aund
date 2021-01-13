@@ -89,7 +89,7 @@ fs_get_info(struct fs_context *c)
 	struct ec_fs_req_get_info *request;
 	FTS *ftsp;
 	FTSENT *f;
-	int match; /* string compare for path and urd */
+	bool match; /* string compare for path and urd */
 
 	if (c->client == NULL) {
 		fs_err(c, EC_FS_E_WHOAREYOU);
@@ -209,8 +209,8 @@ fs_get_info(struct fs_context *c)
 		/* if the path matches our urd then assume that we are the owner
                    and if not, then check if the user has priv, because they own 
 		   everything.  */
-		match = strncmp(userfuncs->urd(c->client->login),upath,strlen(userfuncs->urd(c->client->login)));
-		if (match == 0) {
+		match = fs_is_owner(c, upath);
+		if (match == true) {
 			reply.dir_access = FS_DIR_ACCESS_OWNER;
 		} else {
 			reply.dir_access = FS_DIR_ACCESS_PUBLIC;
@@ -420,7 +420,7 @@ fs_cat_header(struct fs_context *c)
 	struct ec_fs_reply_cat_header reply;
 	char *upath, *path_argv[2];
 	char *oururd;
-	int match;	
+	bool match;	
 	FTS *ftsp;
 	FTSENT *f;
 
@@ -460,8 +460,8 @@ fs_cat_header(struct fs_context *c)
 	fs_acornify_name(oururd);
 	printf("/g users [%s], URD [%s]\n", c->client->login,oururd);
 
-	match = strncmp(userfuncs->urd(c->client->login),upath,strlen(userfuncs->urd(c->client->login)));
-	if (match == 0) {
+    match = fs_is_owner(c, upath);
+	if (match == true) {
 	        reply.ownership[0] = 'O';
 	} else {
 	        reply.ownership[0] = 'P';
