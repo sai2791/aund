@@ -181,7 +181,7 @@ used to check for broken directories.
 Password file
 
 The passwords file is stored as $.Passwords. It must be an integral number
-of sectors long (i.e. byte 8 of its JesMap must be zero.
+of sectors long (i.e. byte 8 of its JesMap must be zero.)
 
 For each entry:
 
