@@ -123,11 +123,7 @@ fs_access_to_string(char *buf, uint8_t access)
 {
 
 	buf[0] = '\0';
-	/*
-	 * FIXME: this should take account of whether you own the
-	 * file. (In an ideal world where file ownership is
-	 * supported, that is.)
-	 */
+
 	if (access & EC_FS_ACCESS_D) strcat(buf, "D");
 	if (access & EC_FS_ACCESS_L) strcat(buf, "L");
 	if (access & EC_FS_ACCESS_UW) strcat(buf, "W");
@@ -402,11 +398,7 @@ fs_is_owner(struct fs_context *c,char *path)
 {
 	char *oururd;
 	int match;
-	bool is_owner;  /* 0 - Owner, 1 - Public */
-
-	/* Check if owner or public 
-	   then check if we have the correct access
-	   so two blocks */
+	bool is_owner;  /* True - Owner, False - Public */
 
 	   oururd = userfuncs->urd(c->client->login);
            fs_acornify_name(oururd);
@@ -427,7 +419,7 @@ fs_is_owner(struct fs_context *c,char *path)
    
            if (c->client->priv == EC_FS_PRIV_SYST)
            {
-		  is_owner = true;  /* Privilege gives owner access */
-            }
+	    	  is_owner = true;  /* Privilege gives owner access */
+           }
     return is_owner;
 }
