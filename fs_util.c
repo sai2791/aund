@@ -401,18 +401,16 @@ fs_is_owner(struct fs_context *c,char *path)
 	bool is_owner;  /* True - Owner, False - Public */
 
 	   oururd = userfuncs->urd(c->client->login);
-           fs_acornify_name(oururd);
-	/* Remove the printf once this is working */
-           printf("/g users [%s], URD [%s] PATH [%s]\n", 
-                c->client->login,userfuncs->urd(c->client->login), path);
-           match = strncmp(userfuncs->urd(c->client->login),path,
+       fs_acornify_name(oururd);
+
+        match = strncmp(userfuncs->urd(c->client->login),path,
 		strlen(userfuncs->urd(c->client->login)));
 
-           if (match == 0) {
-		   is_owner = true;
-           } else {
-		   is_owner = false;
-           }
+        if (match == 0) {
+    	   is_owner = true;
+        } else {
+      	   is_owner = false;
+        }
 
 	/* now we check if they have privilege as that gives
 	   ownership access - Can still have no permission to write */
