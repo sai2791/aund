@@ -190,13 +190,14 @@ fs_close(struct fs_context *c)
 				error = thiserr;
 	} else
 		error = fs_close1(c, request->handle);
-	if (error)
-	    fs_errno(c);
-    else {
-		reply.command_code = EC_FS_CC_DONE;
-		reply.return_code = EC_FS_RC_OK;
-		fs_reply(c, &reply, sizeof(reply));
-	}
+	if (error) 
+        {
+	        fs_errno(c);
+        } else {
+		    reply.command_code = EC_FS_CC_DONE;
+		    reply.return_code = EC_FS_RC_OK;
+		    fs_reply(c, &reply, sizeof(reply));
+	    }
 }
 
 /*
@@ -620,7 +621,6 @@ fs_load(struct fs_context *c)
         if (f->fts_statp->st_mode & S_IRUSR)
         {
             can_read = true;
-            if (debug) printf("Owner Read\n");
         } 
     }
     if (is_owner == false)
@@ -628,7 +628,6 @@ fs_load(struct fs_context *c)
         if (f->fts_statp->st_mode & S_IROTH) 
         {
             can_read = true;
-            if (debug) printf("Public Read\n");
         }
     }
 
@@ -728,7 +727,6 @@ fs_save(struct fs_context *c)
         // Owner permission to write
         if (is_owner == true)
         {
-            if (debug) printf("file has Owner Write Access\n");
             can_write = true;
         }
     }
@@ -737,7 +735,6 @@ fs_save(struct fs_context *c)
         // Public permission to write
         if (is_owner == false) 
         {
-            if (debug) printf("file has Public Write Access\n");
             can_write = true;
         }
     }
@@ -788,9 +785,9 @@ fs_save(struct fs_context *c)
     return;
 
 not_allowed_write:
-free(upath);
-fs_err(c, EC_FS_E_NOACCESS);    
-return;
+    free(upath);
+    fs_err(c, EC_FS_E_NOACCESS);    
+    return;
 }
 
 void
