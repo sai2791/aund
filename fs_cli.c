@@ -377,6 +377,7 @@ fs_cmd_rename(struct fs_context *c, char *tail)
 	char *path_argv[2];
 	FTS *ftsp;
 	FTSENT *f;
+    bool is_owner = false;
 
 	oldname = fs_cli_getarg(&tail);
 	newname = fs_cli_getarg(&tail);
@@ -390,13 +391,47 @@ fs_cmd_rename(struct fs_context *c, char *tail)
 		free(oldupath);
 		return;
 	}
-	if (rename(oldupath, newupath) < 0) {
-		fs_errno(c);
-	} else {
 		path_argv[0] = oldupath;
 		path_argv[1] = NULL;
 		ftsp = fts_open(path_argv, FTS_LOGICAL, NULL);
 		f = fts_read(ftsp);
+
+        if (f->fts_statp->st_mode & S_IXUSR)
+        {
+            // file is locked so we cannot rename
+            fs_err(c, EC_FS_E_LOCKED);
+            goto locked;
+        }
+
+        is_owner = fs_is_owner(c, oldupath);
+
+        if (is_owner == true)
+        {
+            if (!(f->fts_statp->st_mode & S_IWUSR))
+            {
+            // We dont have write access
+            fs_err(c, EC_FS_E_NOACCESS);
+            fts_close(ftsp);
+            goto notallowed;
+            }
+        }
+        if (is_owner == false)
+        {
+            if (!(f->fts_statp->st_mode & S_IWOTH))
+            {
+            // We dont have write access
+            fs_err(c, EC_FS_E_NOACCESS);
+            fts_close(ftsp);
+            goto notallowed;
+            }
+        }
+	if (rename(oldupath, newupath) < 0) {
+        free(oldupath);
+        free(newupath);
+        fts_close(ftsp);
+		fs_errno(c);
+        // Do not need to return here
+	} else {
 		fs_get_meta(f, &meta);
 		fs_del_meta(f);
 		fts_close(ftsp);
@@ -412,8 +447,16 @@ fs_cmd_rename(struct fs_context *c, char *tail)
 		reply.return_code = EC_FS_RC_OK;
 		fs_reply(c, &reply, sizeof(reply));
 	}
+notallowed:
 	free(oldupath);
 	free(newupath);
+    return;
+
+locked:
+    fts_close(ftsp);
+    free(oldupath);
+    free(newupath);
+    return;    
 }
 
 static void

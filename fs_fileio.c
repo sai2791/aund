@@ -727,6 +727,11 @@ fs_save(struct fs_context *c)
         // Owner permission to write
         if (is_owner == true)
         {
+            if (f->fts_statp->st_mode & S_IXUSR)
+            {
+                // the file is locked
+                goto locked;
+            }
             can_write = true;
         }
     }
@@ -735,6 +740,11 @@ fs_save(struct fs_context *c)
         // Public permission to write
         if (is_owner == false) 
         {
+            if (f->fts_statp->st_mode & S_IXUSR)
+            {
+                // the file is locked
+                goto locked;
+            }
             can_write = true;
         }
     }
@@ -787,6 +797,11 @@ fs_save(struct fs_context *c)
 not_allowed_write:
     free(upath);
     fs_err(c, EC_FS_E_NOACCESS);    
+    return;
+
+locked:
+    free(upath);
+    fs_err(c, EC_FS_E_LOCKED);
     return;
 }
 
