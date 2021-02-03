@@ -8,6 +8,7 @@ fileserver.  It supports:
 * Multiple virtual users (all under one Unix UID)
 * Individual users (all under one Unix UID) with passwords and Privilege flags
 * Owner permission on directories under the users URD
+* Access permissions now implemented
 
 For general installation instructions, see the INSTALL file.  aund is
 not particularly portable, and expects a BSDish or GNUish C library.
