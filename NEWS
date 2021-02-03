@@ -1,3 +1,6 @@
+aund 1.06.06
+ * Openin, Openout and Openup now validate and support access permissions
+-- Steve Inglis <sai2791@googlemail.com> Wed, 03 Feb 2021 17:16:00 +0000 
 aund 1.06.5
  * The load command now honors the permission flags as well.
  * Creating a directory did not check if the user had the correct
