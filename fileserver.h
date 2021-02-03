@@ -68,6 +68,11 @@ struct fs_handle {
 	 * request, but not everything follows that reliably.)
 	 */
 	uint8_t	sequence; /* also only for files */
+    bool is_owner;
+    bool can_read;
+    bool can_write;
+    bool is_locked;
+    bool did_create;
 };
 
 struct fs_dir_cache {

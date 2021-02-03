@@ -290,8 +290,8 @@ struct ec_fs_reply_cat_header {
 #define EC_FS_FUNC_OPEN		6
 struct ec_fs_req_open {
 	struct ec_fs_req std_rx;
-	uint8_t must_exist; /* 0 or 1 */
-	uint8_t read_only;
+	uint8_t must_exist; /* 0 or non zero */
+	uint8_t read_only;  /* 0 or non zero */
 	char path[0];
 };
 struct ec_fs_reply_open {

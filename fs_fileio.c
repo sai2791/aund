@@ -84,10 +84,16 @@ fs_open(struct fs_context *c)
 {
 	struct ec_fs_reply_open reply;
 	struct ec_fs_req_open *request;
+    struct stat st;
 	char *upath;
-	int openopt;
+	int openopt, fd;
 	uint8_t h;
     bool is_owner  = false;
+    bool did_create = false;
+    bool found_file = true;  // Assume the file exists, but check later
+	FTS *ftsp;
+	FTSENT *f;
+	char *path_argv[2];
 
 	if (c->client == NULL) {
 		fs_err(c, EC_FS_E_WHOAREYOU);
@@ -102,32 +108,48 @@ fs_open(struct fs_context *c)
 	if (upath == NULL) return;
 
     is_owner = fs_is_owner(c, upath);
+    // We need to check if the file exists before we try to open
+    // it with the O_CREATE option included as an open parameter
+    // So that we can remove it later if theres an error. Or if
+    // the file was created in a directory that you are not the 
+    // owner of.
 
-	openopt = 0;
-	if (!request->must_exist) 
-    {
-        openopt |= O_CREAT;
-        if (is_owner == false)
-            {
-                fs_err(c, EC_FS_E_NOACCESS);
-                free(upath);
-                return;
-            }
+	if ((fd = open(upath, O_RDONLY)) == -1) {
+        // we cannot open the file for read only so 
+        // it probably does not exist
+        found_file = false;
+        }
+
+    if (fstat(fd, &st) == -1) {
+        // As a check I will try to see if I can get any information
+        // about the file as a secondary check
+        found_file = false;
+    }
+
+    openopt = 0;
+    if (!request->must_exist) {
+      openopt |= O_CREAT;
+      if ( found_file == false)
+      {
+          // We need to add the o_create and the file was not
+          // already in the directory so we are going to setup
+          // the did_create flag against the handle 
+          did_create = true;
+      }
+      if (is_owner == false) {
+        fs_err(c, EC_FS_E_NOACCESS);
+        free(upath);
+        return;
+      }
     }
 
 	if (request->read_only) {
-    // need to check if we have read access here    
-    // owner
-    // public
 		openopt |= O_RDONLY;
 #ifdef HAVE_O_xxLOCK
 		openopt |= O_SHLOCK | O_NONBLOCK;
 #endif
 	} else {
 		openopt |= O_RDWR;
-        // need to check if we have read/write access here
-        // owner
-        // public
 #ifdef HAVE_O_xxLOCK
 		openopt |= O_EXLOCK | O_NONBLOCK;
 #endif
@@ -140,9 +162,49 @@ fs_open(struct fs_context *c)
 #endif
 			fs_errno(c);
 		    free(upath);
-		return;
-	}
-	free(upath);
+
+             return;
+        }
+
+	path_argv[0] = upath;
+	path_argv[1] = NULL;
+
+	ftsp = fts_open(path_argv, FTS_LOGICAL, NULL);
+	f = fts_read(ftsp);
+    if (f->fts_statp->st_mode & S_IWUSR) {
+        c->client->handles[h]->can_write = true;
+    }
+    if (f->fts_statp->st_mode & S_IWOTH) {
+        c->client->handles[h]->can_write = true;
+    }
+    if (f->fts_statp->st_mode & S_IRUSR) {
+        c->client->handles[h]->can_read = true;
+    }
+    if (f->fts_statp->st_mode & S_IROTH) {
+        c->client->handles[h]->can_read = true;
+    }
+    if (f->fts_statp->st_mode & S_IXUSR) {
+        c->client->handles[h]->is_locked = true;
+    }
+    fts_close(ftsp);
+
+    // OPENIN sends:   open file for read only
+    // 7: non-zero, file must exist (NFS 3.60 sends &80)
+    // 8: non-zero, open file for reading (NFS 3.60 sends &01)
+
+    // OPENOUT sends:  open file only creates if it does not exist
+    // 7: zero, delete any existing file
+    // 8: zero, not read-only, ie open file for output
+
+    // OPENUP sends:   open file for read/write but file must exist
+    // 7: non-zero, file must exist (NFS 3.60 sends &80)
+    // 8: zero, not read-only, ie open file for output
+
+    if (h != 0) {
+      c->client->handles[h]->is_owner = is_owner;
+      c->client->handles[h]->did_create = did_create;
+        }
+        free(upath);
 #ifdef HAVE_O_xxLOCK
 	if ((openopt = fcntl(c->client->handles[h]->fd, F_GETFL)) == -1 ||
 	    fcntl(c->client->handles[h]->fd,
@@ -369,6 +431,18 @@ fs_putbyte(struct fs_context *c)
 		    request->handle, request->byte);
 	if ((h = fs_check_handle(c->client, request->handle)) != 0) {
 		if (fs_randomio_common(c, request->handle)) return;
+        if (c->client->handles[h]->can_write == false)
+        {
+            // we are trying to write to a file that we do no have permission for
+            fs_err(c, EC_FS_E_NOACCESS);
+            return;
+        }
+        if (c->client->handles[h]->is_locked == true)
+        {
+            // we are trying to write to a file that is locked
+            fs_err(c, EC_FS_E_LOCKED);
+            return;
+        }
 		fd = c->client->handles[h]->fd;
 		if (write(fd, &request->byte, 1) < 0) {
 			fs_errno(c);
@@ -434,6 +508,12 @@ fs_getbytes(struct fs_context *c)
 		    (uintmax_t)off);
 	if ((h = fs_check_handle(c->client, request->handle)) != 0) {
 		if (fs_randomio_common(c, request->handle)) return;
+        if (c->client->handles[h]->can_read == false)
+        {
+            // We are trying to read from a file without the correct permission
+            fs_err(c, EC_FS_E_NOACCESS);
+            return;
+        }
 		fd = c->client->handles[h]->fd;
 		if (!request->use_ptr)
 			if (lseek(fd, off, SEEK_SET) == -1) {
@@ -476,6 +556,12 @@ fs_getbyte(struct fs_context *c)
 	if (debug) printf("getbyte [%d]\n", request->handle);
 	if ((h = fs_check_handle(c->client, request->handle)) != 0) {
 		if (fs_randomio_common(c, request->handle)) return;
+        if (c->client->handles[h]->can_read == false)
+        {
+            // We are trying to read from a file that we do not have permissions to
+            fs_err(c, EC_FS_E_NOACCESS);
+            return;
+        }
 		fd = c->client->handles[h]->fd;
 		if ((ret = read(fd, &reply.byte, 1)) < 0) {
 			fs_errno(c);
@@ -517,6 +603,18 @@ fs_putbytes(struct fs_context *c)
 		    (uintmax_t)off);
 	if ((h = fs_check_handle(c->client, request->handle)) != 0) {
 		if (fs_randomio_common(c, request->handle)) return;
+        if (c->client->handles[h]->can_write == false)
+        {
+            // we are trying to write to a file without permission
+            fs_err(c, EC_FS_E_NOACCESS);
+            return;
+        }
+        if (c->client->handles[h]->is_locked == true)
+        {
+            // we are trying to write to a locked file 
+            fs_err(c, EC_FS_E_LOCKED);
+            return;
+        }
 		fd = c->client->handles[h]->fd;
 		if (!request->use_ptr)
 			if (lseek(fd, off, SEEK_SET) == -1) {
@@ -633,7 +731,7 @@ fs_load(struct fs_context *c)
 
     if (can_read == false) {
         fs_err(c, EC_FS_E_NOACCESS);
-        goto notallowedread;
+        goto out;
     }
 
 	fs_get_meta(f, &(reply1.meta));
@@ -658,12 +756,6 @@ out:
 	free(upath);
 	if (as_command) free(upathlib);
     return;
-
-notallowedread:
-    fts_close(ftsp);
-    free(upath);
-    if (as_command) free(upathlib);
-    return;    
 }
 
 void

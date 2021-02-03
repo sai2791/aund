@@ -26,6 +26,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <fts.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -285,4 +286,3 @@ fs_free_handle(struct fs_client *client, int h)
 	free(client->handles[h]);
 	client->handles[h] = 0;
 }
-
