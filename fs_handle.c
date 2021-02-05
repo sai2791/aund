@@ -99,15 +99,6 @@ fs_open_handle(struct fs_client *client, char *path, int open_flags,
 	char *newpath;
 	int h, fd;
 
-    // Report each time we create a handle for a file
-    // I need to know if this is a good place to check
-    // permisions for openin, openout, and openup
-
-    if (debug) printf("Open handle called ...\n");
-    
-    // We need to get from the fs_client to the fs_context to do 
-    // the ownership testing.  So how do we go about that?
-
 	h = fs_alloc_handle(client, for_open);
 	if (h == 0) {
 		errno = EMFILE;

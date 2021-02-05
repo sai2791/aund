@@ -724,7 +724,6 @@ fs_cdir1(struct fs_context *c, char *path)
 	upath = fs_unixify_path(c, path);
     is_owner = fs_is_owner(c, upath);
     
-    if (debug) printf("Is this the owner of the current directory [%d]\n", is_owner);
     if (is_owner == false)
     {
         fs_err(c, EC_FS_E_NOACCESS);

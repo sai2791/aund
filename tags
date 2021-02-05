@@ -44,7 +44,7 @@ BORING	conf_lex.c	/^#define BORING /;"	d	file:
 CC	Makefile	/^CC = gcc$/;"	m
 CCDEPMODE	Makefile	/^CCDEPMODE = depmode=gcc3$/;"	m
 CCLD	Makefile	/^CCLD = $(CC)$/;"	m
-CFLAGS	Makefile	/^CFLAGS = -g -O0$/;"	m
+CFLAGS	Makefile	/^CFLAGS = -g -O2$/;"	m
 CF_BOOLEAN	conf_lex.c	/^#define CF_BOOLEAN /;"	d	file:
 CF_EOF	conf_lex.c	/^#define CF_EOF /;"	d	file:
 CF_FUNC	conf_lex.c	/^#define CF_FUNC /;"	d	file:
@@ -394,6 +394,7 @@ access	fs_proto.h	/^	uint8_t access;$/;"	m	struct:ec_fs_reply_save2
 access	fs_proto.h	/^	uint8_t access;$/;"	m	struct:ec_fs_req_set_info_access
 access	fs_proto.h	/^	uint8_t access;$/;"	m	struct:ec_fs_req_set_info_all
 addr	beebem.c	/^	struct in_addr addr;$/;"	m	struct:ipport	typeref:struct:ipport::in_addr	file:
+aix_post_process_depfile	depcomp	/^aix_post_process_depfile ()$/;"	f
 am__CONFIG_DISTCLEAN_FILES	Makefile	/^am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \\$/;"	m
 am__DIST_COMMON	Makefile	/^am__DIST_COMMON = $(srcdir)\/Makefile.in $(srcdir)\/config.h.in INSTALL \\$/;"	m
 am__aclocal_m4_deps	Makefile	/^am__aclocal_m4_deps = $(top_srcdir)\/configure.ac$/;"	m
@@ -559,7 +560,7 @@ cfywrap	conf_lex.c	/^#define cfywrap(/;"	d	file:
 change	fileserver.h	/^	int (*change)(char const *, char const *, char const *);$/;"	m	struct:user_funcs
 client	fileserver.h	/^	struct fs_client *client;	\/* Pointer to client structure, or NULL if not logged in *\/$/;"	m	struct:fs_context	typeref:struct:fs_context::fs_client
 cmd_tab	fs_cli.c	/^static const struct fs_cmd cmd_tab[] = {$/;"	v	typeref:struct:fs_cmd	file:
-command_code	fs_proto.h	/^	uint8_t command_code;$/;"	m	struct:ec_fs_reply
+command_code	fs_proto.h	/^	int8_t command_code;$/;"	m	struct:ec_fs_reply
 conf_cmd_beebem	conf_lex.c	/^conf_cmd_beebem(union cfything *thing)$/;"	f	file:
 conf_cmd_debug	conf_lex.c	/^conf_cmd_debug(union cfything *xthing)$/;"	f	file:
 conf_cmd_infofmt	conf_lex.c	/^conf_cmd_infofmt(union cfything *thing)$/;"	f	file:
@@ -582,7 +583,7 @@ crit	fs_filetype.c	/^	} crit;$/;"	m	struct:fs_typemap	typeref:union:fs_typemap::
 csd	fs_proto.h	/^	uint8_t csd;$/;"	m	struct:ec_fs_reply_logon
 csd	fs_proto.h	/^	uint8_t csd;$/;"	m	struct:ec_fs_reply_sdisc
 csd	fs_proto.h	/^	uint8_t csd;$/;"	m	struct:ec_fs_req
-csd_discname	fs_proto.h	/^	char csd_discname[12];	       \/* zero-padded *\/$/;"	m	struct:ec_fs_reply_cat_header
+csd_discname	fs_proto.h	/^	char csd_discname[12];	   \/* zero-padded *\/$/;"	m	struct:ec_fs_reply_cat_header
 csd_discname	fs_proto.h	/^	char csd_discname[16]; 	\/* Name of disc with CSD on *\/$/;"	m	struct:ec_fs_reply_get_uenv
 csd_leafname	fs_proto.h	/^	char csd_leafname[10];	\/* Leaf name of CSD *\/$/;"	m	struct:ec_fs_reply_get_uenv
 curpidfile	aund.c	/^static char const *curpidfile;$/;"	v	file:
@@ -893,8 +894,11 @@ func_file_conv	compile	/^func_file_conv ()$/;"	f
 function	fs_proto.h	/^	uint8_t function;$/;"	m	struct:ec_fs_req
 function	fs_proto.h	/^	uint8_t function;$/;"	m	struct:ec_fs_req_getbyte
 function	fs_proto.h	/^	uint8_t function;$/;"	m	struct:ec_fs_req_putbyte
+get_dirname	ylwrap	/^get_dirname ()$/;"	f
 get_priv	fileserver.h	/^  	int (*get_priv)(char const *);$/;"	m	struct:user_funcs
 get_stn	extern.h	/^	void (*get_stn)(struct aun_srcaddr *addr, uint8_t *out);$/;"	m	struct:aun_funcs
+give_advice	missing	/^give_advice ()$/;"	f
+guard	ylwrap	/^guard ()$/;"	f
 handle	fs_proto.h	/^	uint8_t handle;$/;"	m	struct:ec_fs_reply_open
 handle	fs_proto.h	/^	uint8_t handle;$/;"	m	struct:ec_fs_req_close
 handle	fs_proto.h	/^	uint8_t handle;$/;"	m	struct:ec_fs_req_get_args
@@ -945,6 +949,7 @@ localedir	Makefile	/^localedir = ${datarootdir}\/locale$/;"	m
 localstatedir	Makefile	/^localstatedir = ${prefix}\/var$/;"	m
 login	fileserver.h	/^	char *login;$/;"	m	struct:fs_client
 main	aund.c	/^main(int argc, char *argv[])$/;"	f
+make_dummy_depfile	depcomp	/^make_dummy_depfile ()$/;"	f
 man5dir	Makefile	/^man5dir = $(mandir)\/man5$/;"	m
 man8dir	Makefile	/^man8dir = $(mandir)\/man8$/;"	m
 man_MANS	Makefile	/^man_MANS = aund.conf.5 aund.passwd.5 aund.8$/;"	m
@@ -1037,6 +1042,7 @@ priv	fileserver.h	/^	int priv;$/;"	m	struct:fs_client
 priv	fs_proto.h	/^	uint8_t priv;$/;"	m	struct:ec_fs_reply_get_user
 priv	fs_proto.h	/^	uint8_t priv;$/;"	m	struct:ec_fs_user_on
 progname	aund.c	/^char *progname;$/;"	v
+program_details	missing	/^program_details ()$/;"	f
 program_transform_name	Makefile	/^program_transform_name = s,x,x,$/;"	m
 prototypes	configure	/^   function prototypes and stuff, but not '\\xHH' hex character constants.$/;"	f
 psdir	Makefile	/^psdir = ${docdir}$/;"	m
@@ -1054,6 +1060,7 @@ pw_write_line	pw.c	/^pw_write_line(char *user, char *pw, char *urd, char *priv, 
 pwfile	pw.c	/^char *pwfile = NULL;$/;"	v
 pwline	pw.c	/^static int pwline;$/;"	v	file:
 pwtmp	pw.c	/^char *pwtmp = NULL;$/;"	v
+quote_for_sed	ylwrap	/^quote_for_sed ()$/;"	f
 rbuf	beebem.c	/^static unsigned char rbuf[65536];$/;"	v	file:
 read_only	fs_proto.h	/^	uint8_t read_only;  \/* 0 or non zero *\/$/;"	m	struct:ec_fs_req_open
 recv	extern.h	/^	struct aun_packet *(*recv)(ssize_t *outsize,$/;"	m	struct:aun_funcs	typeref:struct:aun_funcs::recv
@@ -1074,7 +1081,9 @@ secs	fs_proto.h	/^	uint8_t secs;$/;"	m	struct:ec_fs_reply_get_time
 secs	fs_proto.h	/^	uint8_t secs;$/;"	m	struct:ec_fs_req_set_time
 seq	aun.h	/^	uint8_t seq[4]; \/* little-endian *\/$/;"	m	struct:aun_packet
 sequence	fileserver.h	/^	uint8_t	sequence; \/* also only for files *\/$/;"	m	struct:fs_handle
+set_base_from	depcomp	/^set_base_from ()$/;"	f
 set_bytes	fs_proto.h	/^    unsigned long long set_bytes;$/;"	m	struct:ec_fs_req_set_user_free
+set_dir_from	depcomp	/^set_dir_from ()$/;"	f
 set_opt4	fileserver.h	/^	int (*set_opt4)(char const *, int);$/;"	m	struct:user_funcs
 set_priv	fileserver.h	/^	int (*set_priv)(struct fs_client *, char const *, char const *);$/;"	m	struct:user_funcs
 setup	extern.h	/^	void (*setup)(void);$/;"	m	struct:aun_funcs

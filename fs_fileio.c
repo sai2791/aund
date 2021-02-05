@@ -108,11 +108,6 @@ fs_open(struct fs_context *c)
 	if (upath == NULL) return;
 
     is_owner = fs_is_owner(c, upath);
-    // We need to check if the file exists before we try to open
-    // it with the O_CREATE option included as an open parameter
-    // So that we can remove it later if theres an error. Or if
-    // the file was created in a directory that you are not the 
-    // owner of.
 
 	if ((fd = open(upath, O_RDONLY)) == -1) {
         // we cannot open the file for read only so 
@@ -131,9 +126,6 @@ fs_open(struct fs_context *c)
       openopt |= O_CREAT;
       if ( found_file == false)
       {
-          // We need to add the o_create and the file was not
-          // already in the directory so we are going to setup
-          // the did_create flag against the handle 
           did_create = true;
       }
       if (is_owner == false) {
@@ -203,16 +195,16 @@ fs_open(struct fs_context *c)
     if (h != 0) {
       c->client->handles[h]->is_owner = is_owner;
       c->client->handles[h]->did_create = did_create;
-        }
-        free(upath);
+    }
+    free(upath);
 #ifdef HAVE_O_xxLOCK
 	if ((openopt = fcntl(c->client->handles[h]->fd, F_GETFL)) == -1 ||
 	    fcntl(c->client->handles[h]->fd,
 		F_SETFL, openopt & ~O_NONBLOCK) == -1) {
-		fs_errno(c);
-		fs_close_handle(c->client, h);
-		return;
-	}
+          fs_errno(c);
+          fs_close_handle(c->client, h);
+          return;
+    	}
 #else
 	if (flock(c->client->handles[h]->fd,
 		(request->read_only ? LOCK_SH : LOCK_EX) | LOCK_NB) == -1) {
@@ -220,7 +212,7 @@ fs_open(struct fs_context *c)
 			fs_err(c, EC_FS_E_OPEN);
 		else
 			fs_errno(c);
-		fs_close_handle(c->client, h);
+	    	fs_close_handle(c->client, h);
 		return;
 	}
 #endif
@@ -313,7 +305,7 @@ fs_get_args(struct fs_context *c)
 			if (fstat(fd, &st) == -1) {
 				fs_errno(c);
 				return;
-			}
+		    	}
 			fs_write_val(reply.val, st.st_size, sizeof(reply.val));
 			break;
 		case EC_FS_ARG_SIZE:
@@ -632,7 +624,7 @@ fs_putbytes(struct fs_context *c)
 					aunfuncs->max_block);
 		}
 
-	        fs_write_val(reply1.block_size, aunfuncs->max_block,
+	    fs_write_val(reply1.block_size, aunfuncs->max_block,
 			     sizeof(reply1.block_size));
 		fs_reply(c, &(reply1.std_tx), sizeof(reply1));
 		reply2.std_tx.command_code = EC_FS_CC_DONE;

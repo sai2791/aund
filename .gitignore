@@ -5,4 +5,8 @@
 config.log
 .nvimrc
 *.swp
-Tags
+tags
+Config.h.in
+config.status
+depcomp
+

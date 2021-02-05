@@ -278,7 +278,7 @@ struct ec_fs_reply_cat_header {
 	char space[1];		       /* just a space */
 	char ownership[1];	       /* 'O'(wner) or 'P'(ublic) */
 	char spaces[3];		       /* spaces */
-	char csd_discname[12];	       /* zero-padded */
+	char csd_discname[12];	   /* zero-padded */
 	char cr80[2];		       /* cr, 0x80 */
 };
 
