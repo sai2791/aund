@@ -134,8 +134,6 @@ called
 .Pa econet.cfg
 and found in
 .Pa $HOME/.beebem ) ;
-.Nm aund
-will always assign itself station number 254.
 The
 .Ql ingress
 option enables ingress filtering, in which
@@ -195,6 +193,8 @@ to specify regular files, directories, character devices, block devices,
 named pipes, broken symlinks, sockets, and whiteouts respectively.
 .It Ic typemap default Ar type
 Sets the default type for files.
+.It Ic fsstation Ar option
+Sets the File Server station number defaults to 254 
 .El
 .Sh SEE ALSO
 .Xr aund.passwd 5 ,

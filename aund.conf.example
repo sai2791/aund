@@ -4,6 +4,7 @@
 
 root /srv/acorn
 opt4 2
+fsstation 254
 
 typemap type dir	000 # Does RISC OS care?
 typemap type lnk	fdc # SoftLink
