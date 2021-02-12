@@ -4,7 +4,7 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-ACLOCAL	Makefile	/^ACLOCAL = aclocal-1.16$/;"	m
+ACLOCAL	Makefile	/^ACLOCAL = ${SHELL} '\/Users\/steveinglis\/documents\/aund\/missing' aclocal-1.16$/;"	m
 ACLOCAL_M4	Makefile	/^ACLOCAL_M4 = $(top_srcdir)\/aclocal.m4$/;"	m
 AMTAR	Makefile	/^AMTAR = $${TAR-tar}$/;"	m
 AM_CFLAGS	Makefile	/^AM_CFLAGS = $(GCCWARNINGS)$/;"	m
@@ -34,9 +34,9 @@ AUN_TYPE_IMMEDIATE	aun.h	/^#define AUN_TYPE_IMMEDIATE	/;"	d
 AUN_TYPE_IMM_REPLY	aun.h	/^#define AUN_TYPE_IMM_REPLY	/;"	d
 AUN_TYPE_REJ	aun.h	/^#define AUN_TYPE_REJ	/;"	d
 AUN_TYPE_UNICAST	aun.h	/^#define AUN_TYPE_UNICAST	/;"	d
-AUTOCONF	Makefile	/^AUTOCONF = autoconf$/;"	m
-AUTOHEADER	Makefile	/^AUTOHEADER = autoheader$/;"	m
-AUTOMAKE	Makefile	/^AUTOMAKE = automake-1.16$/;"	m
+AUTOCONF	Makefile	/^AUTOCONF = ${SHELL} '\/Users\/steveinglis\/documents\/aund\/missing' autoconf$/;"	m
+AUTOHEADER	Makefile	/^AUTOHEADER = ${SHELL} '\/Users\/steveinglis\/documents\/aund\/missing' autoheader$/;"	m
+AUTOMAKE	Makefile	/^AUTOMAKE = ${SHELL} '\/Users\/steveinglis\/documents\/aund\/missing' automake-1.16$/;"	m
 AWK	Makefile	/^AWK = awk$/;"	m
 BEGIN	conf_lex.c	/^#define BEGIN /;"	d	file:
 BOOLEAN	conf_lex.c	/^#define BOOLEAN /;"	d	file:
@@ -262,7 +262,7 @@ LIBRARIES	Makefile	/^LIBRARIES = $(noinst_LIBRARIES)$/;"	m
 LIBS	Makefile	/^LIBS = $/;"	m
 LINK	Makefile	/^LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@$/;"	m
 LTLIBOBJS	Makefile	/^LTLIBOBJS = $/;"	m
-MAKEINFO	Makefile	/^MAKEINFO = makeinfo$/;"	m
+MAKEINFO	Makefile	/^MAKEINFO = ${SHELL} '\/Users\/steveinglis\/documents\/aund\/missing' makeinfo$/;"	m
 MANS	Makefile	/^MANS = $(man_MANS)$/;"	m
 MAX_HANDLES	fs_handle.c	/^#define MAX_HANDLES /;"	d	file:
 MKDIR_P	Makefile	/^MKDIR_P = \/usr\/local\/bin\/gmkdir -p$/;"	m
@@ -281,13 +281,13 @@ PACKAGE_BUGREPORT	Makefile	/^PACKAGE_BUGREPORT = bjh21@bjh21.me.uk$/;"	m
 PACKAGE_BUGREPORT	config.h	/^#define PACKAGE_BUGREPORT /;"	d
 PACKAGE_NAME	Makefile	/^PACKAGE_NAME = aund$/;"	m
 PACKAGE_NAME	config.h	/^#define PACKAGE_NAME /;"	d
-PACKAGE_STRING	Makefile	/^PACKAGE_STRING = aund 0.06$/;"	m
+PACKAGE_STRING	Makefile	/^PACKAGE_STRING = aund 1.06$/;"	m
 PACKAGE_STRING	config.h	/^#define PACKAGE_STRING /;"	d
 PACKAGE_TARNAME	Makefile	/^PACKAGE_TARNAME = aund$/;"	m
 PACKAGE_TARNAME	config.h	/^#define PACKAGE_TARNAME /;"	d
 PACKAGE_URL	Makefile	/^PACKAGE_URL = $/;"	m
 PACKAGE_URL	config.h	/^#define PACKAGE_URL /;"	d
-PACKAGE_VERSION	Makefile	/^PACKAGE_VERSION = 0.06$/;"	m
+PACKAGE_VERSION	Makefile	/^PACKAGE_VERSION = 1.06$/;"	m
 PACKAGE_VERSION	config.h	/^#define PACKAGE_VERSION /;"	d
 PATH_SEPARATOR	Makefile	/^PATH_SEPARATOR = :$/;"	m
 PKTOFF	beebem.c	/^#define PKTOFF /;"	d	file:
@@ -319,7 +319,7 @@ TYPEMAP_TYPE	conf_lex.c	/^#define TYPEMAP_TYPE /;"	d	file:
 UINT16_MAX	conf_lex.c	/^#define UINT16_MAX /;"	d	file:
 UINT32_MAX	conf_lex.c	/^#define UINT32_MAX /;"	d	file:
 UINT8_MAX	conf_lex.c	/^#define UINT8_MAX /;"	d	file:
-VERSION	Makefile	/^VERSION = 0.06$/;"	m
+VERSION	Makefile	/^VERSION = 1.06$/;"	m
 VERSION	config.h	/^#define VERSION /;"	d
 YLWRAP	Makefile	/^YLWRAP = $(top_srcdir)\/ylwrap$/;"	m
 YYSTATE	conf_lex.c	/^#define YYSTATE /;"	d	file:
@@ -560,7 +560,7 @@ cfywrap	conf_lex.c	/^#define cfywrap(/;"	d	file:
 change	fileserver.h	/^	int (*change)(char const *, char const *, char const *);$/;"	m	struct:user_funcs
 client	fileserver.h	/^	struct fs_client *client;	\/* Pointer to client structure, or NULL if not logged in *\/$/;"	m	struct:fs_context	typeref:struct:fs_context::fs_client
 cmd_tab	fs_cli.c	/^static const struct fs_cmd cmd_tab[] = {$/;"	v	typeref:struct:fs_cmd	file:
-command_code	fs_proto.h	/^	int8_t command_code;$/;"	m	struct:ec_fs_reply
+command_code	fs_proto.h	/^	uint8_t command_code;$/;"	m	struct:ec_fs_reply
 conf_cmd_beebem	conf_lex.c	/^conf_cmd_beebem(union cfything *thing)$/;"	f	file:
 conf_cmd_debug	conf_lex.c	/^conf_cmd_debug(union cfything *xthing)$/;"	f	file:
 conf_cmd_infofmt	conf_lex.c	/^conf_cmd_infofmt(union cfything *thing)$/;"	f	file:
