@@ -108,6 +108,7 @@ static void conf_cmd_typemap_name(union cfything *);
 static void conf_cmd_typemap_perm(union cfything *);
 static void conf_cmd_typemap_type(union cfything *);
 static void conf_cmd_typemap_default(union cfything *);
+static void conf_cmd_fsstation(union cfything *);
 
 static void dequote(char *);
 
@@ -153,6 +154,7 @@ static int cfy_line;
   opt4		BEGIN(BORING); thing->func.func = conf_cmd_opt4; return CF_FUNC;
   timeout	BEGIN(BORING); thing->func.func = conf_cmd_timeout; return CF_FUNC;
   beebem	BEGIN(BORING); thing->func.func = conf_cmd_beebem; return CF_FUNC;
+  fsstation BEGIN(BORING); thing->func.func = conf_cmd_fsstation; return CF_FUNC;
   info([_-]?(fmt|format))	BEGIN(BORING); thing->func.func = conf_cmd_infofmt; return CF_FUNC;
   safe[_-]?handles	BEGIN(BORING); thing->func.func = conf_cmd_safehandles; return CF_FUNC;
 }
@@ -367,6 +369,20 @@ conf_cmd_opt4(union cfything *thing)
 	default_opt4 = strtol(cfytext, &endptr, 0);
 	if (*endptr != '\0')
 		errx(1, "bad boot option");
+}
+
+static void
+conf_cmd_fsstation(union cfything *thing)
+{
+    char *endptr;
+
+    our_econet_addr = 254;
+
+    if (cfylex(BORING, NULL) != CF_WORD)
+        errx(1, "No FS Station Number option specified");
+    our_econet_addr = strtol(cfytext, &endptr, 0);
+    if (*endptr != '\0')
+        errx(1, "Bad FS Station Number");
 }
 
 static void
