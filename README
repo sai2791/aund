@@ -8,7 +8,9 @@ fileserver.  It supports:
 * Multiple virtual users (all under one Unix UID)
 * Individual users (all under one Unix UID) with passwords and Privilege flags
 * Owner permission on directories under the users URD
-* Access permissions now implemented
+* Access permissions now supported
+* Locked files now supported
+* File Server can now be any station number not just 254
 
 For general installation instructions, see the INSTALL file.  aund is
 not particularly portable, and expects a BSDish or GNUish C library.
@@ -27,7 +29,7 @@ aund itself is released under the following licence:
 Copyright (c) 1998, 2010 Ben Harris
 Copyright (c) 2010 Simon Tatham
 Copyright (c) 2010 James Woodcock
-Copyright (c) 2015, 2020 Steve Inglis
+Copyright (c) 2015, 2021 Steve Inglis
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

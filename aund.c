@@ -57,6 +57,7 @@ int using_syslog = 1;
 char *beebem_cfg_file = NULL;
 const struct aun_funcs *aunfuncs = &aun;
 char *progname;
+int default_fsstation = 254;
 
 volatile int painful_death = 0;
 
@@ -172,7 +173,7 @@ main(int argc, char *argv[])
 	}
 	dopidfile(pidfile);
 	if (debug)
-		printf("started\n");
+		printf("started as fileserver at station [%d]\n", our_econet_addr);
 
 	for (;!painful_death;) {
 		ssize_t msgsize;

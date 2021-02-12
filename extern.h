@@ -57,6 +57,7 @@ extern int using_syslog;
 extern char *beebem_cfg_file;
 extern int beebem_ingress;
 extern int default_timeout;
+extern int our_econet_addr;
 
 struct aun_funcs {
 	int max_block;

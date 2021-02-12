@@ -85,7 +85,7 @@ static unsigned short eclist[256*256];
 static int eccount = 0;
 
 /* (FIXME: probably should make this configurable) */
-static int our_econet_addr = 254;      /* 0.254 */
+int our_econet_addr = 254;      /* 0.254 */
 
 int beebem_ingress = 0;		       /* set by conf_lex.l */
 
