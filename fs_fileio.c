@@ -67,7 +67,7 @@ static int fs_close1(struct fs_context *c, int h);
  * O_SHLOCK and O_EXLOCK, but Linux doesn't have these and we have to
  * resort to calling flock() after open().
  *
- * Using flock() causes a problem when creating a new file, becuase
+ * Using flock() causes a problem when creating a new file, because
  * another client could get in after the file is created and before we
  * lock it, which shouldn't be able to happen.  This doesn't matter
  * while aund is single-threaded, but once it isn't, the best approach

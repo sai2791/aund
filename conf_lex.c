@@ -582,6 +582,7 @@ char *cfytext;
  * Copyright (c) 2010 Simon Tatham
  * Copyright (c) 1998, 2010 Ben Harris
  * Copyright (c) 2010 James Woodcock
+ * Copyright (C) 2015, 2021 Steve Inglis
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -613,7 +614,7 @@ char *cfytext;
 /*
  * conf_lex.l - lexer for configuration files.
  */
-#line 42 "conf_lex.l"
+#line 43 "conf_lex.l"
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -697,7 +698,7 @@ static int cfy_line;
 
 
 
-#line 701 "conf_lex.c"
+#line 702 "conf_lex.c"
 
 #define INITIAL 0
 #define BORING 1
@@ -883,13 +884,13 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 128 "conf_lex.l"
+#line 129 "conf_lex.l"
 
 
 	if (start != -1) BEGIN(start);
 
  /* Backslash-escaped newline is completely ignored */
-#line 893 "conf_lex.c"
+#line 894 "conf_lex.c"
 
 	if ( !(yy_init) )
 		{
@@ -975,7 +976,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 133 "conf_lex.l"
+#line 134 "conf_lex.l"
 cfy_line++;
 	YY_BREAK
 /* Newline, with optional comment before it. Ignored in INITIAL state;
@@ -984,13 +985,13 @@ cfy_line++;
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 138 "conf_lex.l"
+#line 139 "conf_lex.l"
 cfy_line++; if (YY_START != INITIAL) { BEGIN(INITIAL); return CF_NEWLINE; }
 	YY_BREAK
 /* Ignore whitespace except insofar as it splits words */
 case 3:
 YY_RULE_SETUP
-#line 141 "conf_lex.l"
+#line 142 "conf_lex.l"
 /* do nothing */
 	YY_BREAK
 /* In starting state, recognise main config keywords, return them as
@@ -999,155 +1000,155 @@ YY_RULE_SETUP
 
 case 4:
 YY_RULE_SETUP
-#line 147 "conf_lex.l"
+#line 148 "conf_lex.l"
 BEGIN(TYPEMAP);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 148 "conf_lex.l"
+#line 149 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_debug; return CF_FUNC;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 149 "conf_lex.l"
+#line 150 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_syslog; return CF_FUNC;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 150 "conf_lex.l"
+#line 151 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_root; return CF_FUNC;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 151 "conf_lex.l"
+#line 152 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_lib; return CF_FUNC;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 152 "conf_lex.l"
+#line 153 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_urd; return CF_FUNC;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 153 "conf_lex.l"
+#line 154 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_pwfile; return CF_FUNC;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 154 "conf_lex.l"
+#line 155 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_opt4; return CF_FUNC;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 155 "conf_lex.l"
+#line 156 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_timeout; return CF_FUNC;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 156 "conf_lex.l"
+#line 157 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_beebem; return CF_FUNC;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 157 "conf_lex.l"
+#line 158 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_fsstation; return CF_FUNC;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 158 "conf_lex.l"
+#line 159 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_infofmt; return CF_FUNC;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 159 "conf_lex.l"
+#line 160 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_safehandles; return CF_FUNC;
 	YY_BREAK
 
 
 case 17:
 YY_RULE_SETUP
-#line 162 "conf_lex.l"
+#line 163 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_typemap_name; return CF_FUNC;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 163 "conf_lex.l"
+#line 164 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_typemap_perm; return CF_FUNC;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 164 "conf_lex.l"
+#line 165 "conf_lex.l"
 BEGIN(TYPEMAP_TYPE);
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 165 "conf_lex.l"
+#line 166 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_typemap_default; return CF_FUNC;
 	YY_BREAK
 
 
 case 21:
 YY_RULE_SETUP
-#line 168 "conf_lex.l"
+#line 169 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_typemap_type; thing->func.mode = S_IFIFO; return CF_FUNC;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 169 "conf_lex.l"
+#line 170 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_typemap_type; thing->func.mode = S_IFCHR; return CF_FUNC;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 170 "conf_lex.l"
+#line 171 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_typemap_type; thing->func.mode = S_IFDIR; return CF_FUNC;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 171 "conf_lex.l"
+#line 172 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_typemap_type; thing->func.mode = S_IFBLK; return CF_FUNC;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 172 "conf_lex.l"
+#line 173 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_typemap_type; thing->func.mode = S_IFREG; return CF_FUNC;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 173 "conf_lex.l"
+#line 174 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_typemap_type; thing->func.mode = S_IFLNK; return CF_FUNC;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 174 "conf_lex.l"
+#line 175 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_typemap_type; thing->func.mode = S_IFSOCK; return CF_FUNC;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 175 "conf_lex.l"
+#line 176 "conf_lex.l"
 BEGIN(BORING); thing->func.func = conf_cmd_typemap_type; thing->func.mode = S_IFWHT; return CF_FUNC;
 	YY_BREAK
 
 
 case 29:
 YY_RULE_SETUP
-#line 178 "conf_lex.l"
+#line 179 "conf_lex.l"
 *(int *)thing = 1; BEGIN(BORING); return CF_BOOLEAN;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 179 "conf_lex.l"
+#line 180 "conf_lex.l"
 *(int *)thing = 0; BEGIN(BORING); return CF_BOOLEAN;
 	YY_BREAK
 
 /* Any word without a specific meaning from context is returned as CF_WORD. */
 case 31:
 YY_RULE_SETUP
-#line 183 "conf_lex.l"
+#line 184 "conf_lex.l"
 dequote(cfytext); return CF_WORD; /* [deconfuse jed syntax highlighting: '] */
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 184 "conf_lex.l"
+#line 185 "conf_lex.l"
 return CF_WORD;
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
@@ -1155,15 +1156,15 @@ case YY_STATE_EOF(BORING):
 case YY_STATE_EOF(TYPEMAP):
 case YY_STATE_EOF(TYPEMAP_TYPE):
 case YY_STATE_EOF(BOOLEAN):
-#line 185 "conf_lex.l"
+#line 186 "conf_lex.l"
 return CF_EOF;
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 187 "conf_lex.l"
+#line 188 "conf_lex.l"
 ECHO;
 	YY_BREAK
-#line 1167 "conf_lex.c"
+#line 1168 "conf_lex.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2158,7 +2159,7 @@ void cfyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 187 "conf_lex.l"
+#line 188 "conf_lex.l"
 
 
 
