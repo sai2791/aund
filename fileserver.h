@@ -197,6 +197,7 @@ struct user_funcs {
 	int (*set_priv)(struct fs_client *, char const *, char const *);
   	int (*get_priv)(char const *);
     int (*add_user)(char *);
+    bool (*is_user)(char *);
 };
 
 extern struct user_funcs const *userfuncs;

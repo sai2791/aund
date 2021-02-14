@@ -290,10 +290,8 @@ fs_cmd_i_am(struct fs_context *c, char *tail)
 	 * Initial user environment.  Note that we can't use the same
 	 * handle twice.
 	 *
-	 * Problem is if we have a user not in the root directory, we get the
-    * wrong urd
     */
-        if (debug) printf("Env: URD: %s CSD: %s LIB: %s\n", oururd, oururd, lib);
+    if (debug) printf("Env: URD: %s CSD: %s LIB: %s\n", oururd, oururd, lib);
 				
 	reply.urd = fs_open_handle(c->client, oururd, O_RDONLY, false);
 	reply.csd = fs_open_handle(c->client, oururd, O_RDONLY, false);
@@ -1089,12 +1087,13 @@ fs_cmd_newuser(struct fs_context *c, char *tail)
     char *username;
     int priv = EC_FS_PRIV_NONE; /* Assume no Priv */
     bool user_exists = false;
-    bool user_added = false;
+    int result;
 
 	username = fs_cli_getarg(&tail);
-	if (debug) printf("cli: newuser request [%s]\n", username);
 
     // Check if the user is logged onto the system
+    if (debug) printf("Checked you're a known user\n");
+
     if (c->client == NULL) {
       fs_err(c, EC_FS_E_WHOAREYOU);
       return;
@@ -1108,18 +1107,40 @@ fs_cmd_newuser(struct fs_context *c, char *tail)
     }
 
     // Check if new user already exists
-    user_exists = fs_is_user(username);
+    if (debug) printf("Check if the user already exists\n");
+    user_exists = userfuncs->is_user(username);
 
     if (user_exists == true) 
     {
+        if (debug) printf("User exists was true\n");
         fs_err(c, EC_FS_E_USEREXIST);
+        return;
+    }
+
+    // Now we need to add the new user
+
+    if (username == NULL)
+    {
+        if (debug) printf("User was null\n");
+        fs_err(c, EC_FS_E_BADUSER);
+        return;
+    }
+
+    // what if the username is too long
+
+    if (strlen(username) > 21)
+    {
+        if (debug) printf("Username was too long\n");
+        fs_err(c, EC_FS_E_BADUSER);
         return;
     }
 
     // If the user does not exist add them to the password file 
     // with a blank password
-    if (!( userfuncs->add_user(username)))
+    result = userfuncs->add_user(username);
+    if (result == -1)
     {
+        fs_error(c, 0xff, "Its all gone pear shaped\n");
         return;
     }
     // convert username to directory structure 

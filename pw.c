@@ -200,7 +200,8 @@ pw_validate(char *user, const char *pw, int *opt4)
 			if (!ok)
 				ret = NULL;
 			else
-				ret = strdup(d);
+	 			ret = strdup(d);
+            if (debug) printf("urd is [%s]\n", ret);    
 			strcpy(user, u);   /* normalise case */
 			pw_close();
 			return ret;
@@ -350,10 +351,11 @@ static int
 pw_add_user(char *user)
 {
 	char *u, *p, *d, *s;
-    char *directory;
+    char directory[30];
 	int opt4;
     char *tmp;
-	int done = 0;
+    char ch[30] = "./";
+    char end[2] = "\0";
 
 	if (pw_open(1) < 0)
 		return -1;
@@ -363,22 +365,62 @@ pw_add_user(char *user)
 	}
     // Now we need to add the new user
 
-    // what if the username is blank
-
-    // what if the username is too long
-
     // Duplicate the username in to the variable directory
     // replace any full stops with a / 
     strcpy(directory, user);
-    tmp = strchr(directory, '.');
-    *tmp = '/';
+    tmp = strrchr(directory, '.');
+    // Replace any group seperator with /
+    if (tmp != NULL)
+    {
+        *tmp = '/';
+    }
+    // Now build the urd directory path
+    strcat(ch, directory);
+    strcpy(directory, ch);
     
-    pw_write_line(user, "" , directory, EC_FS_PRIV_NONE, 0);
+    pw_write_line(user, "" , directory, "", 0);
+
+    strcat(directory, end);
+    if (debug) printf("Directory to create [%s]\n", directory);
+    if (debug) printf("Size of directory [%lu]\n", strlen(directory));
+    // bug here, cannot create <group>.<user> as a single mkdir
+    // need to split it into two makes
+    // this is working for just plain username 
+	if (mkdir(directory, 0777) < 0) {
+		errx(0xff, "Can't create directory\n");
+        return -1;
+        }
+
 	return pw_close_rename();
+}
+
+static bool 
+pw_is_user(char *user)
+{
+    bool found = false;
+	char *u, *p, *d, *s;
+    int opt4;
+    int match;
+
+	if (pw_open(1) < 0)
+		return true;
+        
+	while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
+	// Check if the user matches u
+    // if so set found to true;
+    match = strncmp(user, u, strlen(u));
+    if (match == 0)
+        {
+            // We found a match
+            found = true;
+        }
+	}
+
+    return found;
 }
 
 struct user_funcs const user_pw = {
 	pw_validate, pw_urd, pw_change, pw_set_opt4, pw_set_priv, pw_get_priv,
-    pw_add_user
+    pw_add_user, pw_is_user
 
 };
