@@ -393,6 +393,7 @@ access	fs_proto.h	/^	uint8_t access;$/;"	m	struct:ec_fs_reply_load1
 access	fs_proto.h	/^	uint8_t access;$/;"	m	struct:ec_fs_reply_save2
 access	fs_proto.h	/^	uint8_t access;$/;"	m	struct:ec_fs_req_set_info_access
 access	fs_proto.h	/^	uint8_t access;$/;"	m	struct:ec_fs_req_set_info_all
+add_user	fileserver.h	/^    int (*add_user)(char *);$/;"	m	struct:user_funcs
 addr	beebem.c	/^	struct in_addr addr;$/;"	m	struct:ipport	typeref:struct:ipport::in_addr	file:
 aix_post_process_depfile	depcomp	/^aix_post_process_depfile ()$/;"	f
 am__CONFIG_DISTCLEAN_FILES	Makefile	/^am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \\$/;"	m
@@ -563,6 +564,7 @@ cmd_tab	fs_cli.c	/^static const struct fs_cmd cmd_tab[] = {$/;"	v	typeref:struct
 command_code	fs_proto.h	/^	uint8_t command_code;$/;"	m	struct:ec_fs_reply
 conf_cmd_beebem	conf_lex.c	/^conf_cmd_beebem(union cfything *thing)$/;"	f	file:
 conf_cmd_debug	conf_lex.c	/^conf_cmd_debug(union cfything *xthing)$/;"	f	file:
+conf_cmd_fsstation	conf_lex.c	/^conf_cmd_fsstation(union cfything *thing)$/;"	f	file:
 conf_cmd_infofmt	conf_lex.c	/^conf_cmd_infofmt(union cfything *thing)$/;"	f	file:
 conf_cmd_lib	conf_lex.c	/^conf_cmd_lib(union cfything *thing)$/;"	f	file:
 conf_cmd_opt4	conf_lex.c	/^conf_cmd_opt4(union cfything *thing)$/;"	f	file:
@@ -795,6 +797,8 @@ fs_cmd_lib	fs_cli.c	/^fs_cmd_lib(struct fs_context *c, char *tail)$/;"	f	file:
 fs_cmd_lib	fs_cli.c	/^static fs_cmd_impl fs_cmd_lib;$/;"	v	file:
 fs_cmd_load	fs_cli.c	/^fs_cmd_load(struct fs_context *c, char *tail)$/;"	f	file:
 fs_cmd_load	fs_cli.c	/^static fs_cmd_impl fs_cmd_load;$/;"	v	file:
+fs_cmd_newuser	fs_cli.c	/^fs_cmd_newuser(struct fs_context *c, char *tail)$/;"	f	file:
+fs_cmd_newuser	fs_cli.c	/^static fs_cmd_impl fs_cmd_newuser;$/;"	v	file:
 fs_cmd_pass	fs_cli.c	/^fs_cmd_pass(struct fs_context *c, char *tail)$/;"	f	file:
 fs_cmd_pass	fs_cli.c	/^static fs_cmd_impl fs_cmd_pass;$/;"	v	file:
 fs_cmd_priv	fs_cli.c	/^fs_cmd_priv(struct fs_context *c, char *tail)$/;"	f	file:
@@ -852,6 +856,7 @@ fs_hidden_name	fs_nametrans.c	/^fs_hidden_name(char *name)$/;"	f
 fs_info_format	fileserver.h	/^extern enum fs_info_format { FS_INFO_RISCOS, FS_INFO_SJ } default_infoformat;$/;"	g
 fs_init	fileserver.c	/^fs_init(void)$/;"	f
 fs_is_owner	fs_util.c	/^fs_is_owner(struct fs_context *c,char *path)$/;"	f
+fs_is_user	fs_util.c	/^bool fs_is_user(char *user) $/;"	f
 fs_leafname	fs_util.c	/^fs_leafname(const char *path)$/;"	f
 fs_load	fs_fileio.c	/^fs_load(struct fs_context *c)$/;"	f
 fs_logoff	fs_misc.c	/^fs_logoff(struct fs_context *c)$/;"	f
@@ -1009,7 +1014,7 @@ oldincludedir	Makefile	/^oldincludedir = \/usr\/include$/;"	m
 oldoffset	fileserver.h	/^	off_t	oldoffset; \/* files only *\/$/;"	m	struct:fs_handle
 opt4	fs_proto.h	/^	uint8_t opt4;$/;"	m	struct:ec_fs_reply_logon
 opt4	fs_proto.h	/^	uint8_t opt4;$/;"	m	struct:ec_fs_req_set_opt4
-our_econet_addr	beebem.c	/^static int our_econet_addr = 254;      \/* 0.254 *\/$/;"	v	file:
+our_econet_addr	beebem.c	/^int our_econet_addr = 254;         \/* 0.254 set by conf_lex.l *\/$/;"	v
 ownership	fs_proto.h	/^	char ownership[1];	       \/* 'O'(wner) or 'P'(ublic) *\/$/;"	m	struct:ec_fs_reply_cat_header
 painful_death	aund.c	/^volatile int painful_death = 0;$/;"	v
 path	fileserver.h	/^	char	*path;$/;"	m	struct:fs_handle
@@ -1046,6 +1051,7 @@ program_details	missing	/^program_details ()$/;"	f
 program_transform_name	Makefile	/^program_transform_name = s,x,x,$/;"	m
 prototypes	configure	/^   function prototypes and stuff, but not '\\xHH' hex character constants.$/;"	f
 psdir	Makefile	/^psdir = ${docdir}$/;"	m
+pw_add_user	pw.c	/^pw_add_user(char *user)$/;"	f	file:
 pw_change	pw.c	/^pw_change(const char *user, const char *oldpw, const char *newpw)$/;"	f	file:
 pw_close	pw.c	/^pw_close(void)$/;"	f	file:
 pw_close_rename	pw.c	/^pw_close_rename(void)$/;"	f	file:
@@ -1242,9 +1248,9 @@ wcfrag	fs_nametrans.c	/^wcfrag(char *frag, char *file)$/;"	f	file:
 wcmatch	fs_nametrans.c	/^wcmatch(char *wc, char *file, int len)$/;"	f	file:
 xmit	extern.h	/^	ssize_t (*xmit)(struct aun_packet *pkt,$/;"	m	struct:aun_funcs
 year_month	fs_proto.h	/^	uint8_t year_month; \/* Four bits each *\/$/;"	m	struct:ec_fs_date
-yy_accept	conf_lex.c	/^static yyconst flex_int16_t yy_accept[165] =$/;"	v	file:
+yy_accept	conf_lex.c	/^static yyconst flex_int16_t yy_accept[174] =$/;"	v	file:
 yy_at_bol	conf_lex.c	/^	int yy_at_bol;$/;"	m	struct:yy_buffer_state	file:
-yy_base	conf_lex.c	/^static yyconst flex_int16_t yy_base[170] =$/;"	v	file:
+yy_base	conf_lex.c	/^static yyconst flex_int16_t yy_base[179] =$/;"	v	file:
 yy_bs_column	conf_lex.c	/^    int yy_bs_column; \/**< The column count. *\/$/;"	m	struct:yy_buffer_state	file:
 yy_bs_lineno	conf_lex.c	/^    int yy_bs_lineno; \/**< The line count. *\/$/;"	m	struct:yy_buffer_state	file:
 yy_buf_pos	conf_lex.c	/^	char *yy_buf_pos;		\/* current position in input buffer *\/$/;"	m	struct:yy_buffer_state	file:
@@ -1256,9 +1262,9 @@ yy_buffer_state	conf_lex.c	/^struct yy_buffer_state$/;"	s	file:
 yy_buffer_status	conf_lex.c	/^	int yy_buffer_status;$/;"	m	struct:yy_buffer_state	file:
 yy_c_buf_p	conf_lex.c	/^static char *yy_c_buf_p = (char *) 0;$/;"	v	file:
 yy_ch_buf	conf_lex.c	/^	char *yy_ch_buf;		\/* input buffer *\/$/;"	m	struct:yy_buffer_state	file:
-yy_chk	conf_lex.c	/^static yyconst flex_int16_t yy_chk[239] =$/;"	v	file:
+yy_chk	conf_lex.c	/^static yyconst flex_int16_t yy_chk[248] =$/;"	v	file:
 yy_create_buffer	conf_lex.c	/^#define yy_create_buffer /;"	d	file:
-yy_def	conf_lex.c	/^static yyconst flex_int16_t yy_def[170] =$/;"	v	file:
+yy_def	conf_lex.c	/^static yyconst flex_int16_t yy_def[179] =$/;"	v	file:
 yy_delete_buffer	conf_lex.c	/^#define yy_delete_buffer /;"	d	file:
 yy_did_buffer_switch_on_eof	conf_lex.c	/^static int yy_did_buffer_switch_on_eof;$/;"	v	file:
 yy_ec	conf_lex.c	/^static yyconst flex_int32_t yy_ec[256] =$/;"	v	file:
@@ -1285,7 +1291,7 @@ yy_n_chars	conf_lex.c	/^	yy_size_t yy_n_chars;$/;"	m	struct:yy_buffer_state	file
 yy_n_chars	conf_lex.c	/^static yy_size_t yy_n_chars;		\/* number of characters read into yy_ch_buf *\/$/;"	v	file:
 yy_new_buffer	conf_lex.c	/^#define yy_new_buffer /;"	d	file:
 yy_nxt	conf_lex.c	/^	flex_int32_t yy_nxt;$/;"	m	struct:yy_trans_info	file:
-yy_nxt	conf_lex.c	/^static yyconst flex_int16_t yy_nxt[239] =$/;"	v	file:
+yy_nxt	conf_lex.c	/^static yyconst flex_int16_t yy_nxt[248] =$/;"	v	file:
 yy_set_bol	conf_lex.c	/^#define yy_set_bol(/;"	d	file:
 yy_set_interactive	conf_lex.c	/^#define yy_set_interactive(/;"	d	file:
 yy_size_t	conf_lex.c	/^typedef size_t yy_size_t;$/;"	t	file:
