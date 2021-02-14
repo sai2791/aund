@@ -74,6 +74,7 @@ static fs_cmd_impl fs_cmd_pass;
 static fs_cmd_impl fs_cmd_priv;
 static fs_cmd_impl fs_cmd_rename;
 static fs_cmd_impl fs_cmd_access;
+static fs_cmd_impl fs_cmd_newuser;
 
 static int fs_cli_match(char *cmdline, char **tail, const struct fs_cmd *cmd);
 static void fs_cli_unrec(struct fs_context *, char *);
@@ -96,6 +97,7 @@ static const struct fs_cmd cmd_tab[] = {
 	{"SAVE",	1, fs_cmd_save,		},
 	{"SDISC",      	3, fs_cmd_sdisc,	},
 	{"ACCESS",	2, fs_cmd_access,	},
+    {"NEWUSER", 1, fs_cmd_newuser,    }, 
 };
 
 #define NCMDS (sizeof(cmd_tab) / sizeof(cmd_tab[0]))
@@ -1077,5 +1079,54 @@ fs_cmd_access(struct fs_context *c, char *tail)
 out:
 	fts_close(ftsp);
     free(upath);
+    return;
+}
+
+static void
+fs_cmd_newuser(struct fs_context *c, char *tail)
+{
+	struct ec_fs_reply reply;
+    char *username;
+    int priv = EC_FS_PRIV_NONE; /* Assume no Priv */
+    bool user_exists = false;
+    bool user_added = false;
+
+	username = fs_cli_getarg(&tail);
+	if (debug) printf("cli: newuser request [%s]\n", username);
+
+    // Check if the user is logged onto the system
+    if (c->client == NULL) {
+      fs_err(c, EC_FS_E_WHOAREYOU);
+      return;
+    }
+    // check that that user has privilege
+    priv = userfuncs->get_priv(c->client->login);
+    if (priv != EC_FS_PRIV_SYST)
+    {
+        fs_err(c, EC_FS_E_NOPRIV);
+        return;
+    }
+
+    // Check if new user already exists
+    user_exists = fs_is_user(username);
+
+    if (user_exists == true) 
+    {
+        fs_err(c, EC_FS_E_USEREXIST);
+        return;
+    }
+
+    // If the user does not exist add them to the password file 
+    // with a blank password
+    if (!( userfuncs->add_user(username)))
+    {
+        return;
+    }
+    // convert username to directory structure 
+    // leading ./ then name changing the following . to / 
+
+    reply.command_code = EC_FS_CC_DONE; 
+    reply.return_code = EC_FS_RC_OK;
+    fs_reply(c, &reply, sizeof(reply));
     return;
 }

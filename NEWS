@@ -1,5 +1,6 @@
 aund 1.06.07
- * File Server can now be any station number configured in the /etc/aund.conf file
+ * File Server can now be any station number configured in the 
+   /etc/aund.conf file.
 -- Steve Inglis <sai2791@googlemail.com> Fri, 11 Feb 2021 18:13:00 +0000
 aund 1.06.06
  * Openin, Openout and Openup now validate and support access permissions

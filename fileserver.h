@@ -178,6 +178,7 @@ extern int fs_stat(const char *, struct stat *);
 extern const char *fs_leafname(const char *);
 extern bool fs_is_owner(struct fs_context *c,char *path);
 extern bool fs_read_access(struct fs_context *c,char *path);
+extern bool fs_is_user(char *);
 
 extern char *fs_acornify_name(char *);
 extern int fs_hidden_name(char *);
@@ -195,6 +196,7 @@ struct user_funcs {
 	int (*set_opt4)(char const *, int);
 	int (*set_priv)(struct fs_client *, char const *, char const *);
   	int (*get_priv)(char const *);
+    int (*add_user)(char *);
 };
 
 extern struct user_funcs const *userfuncs;

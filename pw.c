@@ -31,6 +31,7 @@
  User:Password:URD:Priv:Opt4
  */
 
+#include "fs_proto.h"
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -161,13 +162,6 @@ pw_read_line(char **user, char **pw, char **urd, char **priv, int *opt4)
 	} else {
 		*opt4 = default_opt4;
 	}
-
-// Need to check if the buffer has a period "." within it
-// if so then the user is a group user
-// we need to split that out, and append it to the URD
-// so acorn.singlis
-// user is singlis, group is acorn
-// urd = $.acorn.singlis
 
 	*user = buffer;
 	*pw = p;
@@ -352,7 +346,39 @@ pw_set_priv( struct fs_client *client, const char *user, const char *newpriv)
 				return -1;  // No privilege
 }
 
+static int
+pw_add_user(char *user)
+{
+	char *u, *p, *d, *s;
+    char *directory;
+	int opt4;
+    char *tmp;
+	int done = 0;
+
+	if (pw_open(1) < 0)
+		return -1;
+
+	while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
+		pw_write_line(u, p, d, s, opt4);
+	}
+    // Now we need to add the new user
+
+    // what if the username is blank
+
+    // what if the username is too long
+
+    // Duplicate the username in to the variable directory
+    // replace any full stops with a / 
+    strcpy(directory, user);
+    tmp = strchr(directory, '.');
+    *tmp = '/';
+    
+    pw_write_line(user, "" , directory, EC_FS_PRIV_NONE, 0);
+	return pw_close_rename();
+}
+
 struct user_funcs const user_pw = {
-	pw_validate, pw_urd, pw_change, pw_set_opt4, pw_set_priv, pw_get_priv
+	pw_validate, pw_urd, pw_change, pw_set_opt4, pw_set_priv, pw_get_priv,
+    pw_add_user
 
 };
