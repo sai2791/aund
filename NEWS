@@ -1,4 +1,8 @@
-aund 1.06.07
+aund 1.06.08
+ * Added NEWUSER command, creates user in password file and creates
+   home directory
+-- Steve Inglis <sai2791@googlemail.com> Sun, 14 Feb 2021 21:24:00 +0000
+   aund 1.06.07
  * File Server can now be any station number configured in the 
    /etc/aund.conf file.
 -- Steve Inglis <sai2791@googlemail.com> Fri, 11 Feb 2021 18:13:00 +0000
