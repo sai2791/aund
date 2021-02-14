@@ -215,6 +215,14 @@ though the user had logged in again.
 The argument
 .Ar disc
 is ignored.
+.It Ic *NEWUSER Op Ar Group.User Ar User
+Creates a new user in the password file, and creates the home directory.
+The argument
+.Ar User
+is used for the username, and to create the users home directory relative
+to the filestore root directory,
+.Ar Group.User
+is allowed.
 .El
 .Ss Security Considerations
 The Acorn fileserver protocol is inherently insecure.  It passes both 
