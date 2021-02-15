@@ -307,21 +307,20 @@ pw_get_priv(const char *user)
 
 	while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
 				if (!strcasecmp(user, u)) {
-												pw_close();
-			switch (*s) {
-				 case 'S': priv = EC_FS_PRIV_SYST; break;
-				 case 'L': priv = EC_FS_PRIV_LIMIT; break;
-				 case 'F': priv = EC_FS_PRIV_FIXED; break;
+		            pw_close();
+			        switch (*s) {
+				        case 'S': priv = EC_FS_PRIV_SYST; break;
+				        case 'L': priv = EC_FS_PRIV_LIMIT; break;
+				        case 'F': priv = EC_FS_PRIV_FIXED; break;
 
-				 default : priv = EC_FS_PRIV_NONE;
-			}
-				if (debug) printf("get_priv: Priv level %d\n",priv);
-												return priv;
-								}
-				}
+				        default : priv = EC_FS_PRIV_NONE;
+			        }
+                    return priv;
+			    }
+    }
 
-				pw_close();
-				return EC_FS_PRIV_NONE;
+    pw_close();
+    return EC_FS_PRIV_NONE;
 }
 
 static int
@@ -360,6 +359,7 @@ pw_add_user(char *user)
     char ct[30] = "./";
     char end[2] = "\0";
     bool has_group = false;
+    struct stat *st;
 
 	if (pw_open(1) < 0)
 		return -1;
@@ -394,16 +394,8 @@ pw_add_user(char *user)
 
     if (has_group == false)
     {
-      if (debug)
-        printf("Directory to create [%s]\n", directory);
-      if (debug)
-        printf("Size of directory [%lu]\n", strlen(directory));
-      // bug here, cannot create <group>.<user> as a single mkdir
-      // need to split it into two makes
-      // this is working for just plain username
-      if (mkdir(directory, 0777) < 0) {
-        errx(0xff, "Can't create directory\n");
-        return -1;
+        if (stat(directory, st) == -1) {
+        mkdir(directory, 0777);
         }
     }
 
@@ -418,14 +410,15 @@ pw_add_user(char *user)
         strcpy(group, ct);
         strcat(group, end);
 
-        if (debug) printf("Group is [%s]\n", group);
-        mkdir(group, 0777);
+        if (stat(group,st) == -1) {
+            mkdir(group, 0777); /* Ignore errors here for the moment */
+        }
 
         // Create the user directory under the group
-        if (mkdir(directory, 0777) < 0) {
-            errx(0xff, "Can't create directory\n");
-            return -1;
+        if (stat(directory,st) == -1) {
+            mkdir(directory, 0777);
         }
+
     }
 
         return pw_close_rename();
@@ -440,7 +433,7 @@ pw_is_user(char *user)
     int match;
 
 	if (pw_open(1) < 0)
-		return true;
+		return true; /* FIXME: Might want to return an error code */
         
 	while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
 	// Check if the user matches u
@@ -456,8 +449,48 @@ pw_is_user(char *user)
     return found;
 }
 
+// Returns 0 - ok, -1 failed
+static int
+pw_del_user(char *user)
+{
+    bool found=false;
+    char *u, *p, *d, *s;
+    int opt4;
+    int match;
+    int result;
+
+    if (pw_open(1) < 0)
+        return -1;
+
+    while (pw_read_line(&u, &p, &d, &s, &opt4) == 0)
+    {
+        match = strncmp(user, u, strlen(u));
+        if (match == 0)
+        {
+            // We found a match
+            found = true;
+            // Do not write the record to the password file
+            // so do nothing else
+        }
+        if (match != 0)
+        {
+            // not a match so we write this back to the password
+            // file.
+            pw_write_line(u, p, d, s, opt4);    
+        }
+            
+    }
+
+    result = pw_close_rename();
+    if (found == true) 
+        result = 0;
+    // Does not delete the directory or files of the user
+    return result;
+}
+
+
 struct user_funcs const user_pw = {
 	pw_validate, pw_urd, pw_change, pw_set_opt4, pw_set_priv, pw_get_priv,
-    pw_add_user, pw_is_user
+    pw_add_user, pw_is_user, pw_del_user
 
 };
