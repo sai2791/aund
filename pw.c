@@ -352,10 +352,14 @@ pw_add_user(char *user)
 {
 	char *u, *p, *d, *s;
     char directory[30];
+    char group[30];
 	int opt4;
+    int index;
     char *tmp;
     char ch[30] = "./";
+    char ct[30] = "./";
     char end[2] = "\0";
+    bool has_group = false;
 
 	if (pw_open(1) < 0)
 		return -1;
@@ -381,17 +385,50 @@ pw_add_user(char *user)
     pw_write_line(user, "" , directory, "", 0);
 
     strcat(directory, end);
-    if (debug) printf("Directory to create [%s]\n", directory);
-    if (debug) printf("Size of directory [%lu]\n", strlen(directory));
-    // bug here, cannot create <group>.<user> as a single mkdir
-    // need to split it into two makes
-    // this is working for just plain username 
-	if (mkdir(directory, 0777) < 0) {
-		errx(0xff, "Can't create directory\n");
+    // Check if we have a period '.' in the username because
+    // if we do then we have group.username and will need to
+    // create the group directory as well as the user directory.
+    tmp = strchr(user , '.');
+    if (tmp != NULL) 
+        has_group = true;
+
+    if (has_group == false)
+    {
+      if (debug)
+        printf("Directory to create [%s]\n", directory);
+      if (debug)
+        printf("Size of directory [%lu]\n", strlen(directory));
+      // bug here, cannot create <group>.<user> as a single mkdir
+      // need to split it into two makes
+      // this is working for just plain username
+      if (mkdir(directory, 0777) < 0) {
+        errx(0xff, "Can't create directory\n");
         return -1;
         }
+    }
 
-	return pw_close_rename();
+    if (has_group == true)
+    {
+        // Create the group directory
+        // this may fail, because the directory already exists
+        tmp = strchr(user, '.');
+        index = (int)(tmp - user);
+        strncpy(group, user, index);
+        strcat(ct, group);
+        strcpy(group, ct);
+        strcat(group, end);
+
+        if (debug) printf("Group is [%s]\n", group);
+        mkdir(group, 0777);
+
+        // Create the user directory under the group
+        if (mkdir(directory, 0777) < 0) {
+            errx(0xff, "Can't create directory\n");
+            return -1;
+        }
+    }
+
+        return pw_close_rename();
 }
 
 static bool 
