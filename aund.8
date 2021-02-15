@@ -223,6 +223,12 @@ is used for the username, and to create the users home directory relative
 to the filestore root directory,
 .Ar Group.User
 is allowed.
+.It Ic *REMUSER Ar User
+Removes an existing user from the password file, preventing the user from
+logging into the file server.
+The 
+.Ar User
+directory and files will not be removed by this command.
 .El
 .Ss Security Considerations
 The Acorn fileserver protocol is inherently insecure.  It passes both 

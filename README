@@ -15,6 +15,8 @@ fileserver.  It supports:
   NEWUSER group.user.  The login directory will be created based on what
   you entered.  Note: You cannot have a user created with the same name
   as a group.
+* REMUSER command has been implemented.  This does not remove the user
+  files or directory structure.
 
 For general installation instructions, see the INSTALL file.  aund is
 not particularly portable, and expects a BSDish or GNUish C library.
