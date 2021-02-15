@@ -198,6 +198,7 @@ struct user_funcs {
   	int (*get_priv)(char const *);
     int (*add_user)(char *);
     bool (*is_user)(char *);
+    int (*del_user)(char *);
 };
 
 extern struct user_funcs const *userfuncs;

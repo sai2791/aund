@@ -75,6 +75,7 @@ static fs_cmd_impl fs_cmd_priv;
 static fs_cmd_impl fs_cmd_rename;
 static fs_cmd_impl fs_cmd_access;
 static fs_cmd_impl fs_cmd_newuser;
+static fs_cmd_impl fs_cmd_deluser;
 
 static int fs_cli_match(char *cmdline, char **tail, const struct fs_cmd *cmd);
 static void fs_cli_unrec(struct fs_context *, char *);
@@ -97,7 +98,8 @@ static const struct fs_cmd cmd_tab[] = {
 	{"SAVE",	1, fs_cmd_save,		},
 	{"SDISC",      	3, fs_cmd_sdisc,	},
 	{"ACCESS",	2, fs_cmd_access,	},
-    {"NEWUSER", 1, fs_cmd_newuser,    }, 
+    {"NEWUSER", 2, fs_cmd_newuser,    }, 
+    {"REMUSER", 3, fs_cmd_deluser,    },
 };
 
 #define NCMDS (sizeof(cmd_tab) / sizeof(cmd_tab[0]))
@@ -1092,7 +1094,6 @@ fs_cmd_newuser(struct fs_context *c, char *tail)
 	username = fs_cli_getarg(&tail);
 
     // Check if the user is logged onto the system
-    if (debug) printf("Checked you're a known user\n");
 
     if (c->client == NULL) {
       fs_err(c, EC_FS_E_WHOAREYOU);
@@ -1107,7 +1108,6 @@ fs_cmd_newuser(struct fs_context *c, char *tail)
     }
 
     // Check if new user already exists
-    if (debug) printf("Check if the user already exists\n");
     user_exists = userfuncs->is_user(username);
 
     if (user_exists == true) 
@@ -1145,6 +1145,58 @@ fs_cmd_newuser(struct fs_context *c, char *tail)
     }
     // convert username to directory structure 
     // leading ./ then name changing the following . to / 
+
+    reply.command_code = EC_FS_CC_DONE; 
+    reply.return_code = EC_FS_RC_OK;
+    fs_reply(c, &reply, sizeof(reply));
+    return;
+}
+
+static void
+fs_cmd_deluser(struct fs_context *c, char *tail)
+{
+	struct ec_fs_reply reply;
+    char *username;
+    int priv = EC_FS_PRIV_NONE; /* Assume no Priv */
+    bool user_exists = false;
+    int result;
+
+	username = fs_cli_getarg(&tail);
+
+    // Check if the user is logged onto the system
+
+    if (c->client == NULL) {
+      fs_err(c, EC_FS_E_WHOAREYOU);
+      return;
+    }
+    // check that that user has privilege
+    priv = userfuncs->get_priv(c->client->login);
+    if (priv != EC_FS_PRIV_SYST)
+    {
+        fs_err(c, EC_FS_E_NOPRIV);
+        return;
+    }
+
+    // Check if new user already exists
+    if (debug) printf("Check if the user already exists\n");
+    user_exists = userfuncs->is_user(username);
+
+    if (user_exists == false)
+    {
+        fs_err(c, EC_FS_E_BADUSER);
+        return;
+    }
+
+    if (user_exists == true)
+    {
+        result = userfuncs->del_user(username);
+    }
+
+    if (result == -1)
+    {
+        fs_error(c, 0x39, "FS Internal Error 27");
+        return;
+    }
 
     reply.command_code = EC_FS_CC_DONE; 
     reply.return_code = EC_FS_RC_OK;
