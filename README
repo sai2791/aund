@@ -11,6 +11,10 @@ fileserver.  It supports:
 * Access permissions now supported
 * Locked files now supported
 * File Server can now be any station number not just 254
+* NEWUSER command has been implemented, you can use NEWUSER user, or 
+  NEWUSER group.user.  The login directory will be created based on what
+  you entered.  Note: You cannot have a user create with the same name
+  as a group.
 
 For general installation instructions, see the INSTALL file.  aund is
 not particularly portable, and expects a BSDish or GNUish C library.
