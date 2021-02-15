@@ -394,13 +394,6 @@ pw_add_user(char *user)
 
     if (has_group == false)
     {
-      if (debug)
-        printf("Directory to create [%s]\n", directory);
-      if (debug)
-        printf("Size of directory [%lu]\n", strlen(directory));
-      // bug here, cannot create <group>.<user> as a single mkdir
-      // need to split it into two makes
-      // this is working for just plain username
       if (mkdir(directory, 0777) < 0) {
         errx(0xff, "Can't create directory\n");
         return -1;
@@ -418,8 +411,7 @@ pw_add_user(char *user)
         strcpy(group, ct);
         strcat(group, end);
 
-        if (debug) printf("Group is [%s]\n", group);
-        mkdir(group, 0777);
+        mkdir(group, 0777); /* Ignore errors here for the moment */
 
         // Create the user directory under the group
         if (mkdir(directory, 0777) < 0) {
@@ -440,7 +432,7 @@ pw_is_user(char *user)
     int match;
 
 	if (pw_open(1) < 0)
-		return true;
+		return true; /* FIXME: Might want to return an error code */
         
 	while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
 	// Check if the user matches u
