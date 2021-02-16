@@ -9,6 +9,8 @@ Config.h.in
 config.status
 depcomp
 tags
+config.status
+
 
 
 
