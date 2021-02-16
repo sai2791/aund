@@ -54,7 +54,7 @@ typedef void fs_cmd_impl(struct fs_context *, char *);
 
 struct fs_cmd {
 	char	*name;
-	int	minlen;
+	int	    minlen;   /* Min length of command for abreviation */
 	fs_cmd_impl	*impl;
 };
 
@@ -312,8 +312,8 @@ fs_cmd_priv(struct fs_context *c, char *tail)
 	user = fs_cli_getarg(&tail);
 	priv = fs_cli_getarg(&tail);
 	if (debug) printf("cli: priv request %s to '%s'\n",user,priv);
-        if (c->client == NULL) {
-		fs_error(c, 0xff, "Who are you?");
+    if (c->client == NULL) {
+        fs_err(c, EC_FS_E_WHOAREYOU);
 		return;
 	}
 	if (userfuncs->set_priv(c->client, user, priv)) {
@@ -925,14 +925,16 @@ fs_cmd_access(struct fs_context *c, char *tail)
     bool is_public_write = false;
     bool is_public_read = false;
     bool found_slash = false;
+    bool bad_access = false;
 	FTS *ftsp;
 	FTSENT *f;
 	
     name = fs_cli_getarg(&tail);
-    // FIXME: 
-    // bug here - if user uses access. name permissions the . is used
-    // as the filename but the command expansion process seems to leave
-    // it in the buffer
+    // Thought there was a bug here with the way the command line
+    // Processor handled keywords with a period (.) at the end
+    // but tried on the DFS and its the same, it assumes
+    // *ACCESS. FILE WR/R is valid, and the filename is . and the 
+    // permissions are FILE
 
 	access = fs_cli_getarg(&tail);
     if (debug) printf("Command line argument [%s]\n", name);
@@ -974,6 +976,7 @@ fs_cmd_access(struct fs_context *c, char *tail)
 
     // The access string is not empty so now we must figure out
     // what the user gave us
+    // added addition check for lwr/wr must not allow stuff like lww/rr etc
     
     for (loop_count = 0; (loop_count < strlen(access)); loop_count++) 
     {
@@ -984,38 +987,85 @@ fs_cmd_access(struct fs_context *c, char *tail)
             {    
             is_locked = true;
             }
+            if (found_slash == true)
+            {
+                bad_access = true;
+                // found L after the slash
+            }
             break;
 
             case 'W':
             if  (found_slash == false)
             {
-                is_owner_write = true;
+                if (is_owner_write == true)
+                {
+                    bad_access = true; 
+                }
+                if (is_owner_write == false)
+                {
+                    is_owner_write = true; 
+                }
             }
             if (found_slash == true)
             {
-                is_public_write = true;
+                if (is_public_write == true)
+                {
+                    bad_access = true;
+                }
+                if (is_public_write == false)
+                {
+                    is_public_write = true;
+                }
             }
             break;
 
             case 'R':
             if (found_slash == false)
             {
-                is_owner_read = true;
+                if (is_owner_read == true)
+                {
+                    bad_access = true;
+                }
+                if (is_owner_read == false)
+                {
+                    is_owner_read = true;
+                }
             }
             if (found_slash == true)
             {
-                is_public_read = true;
+                if (is_public_read == true)
+                {
+                    bad_access = true;
+                }
+                if (is_public_read == false)
+                {
+                    is_public_read = true;
+                }
             }
             break;
 
             case '/':
-            found_slash = true;
+            if (found_slash == true)
+            {
+                bad_access = true;
+            }
+            if (found_slash == false)
+            {
+                found_slash = true;
+            }
             break;
 
             default:
             fs_err(c, EC_FS_E_BADACCESS);
             return;
         }
+    }
+
+    // Check if the access command was malformed
+    if (bad_access == true)
+    {
+        fs_err(c, EC_FS_E_BADACCESS);
+        return;
     }
 
 	if ((upath = fs_unixify_path(c, name )) == NULL) return;
