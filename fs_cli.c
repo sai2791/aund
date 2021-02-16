@@ -937,8 +937,6 @@ fs_cmd_access(struct fs_context *c, char *tail)
     // permissions are FILE
 
 	access = fs_cli_getarg(&tail);
-    if (debug) printf("Command line argument [%s]\n", name);
-    if (debug) printf("access list argument is [%s]\n", access);
 	if (c->client == NULL) {
 		fs_err(c, EC_FS_E_WHOAREYOU);
 		return;
