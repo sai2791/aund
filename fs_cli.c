@@ -530,11 +530,12 @@ fs_cmd_dir(struct fs_context *c, char *tail)
 		return;
 	}
 
-    // check that that user has privilege
+    // Check if the user has fixed privilege, if they do
+    // they are not allowed to change directory
     priv = userfuncs->get_priv(c->client->login);
     if (priv == EC_FS_PRIV_FIXED)
     {
-        fs_err(c, EC_FS_E_NOACCESS);
+        fs_error(c, 0xff, "Not allowed");
         return;
     }
 	upath = fs_cli_getarg(&tail);
