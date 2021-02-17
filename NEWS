@@ -28,7 +28,7 @@ aund 1.06 *
  * Change to user permissions on directories
    If the users current path, matches the user root directory at
    the start at least, we assume that this is owned by the user
-   otherwise you have public average
+   otherwise you have public access.
  * If you have privilege then you will always be the directory owner
 -- Steve Inglis <sai2791@googlemail.com> Sun, 08 Nov 2020 20:34:00 +0000    
 
