@@ -523,11 +523,20 @@ fs_cmd_dir(struct fs_context *c, char *tail)
 {
 	char *upath;
 	struct ec_fs_reply_dir reply;
+    int priv = EC_FS_PRIV_NONE;
 
 	if (c->client == NULL) {
 		fs_err(c, EC_FS_E_WHOAREYOU);
 		return;
 	}
+
+    // check that that user has privilege
+    priv = userfuncs->get_priv(c->client->login);
+    if (priv == EC_FS_PRIV_FIXED)
+    {
+        fs_err(c, EC_FS_E_NOACCESS);
+        return;
+    }
 	upath = fs_cli_getarg(&tail);
 	if (!*upath)
 		upath = "&";

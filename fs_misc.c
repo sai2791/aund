@@ -757,7 +757,7 @@ fs_set_opt4(struct fs_context *c)
 	}
 
 	if (userfuncs->set_opt4(c->client->login, opt4)) {
-		fs_err(c, EC_FS_E_BADPW);
+		fs_err(c, EC_FS_E_NOACCESS);
 		return;
 	}
 	reply.command_code = EC_FS_CC_DONE;

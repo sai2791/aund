@@ -240,37 +240,43 @@ pw_change(const char *user, const char *oldpw, const char *newpw)
 	char salt[64];
 	char *cp;
 	struct timeval tv;
+    int ok;
 
 	if (pw_open(1) < 0)
 		return -1;
 
 	while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
 		if (!done && !strcasecmp(user, u)) {
-			int ok = 0;
+			ok = 0;
 			ok = !strcmp(s, "L");
 			if (ok) {   // User isnt allowed to change passwd
-							pw_close();
-				return -1;
-			}
-			ok = 0;
-			if (*p) {
-				cp = crypt(oldpw, p);
-				ok = !strcmp(cp, p);
-			} else {
-				ok = (!oldpw || !*oldpw);
-			}
-			if (!ok) {
-				pw_close();
-				return -1;
-			}
-			gettimeofday(&tv, NULL);
-			sprintf(salt, "$6$%08lx%08lx$",
-				tv.tv_sec & 0xFFFFFFFFUL,
-				tv.tv_usec & 0xFFFFFFFFUL);
-			p = crypt(newpw, salt);
+                    pw_close();
+                    return -1;
+            }
+            ok = !strcmp(s, "F");
+            if (ok) {
+                pw_close();
+                return -1;
+            }
+        }
+	    ok = 0;
+	    if (*p) {
+	        cp = crypt(oldpw, p);
+			ok = !strcmp(cp, p);
+	    } else {
+		    ok = (!oldpw || !*oldpw);
+	    }
+	    if (!ok) {
+	        pw_close();
+	        return -1;
+	    }
+	    gettimeofday(&tv, NULL);
+	    sprintf(salt, "$6$%08lx%08lx$",
+	        tv.tv_sec & 0xFFFFFFFFUL,
+	        tv.tv_usec & 0xFFFFFFFFUL);
+	    p = crypt(newpw, salt);
 		}
 		pw_write_line(u, p, d, s, opt4);
-	}
 
 	return pw_close_rename();
 }
@@ -281,13 +287,25 @@ pw_set_opt4(const char *user, int newopt4)
 	char *u, *p, *d, *s;
 	int opt4;
 	int done = 0;
+    int ok;
 
 	if (pw_open(1) < 0)
 		return -1;
 
 	while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
 		if (!done && !strcasecmp(user, u)) {
-				opt4 = newopt4;
+			ok = 0;
+			ok = !strcmp(s, "L");
+			if (ok) {   // User isnt allowed to change passwd
+                    pw_close();
+                    return -1;
+            }
+            ok = !strcmp(s, "F");
+            if (ok) {
+                pw_close();
+                return -1;
+            }
+            opt4 = newopt4;
 		}
 		pw_write_line(u, p, d, s, opt4);
 	}
@@ -310,7 +328,12 @@ pw_get_priv(const char *user)
 		            pw_close();
 			        switch (*s) {
 				        case 'S': priv = EC_FS_PRIV_SYST; break;
+                        // Limited users cannot change passwords or 
+                        // their boot options
 				        case 'L': priv = EC_FS_PRIV_LIMIT; break;
+                        // Fixed users cannot change their boot options,
+                        // passwords, and cannot look at any directories
+                        // other than their own root directory
 				        case 'F': priv = EC_FS_PRIV_FIXED; break;
 
 				        default : priv = EC_FS_PRIV_NONE;
