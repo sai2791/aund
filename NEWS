@@ -1,3 +1,10 @@
+aund 1.07.01
+ * Fixed Access parameter reading, now does not allow duplicates like
+   WWR/RR etc.
+ * Fixed user privilege permissions, Fixed is not allowed to change 
+   password, opt4 or directory. Limited is not allowed to change 
+   password or opt4. (SJ and Lvl4 stuff). 
+-- Steve Inglis <sai2791@googlemail.com> Thu, 18 Feb 2021 09:54 +0000
 aund 1.07
  * Added REMUSER command, removes user from the password file but
    does not remove the user directory or files.
