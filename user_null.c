@@ -50,17 +50,54 @@ null_urd(char const *user)
 static int
 null_change(char const *user, char const *oldpw, char const *newpw)
 {
-
+    assert(fixedurd);
 	return -1; /* failure */
+}
+
+static int
+null_get_priv(const char *user)
+{
+    assert(fixedurd);
+    return EC_FS_PRIV_SYST;
+}
+
+static int
+null_set_priv(struct fs_client *client, const char *user, const char *newpriv)
+{
+    assert(fixedurd);
+    return -1; /* failure */
+}
+
+static int
+null_add_user(char *user)
+{
+    assert(fixedurd);
+    return -1; /* failure */
+}
+
+static bool
+null_is_user(char *user)
+{
+    assert(fixedurd);
+    return true; /* should always return true */
 }
 
 static int
 null_set_opt4(char const *user, int opt4)
 {
-
+    assert(fixedurd);
 	return -1; /* failure */
 }
 
+static int 
+null_del_user(char *user)
+{
+    assert(fixedurd);
+    return -1; /* failure */
+}
+
 struct user_funcs const user_null = {
-	null_validate, null_urd, null_change, null_set_opt4
+	null_validate, null_urd, null_change, null_set_opt4, 
+    null_set_priv, null_get_priv,
+    null_add_user, null_is_user, null_del_user
 };
