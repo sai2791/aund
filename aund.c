@@ -50,6 +50,7 @@
 #define EC_PORT_FS 0x99
 
 extern const struct aun_funcs aun, beebem;
+extern char **environ;
 
 int debug = 0;
 int foreground = 0;
@@ -162,9 +163,16 @@ main(int argc, char *argv[])
 	if (chdir(root) < 0)
 		err(1, "%s: chdir", root);
 
-	if (!(debug || foreground))
-        if (posix_spawn(&child_pid ,root, NULL, NULL, NULL, NULL) !=0)
+	if (!(debug || foreground)) {
+	#ifdef __APPLE__
+        if (posix_spawn(&child_pid ,root, NULL, NULL, root, environ) !=0)
 			err(1, "posix_spawn");
+	#endif
+	#ifdef __linux__
+	if (daemon(1,0) != 0)
+		err(1,"Daemon");
+	#endif
+	}
 	if (using_syslog) {
 		openlog(progname, LOG_PID | (debug ? LOG_PERROR : 0),
 			LOG_DAEMON);
