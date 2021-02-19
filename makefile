@@ -305,6 +305,7 @@ INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LDFLAGS = 
+LDLIBS = 
 LEX = flex
 LEXLIB = -ll
 LEX_OUTPUT_ROOT = lex.yy
@@ -498,7 +499,7 @@ libconf_lex.a: $(libconf_lex_a_OBJECTS) $(libconf_lex_a_DEPENDENCIES) $(EXTRA_li
 
 aund$(EXEEXT): $(aund_OBJECTS) $(aund_DEPENDENCIES) $(EXTRA_aund_DEPENDENCIES) 
 	@rm -f aund$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(aund_OBJECTS) $(aund_LDADD) $(LIBS)
+	$(AM_V_CCLD)$(LINK) $(aund_OBJECTS) $(aund_LDADD) $(LIBS) $(LDLIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
