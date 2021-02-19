@@ -50,7 +50,6 @@
 #define EC_PORT_FS 0x99
 
 extern const struct aun_funcs aun, beebem;
-extern char **environ;
 
 int debug = 0;
 int foreground = 0;
@@ -165,7 +164,7 @@ main(int argc, char *argv[])
 
 	if (!(debug || foreground)) {
 	#ifdef __APPLE__
-        if (posix_spawn(&child_pid ,root, NULL, NULL, root, environ) !=0)
+        if (posix_spawn(&child_pid ,root, NULL, NULL, NULL, NULL) !=0)
 			err(1, "posix_spawn");
 	#endif
 	#ifdef __linux__
