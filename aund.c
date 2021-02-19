@@ -57,6 +57,7 @@ int using_syslog = 1;
 char *beebem_cfg_file = NULL;
 const struct aun_funcs *aunfuncs = &aun;
 char *progname;
+int default_fsstation = 254;
 
 volatile int painful_death = 0;
 

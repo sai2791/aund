@@ -886,7 +886,6 @@ YY_DECL
     
 #line 129 "conf_lex.l"
 
-
 	if (start != -1) BEGIN(start);
 
  /* Backslash-escaped newline is completely ignored */

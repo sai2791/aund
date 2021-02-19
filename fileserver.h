@@ -106,6 +106,7 @@ extern char *fixedurd;
 extern char *pwfile;
 extern char *lib;
 extern int default_opt4;
+extern int default_fsstation;
 
 typedef void fs_func_impl(struct fs_context *);
 extern fs_func_impl fs_cli;
