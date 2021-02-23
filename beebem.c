@@ -254,8 +254,13 @@ static void beebem_send(const void *data, ssize_t len)
 		to.sin_addr = ec2ip[ecaddr].addr;
 		to.sin_port = htons(ec2ip[ecaddr].port);
 		if (sendto(sock, data, len, 0,
-			   (struct sockaddr*)&to, sizeof(to)) < 0)
-			err(1, "sendto");
+			   (struct sockaddr*)&to, sizeof(to)) < 0) {
+            if (debug) printf("Error number was [%d]\n", errno);
+            if (debug) printf("Sending to station [%u]\n", ecaddr);
+            if ((errno != 65) && (errno !=64) )
+ 			    err(1, "sendto failed, stopping server : ");
+            }
+        
 	}
 }
 
