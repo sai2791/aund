@@ -103,7 +103,9 @@ main(int argc, char *argv[])
 	char const *conffile = "/etc/aund.conf";
 	char const *pidfile = "/var/run/aund.pid";
 	int c;
+    #ifdef __APPLE__
     pid_t child_pid;
+    #endif
 	int override_debug = -1;
 	int override_syslog = -1;
 
