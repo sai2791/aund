@@ -29,6 +29,7 @@
  * for aund.
  */
 
+#include <sys/errno.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/time.h>
@@ -257,7 +258,8 @@ static void beebem_send(const void *data, ssize_t len)
 			   (struct sockaddr*)&to, sizeof(to)) < 0) {
             if (debug) printf("Error number was [%d]\n", errno);
             if (debug) printf("Sending to station [%u]\n", ecaddr);
-            if ((errno != 65) && (errno !=64) )
+            if ((errno != EHOSTUNREACH) && (errno != 64) && (errno != ETIMEDOUT ))
+                // 64 is EHOSTDOWN - which is apparently mac specific
  			    err(1, "sendto failed, stopping server : ");
             }
         
