@@ -120,6 +120,7 @@ fs_open(struct fs_context *c)
         // about the file as a secondary check
         found_file = false;
     }
+	close(fd);
 
     openopt = 0;
     if (!request->must_exist) {
@@ -161,12 +162,15 @@ fs_open(struct fs_context *c)
 	path_argv[0] = upath;
 	path_argv[1] = NULL;
 
+    c->client->handles[h]->can_write = false;
+    c->client->handles[h]->can_read  = false;
+    c->client->handles[h]->is_locked = false;
 	ftsp = fts_open(path_argv, FTS_LOGICAL, NULL);
 	f = fts_read(ftsp);
-    if (f->fts_statp->st_mode & S_IWUSR) {
+    if (f->fts_statp->st_mode & S_IWUSR && !request->read_only) {
         c->client->handles[h]->can_write = true;
     }
-    if (f->fts_statp->st_mode & S_IWOTH) {
+    if (f->fts_statp->st_mode & S_IWOTH && !request->read_only) {
         c->client->handles[h]->can_write = true;
     }
     if (f->fts_statp->st_mode & S_IRUSR) {
@@ -444,6 +448,9 @@ fs_putbyte(struct fs_context *c)
 		reply.return_code = EC_FS_RC_OK;
 		fs_reply(c, &reply, sizeof(reply));
 	}
+    else
+        fs_err(c, EC_FS_E_CHANNEL);
+
 	
 }
 
@@ -530,7 +537,8 @@ fs_getbytes(struct fs_context *c)
 			fs_reply(c, &(reply2.std_tx), sizeof(reply2));
 		}
 	}
-	
+    else
+        fs_err(c, EC_FS_E_CHANNEL);
 }
 
 void
@@ -569,6 +577,9 @@ fs_getbyte(struct fs_context *c)
 		}
 		fs_reply(c, &(reply.std_tx), sizeof(reply));
 	}
+    else
+        fs_err(c, EC_FS_E_CHANNEL);
+
 }
 
 void
@@ -641,6 +652,8 @@ fs_putbytes(struct fs_context *c)
 			fs_reply(c, &(reply2.std_tx), sizeof(reply2));
 		}
 	}
+    else
+        fs_err(c, EC_FS_E_CHANNEL);
 }
 
 void
