@@ -167,10 +167,10 @@ fs_open(struct fs_context *c)
     c->client->handles[h]->is_locked = false;
 	ftsp = fts_open(path_argv, FTS_LOGICAL, NULL);
 	f = fts_read(ftsp);
-    if (f->fts_statp->st_mode & S_IWUSR) {
+    if (f->fts_statp->st_mode & S_IWUSR && !request->read_only) {
         c->client->handles[h]->can_write = true;
     }
-    if (f->fts_statp->st_mode & S_IWOTH) {
+    if (f->fts_statp->st_mode & S_IWOTH && !request->read_only) {
         c->client->handles[h]->can_write = true;
     }
     if (f->fts_statp->st_mode & S_IRUSR) {
