@@ -120,6 +120,7 @@ fs_open(struct fs_context *c)
         // about the file as a secondary check
         found_file = false;
     }
+	close(fd);
 
     openopt = 0;
     if (!request->must_exist) {
