@@ -448,6 +448,9 @@ fs_putbyte(struct fs_context *c)
 		reply.return_code = EC_FS_RC_OK;
 		fs_reply(c, &reply, sizeof(reply));
 	}
+    else
+        fs_err(c, EC_FS_E_CHANNEL);
+
 	
 }
 
@@ -534,7 +537,8 @@ fs_getbytes(struct fs_context *c)
 			fs_reply(c, &(reply2.std_tx), sizeof(reply2));
 		}
 	}
-	
+    else
+        fs_err(c, EC_FS_E_CHANNEL);
 }
 
 void
@@ -573,6 +577,9 @@ fs_getbyte(struct fs_context *c)
 		}
 		fs_reply(c, &(reply.std_tx), sizeof(reply));
 	}
+    else
+        fs_err(c, EC_FS_E_CHANNEL);
+
 }
 
 void
@@ -645,6 +652,8 @@ fs_putbytes(struct fs_context *c)
 			fs_reply(c, &(reply2.std_tx), sizeof(reply2));
 		}
 	}
+    else
+        fs_err(c, EC_FS_E_CHANNEL);
 }
 
 void
