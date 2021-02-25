@@ -73,6 +73,7 @@ struct fs_handle {
     bool can_write;
     bool is_locked;
     bool did_create;
+    uint8_t read_only;
 };
 
 struct fs_dir_cache {
