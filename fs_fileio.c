@@ -122,6 +122,13 @@ fs_open(struct fs_context *c)
     }
 	close(fd);
 
+    if ((found_file == false) && (request->must_exist))
+    {
+        fs_err(c, EC_FS_E_CHANNEL);
+        free(upath);
+        return;
+    }
+
     openopt = 0;
     if (!request->must_exist) {
       openopt |= O_CREAT;
