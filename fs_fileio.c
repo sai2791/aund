@@ -172,12 +172,13 @@ fs_open(struct fs_context *c)
     c->client->handles[h]->can_write = false;
     c->client->handles[h]->can_read  = false;
     c->client->handles[h]->is_locked = false;
+    c->client->handles[h]->read_only = request->read_only;
 	ftsp = fts_open(path_argv, FTS_LOGICAL, NULL);
 	f = fts_read(ftsp);
-    if (f->fts_statp->st_mode & S_IWUSR && !request->read_only) {
+    if (f->fts_statp->st_mode & S_IWUSR ) {
         c->client->handles[h]->can_write = true;
     }
-    if (f->fts_statp->st_mode & S_IWOTH && !request->read_only) {
+    if (f->fts_statp->st_mode & S_IWOTH ) {
         c->client->handles[h]->can_write = true;
     }
     if (f->fts_statp->st_mode & S_IRUSR) {
@@ -434,6 +435,11 @@ fs_putbyte(struct fs_context *c)
 		    request->handle, request->byte);
 	if ((h = fs_check_handle(c->client, request->handle)) != 0) {
 		if (fs_randomio_common(c, request->handle)) return;
+        if (c->client->handles[h]->read_only)
+        {
+            fs_err(c, EC_FS_E_RDONLY);
+            return;
+        }
         if (c->client->handles[h]->can_write == false)
         {
             // we are trying to write to a file that we do no have permission for
@@ -613,6 +619,12 @@ fs_putbytes(struct fs_context *c)
 		    (uintmax_t)off);
 	if ((h = fs_check_handle(c->client, request->handle)) != 0) {
 		if (fs_randomio_common(c, request->handle)) return;
+        if (c->client->handles[h]->read_only)
+        {
+            // Trying to write to a read only file
+            fs_err(c, EC_FS_E_RDONLY);
+            return;
+        }
         if (c->client->handles[h]->can_write == false)
         {
             // we are trying to write to a file without permission
