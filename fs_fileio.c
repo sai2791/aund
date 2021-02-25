@@ -162,6 +162,9 @@ fs_open(struct fs_context *c)
 	path_argv[0] = upath;
 	path_argv[1] = NULL;
 
+    c->client->handles[h]->can_write = false;
+    c->client->handles[h]->can_read  = false;
+    c->client->handles[h]->is_locked = false;
 	ftsp = fts_open(path_argv, FTS_LOGICAL, NULL);
 	f = fts_read(ftsp);
     if (f->fts_statp->st_mode & S_IWUSR) {
