@@ -424,8 +424,14 @@ conf_cmd_typemap_perm(union cfything *thing)
 
 	if (cfylex(BORING, NULL) != CF_WORD)
 		errx(1, "no perm for typemap");
+    #ifdef __APPLE__
 	if (sscanf(cfytext, "%ho", &perm) != 1)
 		errx(1, "bad perm for typemap");
+    #endif
+    #ifdef __LINUX__
+	if (sscanf(cfytext, "%o", &perm) != 1)
+		errx(1, "bad perm for typemap");
+    #endif
 	if (cfylex(BORING, NULL) != CF_WORD)
 		errx(1, "no type for typemap");
 	if (sscanf(cfytext, "%x", &type) != 1)
