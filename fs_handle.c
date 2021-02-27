@@ -134,6 +134,11 @@ fs_open_handle(struct fs_client *client, char *path, int open_flags,
 		return 0;
 	}
 	client->handles[h]->fd = fd;
+    // Initialise Acorn Permissions on file handle (assume the worst)
+    client->handles[h]->can_write = false;
+    client->handles[h]->can_read  = false;
+    client->handles[h]->is_locked = false;
+
 	newpath = client->handles[h]->path = malloc(strlen(path)+1);
 	if (newpath == NULL) {
 		warnx("fs_open_handle: malloc failed");

@@ -169,9 +169,9 @@ fs_open(struct fs_context *c)
 	path_argv[0] = upath;
 	path_argv[1] = NULL;
 
-    c->client->handles[h]->can_write = false;
-    c->client->handles[h]->can_read  = false;
-    c->client->handles[h]->is_locked = false;
+    // Acorn Permissions on file handle 
+    // moved to fs_handle where the handle
+    // is created.
     c->client->handles[h]->read_only = request->read_only;
 	ftsp = fts_open(path_argv, FTS_LOGICAL, NULL);
 	f = fts_read(ftsp);
