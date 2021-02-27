@@ -25,6 +25,7 @@ dnl (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 dnl THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 define(aund_version,esyscmd([perl -ne '/MAJOR\s*0x(.)/ and print "$1"; /MINOR\s*0x(..)/ and print ".$1";' version.h]))
+AC_PREREQ([2.69])
 AC_INIT([aund], aund_version, [bjh21@bjh21.me.uk])
 AC_CONFIG_SRCDIR([aund.c])
 AM_INIT_AUTOMAKE([-Wall -Wno-error foreign])
