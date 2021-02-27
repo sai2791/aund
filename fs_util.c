@@ -109,8 +109,9 @@ fs_access_to_mode(unsigned char access, int usergroup)
 		mode |= S_IRUSR | (usergroup ? S_IRGRP : 0);
 	if (access & EC_FS_ACCESS_UW)
 		mode |= S_IWUSR | (usergroup ? S_IWGRP : 0);
-    if (access & EC_FS_ACCESS_L)
+    if (access & EC_FS_ACCESS_L) {
         mode |= S_IXUSR | (usergroup ? S_IXGRP : 0);
+    }
 	if (access & EC_FS_ACCESS_OR)
 		mode |= S_IROTH | (usergroup ? 0 : S_IRGRP);
 	if (access & EC_FS_ACCESS_OW)

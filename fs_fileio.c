@@ -333,9 +333,20 @@ fs_get_args(struct fs_context *c)
 			fs_err(c, EC_FS_E_BADARGS);
 			return;
 		}
+        // Differences between apple uint64_t and linux
+        // removes complier warning
+        #ifdef __APPLE__
 		if (debug)
 			printf(" <- %llu\n",
 			    fs_read_val(reply.val, sizeof(reply.val)));
+        #endif
+            
+        #ifdef __LINUX__
+		if (debug)
+			printf(" <- %lu\n",
+			    fs_read_val(reply.val, sizeof(reply.val)));
+        #endif    
+
 		reply.std_tx.command_code = EC_FS_CC_DONE;
 		reply.std_tx.return_code = EC_FS_RC_OK;
 		fs_reply(c, &(reply.std_tx), sizeof(reply));
