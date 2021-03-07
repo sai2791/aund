@@ -153,6 +153,10 @@ file_server(struct aun_packet *pkt, ssize_t len, struct aun_srcaddr *from)
 		fs_dispatch[c->req->function](c);
 	else {
 		/*fs_unrec(sock, request, from);*/
+        if (debug) 
+            {
+                printf("Function request was: %d\n", c->req->function);
+            }
 		fs_error(c, 0xff, "Not yet implemented!");
 	}
 }

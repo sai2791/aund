@@ -294,7 +294,7 @@ beebem_recv(ssize_t *outsize, struct aun_srcaddr *vfrom, int want_port)
 		 * long, and the second payload byte should indicate
 		 * the destination port.
 		 */
-		msgsize = beebem_listen(&scoutaddr, forever);
+		msgsize = beebem_listen((unsigned int *)&scoutaddr, forever);
 
 		if (msgsize == 0) {
 			count--;
@@ -365,7 +365,7 @@ beebem_recv(ssize_t *outsize, struct aun_srcaddr *vfrom, int want_port)
 		count = 50;
 		do {
 			beebem_send(ack, 4);
-			msgsize = beebem_listen(&mainaddr, 0);
+			msgsize = beebem_listen((unsigned int *) &mainaddr, 0);
 			if (msgsize != 0) {
 				if (mainaddr != scoutaddr) {
 					if (debug)
@@ -441,7 +441,7 @@ beebem_xmit(struct aun_packet *spkt, size_t len, struct aun_srcaddr *vto)
 	count = 50;
 	do {
 		beebem_send(sbuf, 6);
-		msgsize = beebem_listen(&ackaddr, 0);
+		msgsize = beebem_listen((unsigned int *)&ackaddr, 0);
 		if (msgsize > 0) {
 			/*
 			 * We expect the ACK to have come from the
@@ -487,7 +487,7 @@ beebem_xmit(struct aun_packet *spkt, size_t len, struct aun_srcaddr *vto)
 	count = 50;
 	do {
 		beebem_send(sbuf, payloadlen+4);
-		msgsize = beebem_listen(&ackaddr, 0);
+		msgsize = beebem_listen((unsigned int *)&ackaddr, 0);
 		if (msgsize > 0) {
 			/*
 			 * The second ACK, just as above, should
