@@ -206,23 +206,23 @@ fs_get_info(struct fs_context *c)
 		strncpy(reply.dir_name, f->fts_name, sizeof(reply.dir_name));
 		strpad(reply.dir_name, ' ', sizeof(reply.dir_name));
 		/* We now check ownership. See also fs_cat_header */
-		/* if the path matches our urd then assume that we are the owner
-                   and if not, then check if the user has priv, because they own 
-		   everything.  */
-		match = fs_is_owner(c, upath);
-		if (match == true) {
-			reply.dir_access = FS_DIR_ACCESS_OWNER;
-		} else {
-			reply.dir_access = FS_DIR_ACCESS_PUBLIC;
-		} 
+		/* if the path matches our urd then assume that we are the owner */
+        /* and if not, then check if the user has priv, because they own */ 
+		/* everything.  */
+        match = fs_is_owner(c, upath);
+        if (match == true) {
+            reply.dir_access = FS_DIR_ACCESS_OWNER;
+        } else {
+            reply.dir_access = FS_DIR_ACCESS_PUBLIC;
+        } 
 
-                if (c->client->priv == EC_FS_PRIV_SYST)
-		{
-		    reply.dir_access = FS_DIR_ACCESS_OWNER;
-		} 
-		    /* Even better would be to check the user and group ID, and see if
-                       the directory is owned by the user but we have not implemented
-		       user identifiers or group identifiers yet.  */
+        if (c->client->priv == EC_FS_PRIV_SYST)
+        {
+            reply.dir_access = FS_DIR_ACCESS_OWNER;
+        } 
+        /* Even better would be to check the user and group ID, and see if */
+        /* the directory is owned by the user but we have not implemented */
+        /* user identifiers or group identifiers yet.  */
 		reply.cycle = 0; /* XXX should fake */
 		fs_reply(c, &(reply.std_tx), sizeof(reply));
 	}
@@ -452,10 +452,11 @@ fs_cat_header(struct fs_context *c)
 	strpad(reply.dir_name, ' ', sizeof(reply.dir_name));
 
 	/* We now check ownership. See also EC_FS_GET_INFO_DIR */
-	/*
-  	   Need to implement this check here, if we are in or below the users URD then assume
-	   that they are the owner (kludge for now).
-        */
+    /*
+       Need to implement this check here, if we are in or below 
+       the users URD then assume
+       that they are the owner (kludge for now).
+     */
 	oururd = userfuncs->urd(c->client->login);
 	fs_acornify_name(oururd);
 	printf("/g users [%s], URD [%s]\n", c->client->login,oururd);
