@@ -423,10 +423,4 @@ fs_is_owner(struct fs_context *c,char *path)
     return is_owner;
 }
 
-bool fs_is_user(char *user) 
-{
-    bool is_user = false;
-
-    return is_user;
-}
 
