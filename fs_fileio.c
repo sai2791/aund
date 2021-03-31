@@ -444,8 +444,8 @@ fs_putbyte(struct fs_context *c)
 	if (debug)
 		printf("putbyte [%d, 0x%02x]\n",
 		    request->handle, request->byte);
-	if ((h = fs_check_handle(c->client, request->handle)) != 0) {
-		if (fs_randomio_common(c, request->handle)) return;
+    if ((h = fs_check_handle(c->client, request->handle)) != 0) {
+        if (fs_randomio_common(c, request->handle)) return;
         if (c->client->handles[h]->read_only)
         {
             fs_err(c, EC_FS_E_RDONLY);
@@ -463,19 +463,17 @@ fs_putbyte(struct fs_context *c)
             fs_err(c, EC_FS_E_LOCKED);
             return;
         }
-		fd = c->client->handles[h]->fd;
-		if (write(fd, &request->byte, 1) < 0) {
-			fs_errno(c);
-			return;
-		}
-		reply.command_code = EC_FS_CC_DONE;
-		reply.return_code = EC_FS_RC_OK;
-		fs_reply(c, &reply, sizeof(reply));
-	}
+        fd = c->client->handles[h]->fd;
+        if (write(fd, &request->byte, 1) < 0) {
+            fs_errno(c);
+            return;
+        }
+        reply.command_code = EC_FS_CC_DONE;
+        reply.return_code = EC_FS_RC_OK;
+        fs_reply(c, &reply, sizeof(reply));
+    }
     else
         fs_err(c, EC_FS_E_CHANNEL);
-
-	
 }
 
 static int
@@ -529,38 +527,38 @@ fs_getbytes(struct fs_context *c)
 		printf("getbytes [%d, %zu%s%ju]\n",
 		    request->handle, size, request->use_ptr ? "!" : "@",
 		    (uintmax_t)off);
-	if ((h = fs_check_handle(c->client, request->handle)) != 0) {
-		if (fs_randomio_common(c, request->handle)) return;
+    if ((h = fs_check_handle(c->client, request->handle)) != 0) {
+        if (fs_randomio_common(c, request->handle)) return;
         if (c->client->handles[h]->can_read == false)
         {
             // We are trying to read from a file without the correct permission
             fs_err(c, EC_FS_E_NOACCESS);
             return;
         }
-		fd = c->client->handles[h]->fd;
-		if (!request->use_ptr)
-			if (lseek(fd, off, SEEK_SET) == -1) {
-				fs_errno(c);
-				return;
-			}
-		reply1.command_code = EC_FS_CC_DONE;
-		reply1.return_code = EC_FS_RC_OK;
-		fs_reply(c, &reply1, sizeof(reply1));
-		reply2.std_tx.command_code = EC_FS_CC_DONE;
-		reply2.std_tx.return_code = EC_FS_RC_OK;
-		got = fs_data_send(c, fd, size);
-		if (got == -1) {
-			/* Error */
-			fs_errno(c);
-		} else {
-			if (got == size && !at_eof(fd))
-				reply2.flag = 0;
-			else
-				reply2.flag = 0x80; /* EOF reached */
-			fs_write_val(reply2.nbytes, got, sizeof(reply2.nbytes));
-			fs_reply(c, &(reply2.std_tx), sizeof(reply2));
-		}
-	}
+        fd = c->client->handles[h]->fd;
+        if (!request->use_ptr)
+            if (lseek(fd, off, SEEK_SET) == -1) {
+                fs_errno(c);
+                return;
+            }
+        reply1.command_code = EC_FS_CC_DONE;
+        reply1.return_code = EC_FS_RC_OK;
+        fs_reply(c, &reply1, sizeof(reply1));
+        reply2.std_tx.command_code = EC_FS_CC_DONE;
+        reply2.std_tx.return_code = EC_FS_RC_OK;
+        got = fs_data_send(c, fd, size);
+        if (got == -1) {
+            /* Error */
+            fs_errno(c);
+        } else {
+            if (got == size && !at_eof(fd))
+                reply2.flag = 0;
+            else
+                reply2.flag = 0x80; /* EOF reached */
+            fs_write_val(reply2.nbytes, got, sizeof(reply2.nbytes));
+            fs_reply(c, &(reply2.std_tx), sizeof(reply2));
+        }
+    }
     else
         fs_err(c, EC_FS_E_CHANNEL);
 }
@@ -578,29 +576,29 @@ fs_getbyte(struct fs_context *c)
 	}
 	request = (struct ec_fs_req_getbyte *)(c->req);
 	if (debug) printf("getbyte [%d]\n", request->handle);
-	if ((h = fs_check_handle(c->client, request->handle)) != 0) {
-		if (fs_randomio_common(c, request->handle)) return;
+    if ((h = fs_check_handle(c->client, request->handle)) != 0) {
+        if (fs_randomio_common(c, request->handle)) return;
         if (c->client->handles[h]->can_read == false)
         {
             // We are trying to read from a file that we do not have permissions to
             fs_err(c, EC_FS_E_NOACCESS);
             return;
         }
-		fd = c->client->handles[h]->fd;
-		if ((ret = read(fd, &reply.byte, 1)) < 0) {
-			fs_errno(c);
-			return;
-		}
-		reply.std_tx.command_code = EC_FS_CC_DONE;
-		reply.std_tx.return_code = EC_FS_RC_OK;
-		if (ret == 0) {
-			reply.flag = 0xC0;
-			reply.byte = 0xFF;
-		} else {
-			reply.flag = at_eof(fd) ? 0x80 : 0;
-		}
-		fs_reply(c, &(reply.std_tx), sizeof(reply));
-	}
+        fd = c->client->handles[h]->fd;
+        if ((ret = read(fd, &reply.byte, 1)) < 0) {
+            fs_errno(c);
+            return;
+        }
+        reply.std_tx.command_code = EC_FS_CC_DONE;
+        reply.std_tx.return_code = EC_FS_RC_OK;
+        if (ret == 0) {
+            reply.flag = 0xC0;
+            reply.byte = 0xFF;
+        } else {
+            reply.flag = at_eof(fd) ? 0x80 : 0;
+        }
+        fs_reply(c, &(reply.std_tx), sizeof(reply));
+    }
     else
         fs_err(c, EC_FS_E_CHANNEL);
 
@@ -628,8 +626,8 @@ fs_putbytes(struct fs_context *c)
 		printf("putbytes [%d, %zu%s%ju]\n",
 		    request->handle, size, request->use_ptr ? "!" : "@",
 		    (uintmax_t)off);
-	if ((h = fs_check_handle(c->client, request->handle)) != 0) {
-		if (fs_randomio_common(c, request->handle)) return;
+    if ((h = fs_check_handle(c->client, request->handle)) != 0) {
+        if (fs_randomio_common(c, request->handle)) return;
         if (c->client->handles[h]->read_only)
         {
             // Trying to write to a read only file
@@ -648,40 +646,40 @@ fs_putbytes(struct fs_context *c)
             fs_err(c, EC_FS_E_LOCKED);
             return;
         }
-		fd = c->client->handles[h]->fd;
-		if (!request->use_ptr)
-			if (lseek(fd, off, SEEK_SET) == -1) {
-				if (debug) printf("Fs_file error\n");
-				fs_errno(c);
-				return;
-			}
-		reply1.std_tx.command_code = EC_FS_CC_DONE;
-		reply1.std_tx.return_code = EC_FS_RC_OK;
-		reply1.data_port = OUR_DATA_PORT;
-		
-		if (debug) {
-				printf("blocksize: %lu, maxsize: %d \n",
-					sizeof(reply1.block_size),
-					aunfuncs->max_block);
-		}
+        fd = c->client->handles[h]->fd;
+        if (!request->use_ptr)
+            if (lseek(fd, off, SEEK_SET) == -1) {
+                if (debug) printf("Fs_file error\n");
+                fs_errno(c);
+                return;
+            }
+        reply1.std_tx.command_code = EC_FS_CC_DONE;
+        reply1.std_tx.return_code = EC_FS_RC_OK;
+        reply1.data_port = OUR_DATA_PORT;
 
-	    fs_write_val(reply1.block_size, aunfuncs->max_block,
-			     sizeof(reply1.block_size));
-		fs_reply(c, &(reply1.std_tx), sizeof(reply1));
-		reply2.std_tx.command_code = EC_FS_CC_DONE;
-		reply2.std_tx.return_code = EC_FS_RC_OK;
-		got = fs_data_recv(c, fd, size, c->req->urd);
-		if (got == -1) {
-			/* Error */
-			if (debug) printf("got error\n");
-			fs_errno(c);
-		} else {
-			reply2.zero = 0;
-			fs_write_val(reply2.nbytes, got, sizeof(reply2.nbytes));
-			c->req->reply_port = replyport;
-			fs_reply(c, &(reply2.std_tx), sizeof(reply2));
-		}
-	}
+        if (debug) {
+            printf("blocksize: %lu, maxsize: %d \n",
+                    sizeof(reply1.block_size),
+                    aunfuncs->max_block);
+        }
+
+        fs_write_val(reply1.block_size, aunfuncs->max_block,
+                sizeof(reply1.block_size));
+        fs_reply(c, &(reply1.std_tx), sizeof(reply1));
+        reply2.std_tx.command_code = EC_FS_CC_DONE;
+        reply2.std_tx.return_code = EC_FS_RC_OK;
+        got = fs_data_recv(c, fd, size, c->req->urd);
+        if (got == -1) {
+            /* Error */
+            if (debug) printf("got error\n");
+            fs_errno(c);
+        } else {
+            reply2.zero = 0;
+            fs_write_val(reply2.nbytes, got, sizeof(reply2.nbytes));
+            c->req->reply_port = replyport;
+            fs_reply(c, &(reply2.std_tx), sizeof(reply2));
+        }
+    }
     else
         fs_err(c, EC_FS_E_CHANNEL);
 }
