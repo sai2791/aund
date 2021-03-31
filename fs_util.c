@@ -102,21 +102,21 @@ fs_mode_to_access(mode_t mode)
 mode_t
 fs_access_to_mode(unsigned char access, int usergroup)
 {
-	mode_t mode;
+    mode_t mode;
 
-	mode = 0;
-	if (access & EC_FS_ACCESS_UR)
-		mode |= S_IRUSR | (usergroup ? S_IRGRP : 0);
-	if (access & EC_FS_ACCESS_UW)
-		mode |= S_IWUSR | (usergroup ? S_IWGRP : 0);
+    mode = 0;
+    if (access & EC_FS_ACCESS_UR)
+        mode |= S_IRUSR | (usergroup ? S_IRGRP : 0);
+    if (access & EC_FS_ACCESS_UW)
+        mode |= S_IWUSR | (usergroup ? S_IWGRP : 0);
     if (access & EC_FS_ACCESS_L) {
         mode |= S_IXUSR | (usergroup ? S_IXGRP : 0);
     }
-	if (access & EC_FS_ACCESS_OR)
-		mode |= S_IROTH | (usergroup ? 0 : S_IRGRP);
-	if (access & EC_FS_ACCESS_OW)
-		mode |= S_IWOTH | (usergroup ? 0 : S_IWGRP);
-	return mode;
+    if (access & EC_FS_ACCESS_OR)
+        mode |= S_IROTH | (usergroup ? 0 : S_IRGRP);
+    if (access & EC_FS_ACCESS_OW)
+        mode |= S_IWOTH | (usergroup ? 0 : S_IWGRP);
+    return mode;
 }
 
 char *
@@ -138,17 +138,17 @@ fs_access_to_string(char *buf, uint8_t access)
 uint64_t
 fs_read_val(uint8_t *p, size_t len)
 {
-	uint64_t value;
+    uint64_t value;
 
-	value = 0;
-	p += len - 1;
-	while(len) {
-		value <<= 8;
-		value |= *p;
-		p--;
-		len--;
-	}
-	return value;
+    value = 0;
+    p += len - 1;
+    while(len) {
+        value <<= 8;
+        value |= *p;
+        p--;
+        len--;
+    }
+    return value;
 }
 
 void
@@ -401,25 +401,25 @@ fs_is_owner(struct fs_context *c,char *path)
 	int match;
 	bool is_owner;  /* True - Owner, False - Public */
 
-	   oururd = userfuncs->urd(c->client->login);
-       fs_acornify_name(oururd);
+    oururd = userfuncs->urd(c->client->login);
+    fs_acornify_name(oururd);
 
-        match = strncmp(userfuncs->urd(c->client->login),path,
-		strlen(userfuncs->urd(c->client->login)));
+    match = strncmp(userfuncs->urd(c->client->login),path,
+            strlen(userfuncs->urd(c->client->login)));
 
-        if (match == 0) {
-    	   is_owner = true;
-        } else {
-      	   is_owner = false;
-        }
+    if (match == 0) {
+        is_owner = true;
+    } else {
+        is_owner = false;
+    }
 
 	/* now we check if they have privilege as that gives
 	   ownership access - Can still have no permission to write */
-   
-           if (c->client->priv == EC_FS_PRIV_SYST)
-           {
-	    	  is_owner = true;  /* Privilege gives owner access */
-           }
+
+    if (c->client->priv == EC_FS_PRIV_SYST)
+    {
+        is_owner = true;  /* Privilege gives owner access */
+    }
     return is_owner;
 }
 
