@@ -218,13 +218,13 @@ fs_cli_getarg(char **stringp)
 	switch (**stringp) {
 	case '"':
    		/* Quoted string. */
-                /*
-		 * XXX There seems to be no way to embed double quotes
-		 * in a quoted string (or at least, NetFiler doesn't
-		 * know how).  For now, assume the first '"' ends the
-		 * string.
-		 */
-		(*stringp)++;
+        /*
+         * XXX There seems to be no way to embed double quotes
+         * in a quoted string (or at least, NetFiler doesn't
+         * know how).  For now, assume the first '"' ends the
+         * string.
+         */
+        (*stringp)++;
 		start = *stringp;
 		*stringp = strchr(start, '"');
 		if (*stringp == NULL)
@@ -801,10 +801,6 @@ fs_cmd_save(struct fs_context *c, char *tail)
 	uint32_t start, end, exec;
 
 	path = fs_cli_getarg(&tail);
-	/* We need to check permissions here
-	   so we need a call to a procedure that 
-	   checks the user permissions in this path
-	*/
 	if (!*path) goto syntax;
 	reply = malloc(sizeof(*reply) + strlen(path) + 1);
 	p = fs_cli_getarg(&tail);
