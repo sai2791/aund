@@ -28,7 +28,7 @@
 /*
  * Password file management for aund.
  * Current format is
- User:Password:URD:Priv:Opt4
+ * User:Password:URD:Priv:Opt4
  */
 
 #include "fs_proto.h"
@@ -132,7 +132,7 @@ static int
 pw_read_line(char **user, char **pw, char **urd, char **priv, int *opt4)
 {
 	static char buffer[16384];
-	char *p, *q, *r, *s;
+	char *password, *directory_name, *r, *s;
 
 	errno = 0;
 	if (!fgets(buffer, sizeof(buffer), fp)) {
@@ -144,15 +144,15 @@ pw_read_line(char **user, char **pw, char **urd, char **priv, int *opt4)
 
 	buffer[strcspn(buffer, "\r\n")] = '\0';
 
-	if ((p = strchr(buffer, ':')) == NULL ||
-			(q = strchr(p+1, ':')) == NULL    ||
-			(s = strchr(q+1, ':')) == NULL) {
+	if ((password = strchr(buffer, ':')) == NULL ||
+			(directory_name = strchr(password+1, ':')) == NULL    ||
+			(s = strchr(directory_name+1, ':')) == NULL) {
 		warnx("%s:%d: malformatted line\n", pwfile, pwline);
 		return -1;
 	}
 
-	*p++ = '\0';
-	*q++ = '\0';
+	*password++ = '\0';
+	*directory_name++ = '\0';
 	*s++ = '\0';
 
 	r = strchr(s, ':');
@@ -164,8 +164,8 @@ pw_read_line(char **user, char **pw, char **urd, char **priv, int *opt4)
 	}
 
 	*user = buffer;
-	*pw = p;
-	*urd = q;
+	*pw = password;
+	*urd = directory_name;
 	*priv = s;
 
 	return 0;
@@ -215,16 +215,18 @@ pw_validate(char *user, const char *pw, int *opt4)
 static char *
 pw_urd(char const *user)
 {
-	char *u, *p, *d, *s;
-	int o4;
+	char *user_name, *user_password, *directory_name;
+    char *privilege;
+	int opt4;
 
 	if (pw_open(1) < 0)
 		return NULL;
 
-	while (pw_read_line(&u, &p, &d, &s, &o4) == 0) {
-		if (!strcasecmp(user, u)) {
+	while (pw_read_line(&user_name, &user_password, 
+                &directory_name, &privilege, &opt4) == 0) {
+		if (!strcasecmp(user, user_name)) {
 			pw_close();
-			return strdup(d);
+			return strdup(directory_name);
 		}
 	}
 	pw_close();
@@ -477,7 +479,8 @@ static int
 pw_del_user(char *user)
 {
     bool found=false;
-    char *u, *p, *d, *s;
+    char *user_name, *password, *directory_name;
+    char *privilege;
     int opt4;
     int match;
     int result;
@@ -485,9 +488,10 @@ pw_del_user(char *user)
     if (pw_open(1) < 0)
         return -1;
 
-    while (pw_read_line(&u, &p, &d, &s, &opt4) == 0)
+    while (pw_read_line(&user_name, &password, &directory_name,
+             &privilege, &opt4) == 0)
     {
-        match = strncmp(user, u, strlen(u));
+        match = strncmp(user, user_name, strlen(user_name));
         if (match == 0)
         {
             // We found a match
@@ -499,7 +503,7 @@ pw_del_user(char *user)
         {
             // not a match so we write this back to the password
             // file.
-            pw_write_line(u, p, d, s, opt4);    
+            pw_write_line(user_name, password, directory_name, privilege, opt4);    
         }
             
     }
