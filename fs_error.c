@@ -72,22 +72,22 @@ const static struct {
 	uint8_t err;
 	char *msg;
 } errmsgtab[] = {
-	{EC_FS_E_BADEXAMINE,	"Bad EXAMINE argument"},
+    {EC_FS_E_BADEXAMINE,	"Bad EXAMINE argument"},
 
-	{EC_FS_E_OBJNOTFILE, "Object not a file"},
+    {EC_FS_E_OBJNOTFILE, "Object not a file"},
 
-	{EC_FS_E_BADINFO,	"Bad INFO argument"},
-	{EC_FS_E_BADARGS,	"Bad RDARGS argument"},
+    {EC_FS_E_BADINFO,	"Bad INFO argument"},
+    {EC_FS_E_BADARGS,	"Bad RDARGS argument"},
 
-	{EC_FS_E_NOMEM, "Server out of memory"},
+    {EC_FS_E_NOMEM, "Server out of memory"},
 
-	{EC_FS_E_USERNOTON, "User not logged on"},
-	{EC_FS_E_TYPENMATC, "Types don't match"},
+    {EC_FS_E_USERNOTON, "User not logged on"},
+    {EC_FS_E_TYPENMATC, "Types don't match"},
 
-	{EC_FS_E_RENXDEV, "Renaming across two discs"},
-	{EC_FS_E_USEREXIST, "User id. already exists"},
-	{EC_FS_E_PWFFULL, "Password file full"},
-	{EC_FS_E_DIRFULL, "Maximum directory size reached"},
+    {EC_FS_E_RENXDEV, "Renaming across two discs"},
+    {EC_FS_E_USEREXIST, "User id. already exists"},
+    {EC_FS_E_PWFFULL, "Password file full"},
+    {EC_FS_E_DIRFULL, "Maximum directory size reached"},
 	{EC_FS_E_DIRNOTEMPTY, "Directory not empty"},
 	{EC_FS_E_ISDIR, "Is a directory"},
 	{EC_FS_E_MAPDISCERR, "Disc error on map read/write"},
@@ -164,4 +164,3 @@ fs_error(struct fs_context *c, uint8_t err, const char *report)
 	fs_reply(c, reply, sizeof(*reply) + strlen(report) + 1);
 	free(reply);
 }
-

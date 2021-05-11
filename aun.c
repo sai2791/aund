@@ -87,40 +87,40 @@ aun_recv(ssize_t *outsize, struct aun_srcaddr *vfrom, int want_port)
 	union internal_addr *afrom = (union internal_addr *)vfrom;
 	struct sockaddr_in from;
 
-	while (1) {
-		socklen_t fromlen = sizeof(from);
-		int i;
-		msgsize = recvfrom(sock, pkt, sizeof(buf), 0,
-		    (struct sockaddr *)&from, &fromlen);
-		if (msgsize == -1)
-			err(1, "recvfrom");
-		if (0) {
-			printf("Rx");
-			for (i = 0; i < msgsize; i++) {
-				printf(" %02x", buf[i]);
-			}
-			printf(" from UDP port %hu", ntohs(from.sin_port));
-		}
+    while (1) {
+        socklen_t fromlen = sizeof(from);
+        int i;
+        msgsize = recvfrom(sock, pkt, sizeof(buf), 0,
+                (struct sockaddr *)&from, &fromlen);
+        if (msgsize == -1)
+            err(1, "recvfrom");
+        if (0) {
+            printf("Rx");
+            for (i = 0; i < msgsize; i++) {
+                printf(" %02x", buf[i]);
+            }
+            printf(" from UDP port %hu", ntohs(from.sin_port));
+        }
 		/* Replies seem always to go to port 32768 */
 		from.sin_port = htons(PORT_AUN);
 		switch (pkt->type) {
 		case AUN_TYPE_IMMEDIATE:
-			if (pkt->flag == 8) {
-				/* Echo request? */
-				pkt->type = AUN_TYPE_IMM_REPLY;
-				pkt->data[0] = AUND_MACHINE_PEEK_LO;
-				pkt->data[1] = AUND_MACHINE_PEEK_HI;
-				pkt->data[2] = AUND_VERSION_MINOR;
-				pkt->data[3] = AUND_VERSION_MAJOR;
-				if (sendto(sock, buf, 12, 0,
-					   (struct sockaddr*)&from,
-					   sizeof(from))
-				    == -1) {
-					err(1, "sendto(echo reply)");
-				}
-				if (debug) printf(" (echo request)");
-			}
-			break;
+            if (pkt->flag == 8) {
+                /* Echo request? */
+                pkt->type = AUN_TYPE_IMM_REPLY;
+                pkt->data[0] = AUND_MACHINE_PEEK_LO;
+                pkt->data[1] = AUND_MACHINE_PEEK_HI;
+                pkt->data[2] = AUND_VERSION_MINOR;
+                pkt->data[3] = AUND_VERSION_MAJOR;
+                if (sendto(sock, buf, 12, 0,
+                            (struct sockaddr*)&from,
+                            sizeof(from))
+                        == -1) {
+                    err(1, "sendto(echo reply)");
+                }
+                if (debug) printf(" (echo request)");
+            }
+            break;
 		case AUN_TYPE_UNICAST:
 		case AUN_TYPE_BROADCAST:
 			if ((want_port == 0 || pkt->dest_port == want_port) &&

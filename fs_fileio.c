@@ -143,27 +143,27 @@ fs_open(struct fs_context *c)
       }
     }
 
-	if (request->read_only) {
-		openopt |= O_RDONLY;
+    if (request->read_only) {
+        openopt |= O_RDONLY;
 #ifdef HAVE_O_xxLOCK
-		openopt |= O_SHLOCK | O_NONBLOCK;
+        openopt |= O_SHLOCK | O_NONBLOCK;
 #endif
-	} else {
-		openopt |= O_RDWR;
+    } else {
+        openopt |= O_RDWR;
 #ifdef HAVE_O_xxLOCK
-		openopt |= O_EXLOCK | O_NONBLOCK;
+        openopt |= O_EXLOCK | O_NONBLOCK;
 #endif
-	}
-	if ((h = fs_open_handle(c->client, upath, openopt, true)) == 0) {
+    }
+    if ((h = fs_open_handle(c->client, upath, openopt, true)) == 0) {
 #ifdef HAVE_O_xxLOCK
-		if (errno == EAGAIN)
-			fs_err(c, EC_FS_E_OPEN);
-		else
+        if (errno == EAGAIN)
+            fs_err(c, EC_FS_E_OPEN);
+        else
 #endif
-			fs_errno(c);
-		    free(upath);
+            fs_errno(c);
+        free(upath);
 
-             return;
+        return;
         }
 
 	path_argv[0] = upath;
@@ -172,6 +172,7 @@ fs_open(struct fs_context *c)
     // Acorn Permissions on file handle 
     // moved to fs_handle where the handle
     // is created.
+
     c->client->handles[h]->read_only = request->read_only;
 	ftsp = fts_open(path_argv, FTS_LOGICAL, NULL);
 	f = fts_read(ftsp);
@@ -210,23 +211,23 @@ fs_open(struct fs_context *c)
     }
     free(upath);
 #ifdef HAVE_O_xxLOCK
-	if ((openopt = fcntl(c->client->handles[h]->fd, F_GETFL)) == -1 ||
-	    fcntl(c->client->handles[h]->fd,
-		F_SETFL, openopt & ~O_NONBLOCK) == -1) {
-          fs_errno(c);
-          fs_close_handle(c->client, h);
-          return;
-    	}
+    if ((openopt = fcntl(c->client->handles[h]->fd, F_GETFL)) == -1 ||
+            fcntl(c->client->handles[h]->fd,
+                F_SETFL, openopt & ~O_NONBLOCK) == -1) {
+        fs_errno(c);
+        fs_close_handle(c->client, h);
+        return;
+    }
 #else
-	if (flock(c->client->handles[h]->fd,
-		(request->read_only ? LOCK_SH : LOCK_EX) | LOCK_NB) == -1) {
-		if (errno == EAGAIN)
-			fs_err(c, EC_FS_E_OPEN);
-		else
-			fs_errno(c);
-	    	fs_close_handle(c->client, h);
-		return;
-	}
+    if (flock(c->client->handles[h]->fd,
+                (request->read_only ? LOCK_SH : LOCK_EX) | LOCK_NB) == -1) {
+        if (errno == EAGAIN)
+            fs_err(c, EC_FS_E_OPEN);
+        else
+            fs_errno(c);
+        fs_close_handle(c->client, h);
+        return;
+    }
 #endif
 	reply.std_tx.command_code = EC_FS_CC_DONE;
 	reply.std_tx.return_code = EC_FS_RC_OK;
@@ -580,7 +581,8 @@ fs_getbyte(struct fs_context *c)
         if (fs_randomio_common(c, request->handle)) return;
         if (c->client->handles[h]->can_read == false)
         {
-            // We are trying to read from a file that we do not have permissions to
+            // We are trying to read from a file that we do not
+            // have permissions to.
             fs_err(c, EC_FS_E_NOACCESS);
             return;
         }
@@ -879,6 +881,7 @@ fs_save(struct fs_context *c)
 
     if (can_write == false) {
         // need to delete the file we just created
+        // Is this a TODO that has not been done?
         close(fd);
         fts_close(ftsp);
         goto not_allowed_write;

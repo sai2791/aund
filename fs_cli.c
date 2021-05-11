@@ -80,23 +80,27 @@ static fs_cmd_impl fs_cmd_deluser;
 static int fs_cli_match(char *cmdline, char **tail, const struct fs_cmd *cmd);
 static void fs_cli_unrec(struct fs_context *, char *);
 
+/* the table has command, number of character to make it */
+/* unique (abbreviation) and the command to call when */
+/* found. */
+
 static const struct fs_cmd cmd_tab[] = {
 	{"BYE",		1, fs_cmd_bye,		},
 	{"CAT",		0, fs_cmd_cat,		},
-	{"CDIR",	2, fs_cmd_cdir,		},
-	{"DELETE",	3, fs_cmd_delete,	},
-	{"DIR", 	3, fs_cmd_dir,		},
-	{"FSOPT",	2, fs_cmd_fsopt,	},
-	{"INFO",	1, fs_cmd_info,		},
-	{"I AM", 	2, fs_cmd_i_am,		},
-	{"LIB",		3, fs_cmd_lib,		},
-	{"LOAD",	1, fs_cmd_load,		},
-	{"LOGOFF",	3, fs_cmd_bye,		},
-	{"PASS",      	1, fs_cmd_pass,		},
+    {"CDIR",	2, fs_cmd_cdir,		},
+    {"DELETE",	3, fs_cmd_delete,	},
+    {"DIR", 	3, fs_cmd_dir,		},
+    {"FSOPT",	2, fs_cmd_fsopt,	},
+    {"INFO",	1, fs_cmd_info,		},
+    {"I AM", 	2, fs_cmd_i_am,		},
+    {"LIB",		3, fs_cmd_lib,		},
+    {"LOAD",	1, fs_cmd_load,		},
+    {"LOGOFF",	3, fs_cmd_bye,		},
+	{"PASS",    1, fs_cmd_pass,		},
  	{"PRIV",	1, fs_cmd_priv,		},
-	{"RENAME",      1, fs_cmd_rename,	},
+	{"RENAME",  1, fs_cmd_rename,	},
 	{"SAVE",	1, fs_cmd_save,		},
-	{"SDISC",      	3, fs_cmd_sdisc,	},
+	{"SDISC",   3, fs_cmd_sdisc,	},
 	{"ACCESS",	2, fs_cmd_access,	},
     {"NEWUSER", 2, fs_cmd_newuser,    }, 
     {"REMUSER", 3, fs_cmd_deluser,    },
@@ -977,9 +981,8 @@ fs_cmd_access(struct fs_context *c, char *tail)
         return;
     }
 
-
     // The access string is not empty so now we must figure out
-    // what the user gave us
+    // what the user gave us. 
     // added addition check for lwr/wr must not allow stuff like lww/rr etc
     
     for (loop_count = 0; (loop_count < strlen(access)); loop_count++) 

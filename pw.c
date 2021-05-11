@@ -356,19 +356,19 @@ pw_set_priv( struct fs_client *client, const char *user, const char *newpriv)
 				int done = 0;
 
 	if (client->priv == EC_FS_PRIV_SYST) {
-					 if (pw_open(1) < 0)
-						 return -1;
+        if (pw_open(1) < 0)
+            return -1;
 
-					 while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
-										if (!done && !strcasecmp(user, u)) {
-												strcpy(s, newpriv);
-										}
-										pw_write_line(u, p, d, s, opt4);
-					 }
+        while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
+            if (!done && !strcasecmp(user, u)) {
+                strcpy(s, newpriv);
+            }
+            pw_write_line(u, p, d, s, opt4);
+        }
 
-					 return pw_close_rename();
-				}
-				return -1;  // No privilege
+        return pw_close_rename();
+    }
+    return -1;  // No privilege
 }
 
 static int

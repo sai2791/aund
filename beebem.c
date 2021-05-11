@@ -542,10 +542,10 @@ beebem_get_stn(struct aun_srcaddr *vfrom, uint8_t *out)
 }
 
 const struct aun_funcs beebem = {
-	512,
-	beebem_setup,
-	beebem_recv,
-        beebem_xmit,
-        beebem_ntoa,
-        beebem_get_stn,
+    512,
+    beebem_setup,
+    beebem_recv,
+    beebem_xmit,
+    beebem_ntoa,
+    beebem_get_stn,
 };
