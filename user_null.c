@@ -34,24 +34,24 @@
 static char *
 null_validate(char *user, char const *pw, int *opt4)
 {
-	assert(fixedurd);
-	*opt4 = default_opt4;
-	return strdup(fixedurd);
+    assert(fixedurd);
+    *opt4 = default_opt4;
+    return strdup(fixedurd);
 }
 
 static char *
 null_urd(char const *user)
 {
 
-	assert(fixedurd);
-	return strdup(fixedurd);
+    assert(fixedurd);
+    return strdup(fixedurd);
 }
 
 static int
 null_change(char const *user, char const *oldpw, char const *newpw)
 {
     assert(fixedurd);
-	return -1; /* failure */
+    return -1; /* failure */
 }
 
 static int
@@ -86,7 +86,7 @@ static int
 null_set_opt4(char const *user, int opt4)
 {
     assert(fixedurd);
-	return -1; /* failure */
+    return -1; /* failure */
 }
 
 static int 
@@ -97,7 +97,7 @@ null_del_user(char *user)
 }
 
 struct user_funcs const user_null = {
-	null_validate, null_urd, null_change, null_set_opt4, 
+    null_validate, null_urd, null_change, null_set_opt4, 
     null_set_priv, null_get_priv,
     null_add_user, null_is_user, null_del_user
 };

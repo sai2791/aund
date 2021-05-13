@@ -51,28 +51,28 @@ static void fs_free_handle(struct fs_client *, int);
  */
 void fs_check_handles(struct fs_context *c)
 {
-	if (debug) printf("{");
-	switch (c->req->function) {
-	default:
-		if (debug) printf("&=%u,", c->req->urd);
-		c->req->urd = fs_check_handle(c->client, c->req->urd);
-		/* FALLTHROUGH */
-	case EC_FS_FUNC_LOAD:
-	case EC_FS_FUNC_LOAD_COMMAND:
-	case EC_FS_FUNC_SAVE:
-	case EC_FS_FUNC_GETBYTES:
-	case EC_FS_FUNC_PUTBYTES:
-		/* In these calls, the URD is replaced by a port number */
-		if (debug) printf("@=%u,%%=%u", c->req->csd, c->req->lib);
-		c->req->csd = fs_check_handle(c->client, c->req->csd);
-		c->req->lib = fs_check_handle(c->client, c->req->lib);
-		/* FALLTHROUGH */
-	case EC_FS_FUNC_GETBYTE:
-	case EC_FS_FUNC_PUTBYTE:
-		/* And these ones don't pass context at all. */
-		break;
-	}
-	if (debug) printf("} ");
+    if (debug) printf("{");
+    switch (c->req->function) {
+    default:
+        if (debug) printf("&=%u,", c->req->urd);
+        c->req->urd = fs_check_handle(c->client, c->req->urd);
+        /* FALLTHROUGH */
+    case EC_FS_FUNC_LOAD:
+    case EC_FS_FUNC_LOAD_COMMAND:
+    case EC_FS_FUNC_SAVE:
+    case EC_FS_FUNC_GETBYTES:
+    case EC_FS_FUNC_PUTBYTES:
+        /* In these calls, the URD is replaced by a port number */
+        if (debug) printf("@=%u,%%=%u", c->req->csd, c->req->lib);
+        c->req->csd = fs_check_handle(c->client, c->req->csd);
+        c->req->lib = fs_check_handle(c->client, c->req->lib);
+        /* FALLTHROUGH */
+    case EC_FS_FUNC_GETBYTE:
+    case EC_FS_FUNC_PUTBYTE:
+        /* And these ones don't pass context at all. */
+        break;
+    }
+    if (debug) printf("} ");
 }
 
 /*
@@ -81,10 +81,10 @@ void fs_check_handles(struct fs_context *c)
  */
 int fs_check_handle(struct fs_client *client, int h)
 {
-	if (client && h < client->nhandles && client->handles[h])
-		return h;
-	else
-		return 0;
+    if (client && h < client->nhandles && client->handles[h])
+        return h;
+    else
+        return 0;
 }
 
 /*
@@ -95,63 +95,63 @@ int
 fs_open_handle(struct fs_client *client, char *path, int open_flags,
     bool for_open)
 {
-	struct stat sb;
-	char *newpath;
-	int h, fd;
+    struct stat sb;
+    char *newpath;
+    int h, fd;
 
-	h = fs_alloc_handle(client, for_open);
-	if (h == 0) {
-		errno = EMFILE;
-		return h;
-	}
-	if ((fd = open(path, open_flags,
-		    S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)) == -1) {
-		fs_free_handle(client, h);
-		return 0;
-	}
-	if (fstat(fd, &sb) == -1) {
-		close(fd);
-		fs_free_handle(client, h);
-		return 0;
-	}
-	if (S_ISDIR(sb.st_mode))
-		client->handles[h]->type = FS_HANDLE_DIR;
-	else if (S_ISREG(sb.st_mode)) {
-		client->handles[h]->type = FS_HANDLE_FILE;
-		/*
-		 * Initialise the sequence number to 'unknown', so
-		 * that the first request from the client will not
-		 * be considered a repeat regardless of its sequence
-		 * number.
-		 */
-		client->handles[h]->sequence = 0xFF;
-		client->handles[h]->oldoffset = 0;
-	} else {
-		warnx("fs_open_handle: tried to open something odd");
-		close(fd);
-		fs_free_handle(client, h);
-		errno = ENOENT;
-		return 0;
-	}
-	client->handles[h]->fd = fd;
+    h = fs_alloc_handle(client, for_open);
+    if (h == 0) {
+        errno = EMFILE;
+        return h;
+    }
+    if ((fd = open(path, open_flags,
+            S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)) == -1) {
+        fs_free_handle(client, h);
+        return 0;
+    }
+    if (fstat(fd, &sb) == -1) {
+        close(fd);
+        fs_free_handle(client, h);
+        return 0;
+    }
+    if (S_ISDIR(sb.st_mode)) {
+        client->handles[h]->type = FS_HANDLE_DIR;
+    } else if (S_ISREG(sb.st_mode)) {
+        client->handles[h]->type = FS_HANDLE_FILE;
+        /*
+         * Initialise the sequence number to 'unknown', so
+         * that the first request from the client will not
+         * be considered a repeat regardless of its sequence
+         * number.
+         */
+        client->handles[h]->sequence = 0xFF;
+        client->handles[h]->oldoffset = 0;
+    } else {
+        warnx("fs_open_handle: tried to open something odd");
+        close(fd);
+        fs_free_handle(client, h);
+        errno = ENOENT;
+        return 0;
+    }
+    client->handles[h]->fd = fd;
     // Initialise Acorn Permissions on file handle (assume the worst)
     client->handles[h]->can_write = false;
     client->handles[h]->can_read  = false;
     client->handles[h]->is_locked = false;
 
-	newpath = client->handles[h]->path = malloc(strlen(path)+1);
-	if (newpath == NULL) {
-		warnx("fs_open_handle: malloc failed");
-		close(fd);
-		fs_free_handle(client, h);
-		errno = ENOMEM;
-		return 0;
-	}
-	strcpy(newpath, path);
-	if (newpath[strlen(newpath)-1] == '/')
-		newpath[strlen(newpath)-1] = '\0';
-	if (debug) printf("{%d=%s} ", h, newpath);
-	return h;
+    newpath = client->handles[h]->path = malloc(strlen(path)+1);
+    if (newpath == NULL) {
+        warnx("fs_open_handle: malloc failed");
+        close(fd);
+        fs_free_handle(client, h);
+        errno = ENOMEM;
+        return 0;
+    }
+    strcpy(newpath, path);
+    if (newpath[strlen(newpath)-1] == '/')
+        newpath[strlen(newpath)-1] = '\0';
+    if (debug) printf("{%d=%s} ", h, newpath);
+    return h;
 }
 
 /*
@@ -162,11 +162,11 @@ void
 fs_close_handle(struct fs_client *client, int h)
 {
 
-	if (h == 0) return;
-	if (debug) printf("{%d closed} ", h);
-	close(client->handles[h]->fd);
-	free(client->handles[h]->path);
-	fs_free_handle(client, h);
+    if (h == 0) return;
+    if (debug) printf("{%d closed} ", h);
+    close(client->handles[h]->fd);
+    free(client->handles[h]->path);
+    fs_free_handle(client, h);
 }
 
 /*
@@ -197,25 +197,25 @@ fs_close_handle(struct fs_client *client, int h)
 static int
 fs_alloc_handle_p2(struct fs_client *client)
 {
-	int h;
+    int h;
 
-	for (h = 1; h < MAX_HANDLES; h <<= 1)
-		if (h >= client->nhandles ||
-		    client->handles[h] == NULL) return h;
-	return 0;
+    for (h = 1; h < MAX_HANDLES; h <<= 1)
+        if (h >= client->nhandles ||
+            client->handles[h] == NULL) return h;
+    return 0;
 }
 
 /* Allocate a handle that's not a power of two. */
 static int
 fs_alloc_handle_np2(struct fs_client *client)
 {
-	int h;
+    int h;
 
-	for (h = 1; h < MAX_HANDLES; h++)
-		if ((h & (h - 1)) != 0 &&
-		    (h >= client->nhandles ||
-		     client->handles[h] == NULL)) return h;
-	return 0;
+    for (h = 1; h < MAX_HANDLES; h++)
+        if ((h & (h - 1)) != 0 &&
+            (h >= client->nhandles ||
+             client->handles[h] == NULL)) return h;
+    return 0;
 }
 
 /* Allocate handle 255. */
@@ -223,62 +223,62 @@ static int
 fs_alloc_handle_255(struct fs_client *client)
 {
 
-	if (255 >= client->nhandles ||
-	    client->handles[255] == NULL) return 255;
-	return 0;
+    if (255 >= client->nhandles ||
+        client->handles[255] == NULL) return 255;
+    return 0;
 }
 
 static int
 fs_alloc_handle(struct fs_client *client, bool for_open)
 {
-	int h;
+    int h;
 
-	if (for_open) {
-		h = fs_alloc_handle_p2(client);
-		if (!client->safehandles) {
-			if (h == 0) h = fs_alloc_handle_np2(client);
-			if (h == 0) h = fs_alloc_handle_255(client);
-		}
-	} else {
-		h = fs_alloc_handle_np2(client);
-		if (h == 0) h = fs_alloc_handle_p2(client);
-		if (!client->safehandles && h == 0)
-			h = fs_alloc_handle_255(client);
-	}
-	if (h == 0) return 0;
-	if (h >= client->nhandles) {
-		/* Extend the table. */
-		int new_nhandles, i;
-		struct fs_handle **new_handles;
+    if (for_open) {
+        h = fs_alloc_handle_p2(client);
+        if (!client->safehandles) {
+            if (h == 0) h = fs_alloc_handle_np2(client);
+            if (h == 0) h = fs_alloc_handle_255(client);
+        }
+    } else {
+        h = fs_alloc_handle_np2(client);
+        if (h == 0) h = fs_alloc_handle_p2(client);
+        if (!client->safehandles && h == 0)
+            h = fs_alloc_handle_255(client);
+    }
+    if (h == 0) return 0;
+    if (h >= client->nhandles) {
+        /* Extend the table. */
+        int new_nhandles, i;
+        struct fs_handle **new_handles;
 
-		new_nhandles = h + 1;
-		if (new_nhandles > MAX_HANDLES)
-			new_nhandles = MAX_HANDLES;
-		new_handles = realloc(client->handles,
-		    new_nhandles * sizeof(struct fs_handle *));
-		if (new_handles != NULL) {
-			for (i = client->nhandles; i < new_nhandles; i++)
-				new_handles[i] = NULL;
-			client->handles = new_handles;
-			client->nhandles = new_nhandles;
-		} else {
-			warnx("fs_alloc_handle: realloc failed");
-			return 0;
-		}
-	}
-	client->handles[h] = malloc(sizeof(*(client->handles[h])));
-	if (client->handles[h] == NULL) {
-		warnx("fs: fs_alloc_handle: malloc failed");
-		h = 0;
-	}
-	return h;
+        new_nhandles = h + 1;
+        if (new_nhandles > MAX_HANDLES)
+            new_nhandles = MAX_HANDLES;
+        new_handles = realloc(client->handles,
+            new_nhandles * sizeof(struct fs_handle *));
+        if (new_handles != NULL) {
+            for (i = client->nhandles; i < new_nhandles; i++)
+                new_handles[i] = NULL;
+            client->handles = new_handles;
+            client->nhandles = new_nhandles;
+        } else {
+            warnx("fs_alloc_handle: realloc failed");
+            return 0;
+        }
+    }
+    client->handles[h] = malloc(sizeof(*(client->handles[h])));
+    if (client->handles[h] == NULL) {
+        warnx("fs: fs_alloc_handle: malloc failed");
+        h = 0;
+    }
+    return h;
 }
 
 static void
 fs_free_handle(struct fs_client *client, int h)
 {
 
-	/* very simple */
-	free(client->handles[h]);
-	client->handles[h] = 0;
+    /* very simple */
+    free(client->handles[h]);
+    client->handles[h] = 0;
 }
