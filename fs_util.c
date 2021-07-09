@@ -245,7 +245,7 @@ fs_get_meta(FTSENT *f, struct ec_fs_meta *meta)
     }
 }
 
-int
+bool
 fs_set_meta(FTSENT *f, struct ec_fs_meta *meta)
 {
     char *lastslash, *metapath, rawinfo[24];
@@ -254,7 +254,7 @@ fs_set_meta(FTSENT *f, struct ec_fs_meta *meta)
     metapath = fs_metapath(f);
     if (metapath == NULL) {
         errno = ENOMEM;
-        return 0;
+        return false;
     }
 
     lastslash = strrchr(metapath, '/');
@@ -277,10 +277,10 @@ fs_set_meta(FTSENT *f, struct ec_fs_meta *meta)
     if (symlink(rawinfo, metapath) < 0)
         goto fail;
     free(metapath);
-    return 1;
+    return true;
 fail:
     free(metapath);
-    return 0;
+    return false;
 }
 
 void
@@ -421,5 +421,3 @@ fs_is_owner(struct fs_context *c, char *path) {
     }
     return is_owner;
 }
-
-
