@@ -183,7 +183,7 @@ extern bool fs_read_access(struct fs_context *c,char *path);
 extern bool fs_is_user(char *);
 
 extern char *fs_acornify_name(char *);
-extern int fs_hidden_name(char *);
+extern bool fs_hidden_name(char *);
 extern char *fs_unixify_path(struct fs_context *, char *);
 
 extern int fs_guess_type(FTSENT *);

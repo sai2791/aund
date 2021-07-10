@@ -79,7 +79,8 @@ void fs_check_handles(struct fs_context *c)
  * Check a handle for validity.  Return the handle if it's valid and 0
  * if it isn't.
  */
-int fs_check_handle(struct fs_client *client, int h)
+int 
+fs_check_handle(struct fs_client *client, int h)
 {
     if (client && h < client->nhandles && client->handles[h])
         return h;

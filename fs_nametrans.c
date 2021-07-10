@@ -88,7 +88,7 @@ fs_acornify_name(char *name)
  * particular), and so are file names longer than 10 characters
  * (after stripping two dots off dot-stuffed ones).
  */
-int
+bool
 fs_hidden_name(char *name)
 {
 	int len;
@@ -98,7 +98,7 @@ fs_hidden_name(char *name)
 		 * Check for, and skip, two extra dots.
 		 */
 		if (*++name != '.' || *++name != '.')
-			return 1;      /* dotfile; hidden */
+			return true;      /* dotfile; hidden */
 		/*
 		 * Now the name has been un-dot-stuffed.
 		 */
@@ -109,9 +109,9 @@ fs_hidden_name(char *name)
 	if (len >= 4 && name[len-4] == ',')
 		len -= 4;
 	if (len > 10)
-		return 1;	       /* long file: hidden */
+		return true;	       /* long file: hidden */
 
-	return 0;
+	return false;
 }
 
 /*
@@ -309,20 +309,20 @@ fs_unhat_path(char *path)
  * Case-insensitively match a file name against a potential
  * wildcard.
  */
-static int
+static bool
 wcfrag(char *frag, char *file)
 {
 	while (*frag && *frag != '*') {
 		if (*frag != '?' && (toupper((unsigned char)*file) !=
 				     toupper((unsigned char)*frag)))
-			return 0;
+			return false;
 		frag++;
 		file++;
 	}
-	return 1;
+	return true;
 }
 
-static int
+static bool
 wcmatch(char *wc, char *file, int len)
 {
 	char *fragend;
@@ -342,7 +342,7 @@ wcmatch(char *wc, char *file, int len)
 				!wcfrag(wc, file)))
 				file++, len--;
 			if (len < fragend - wc)
-				return 0;
+				return false;
 			file += fragend - wc;
 			len -= fragend - wc;
 			wc = fragend;
@@ -352,7 +352,7 @@ wcmatch(char *wc, char *file, int len)
 			 * match it at precisely the end or fail.
 			 */
 			if (len < fragend - wc)
-				return 0;
+				return false;
 			file += len - (fragend - wc);
 			return ((!at_start || file==filestart) &&
 				wcfrag(wc, file));
@@ -360,7 +360,7 @@ wcmatch(char *wc, char *file, int len)
 		while (*wc == '*') wc++;
 		at_start = 0;
 	}
-	return 1;
+	return true;
 }
 
 /*
