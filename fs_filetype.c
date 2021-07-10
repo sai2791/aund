@@ -68,7 +68,7 @@ struct fs_typemap {
 TAILQ_HEAD(fs_typemap_head, fs_typemap);
 static struct fs_typemap_head typemap = TAILQ_HEAD_INITIALIZER(typemap);
 
-static int fs_check_typemap(FTSENT *, struct fs_typemap *);
+static bool fs_check_typemap(FTSENT *, struct fs_typemap *);
 
 /*
  * fs_guess_type - pick a sensible RISC OS file type for a Unix file.
@@ -89,21 +89,21 @@ int fs_guess_type(FTSENT *f)
     return FT_DATA;
 }
 
-int fs_check_typemap(FTSENT *f, struct fs_typemap *map)
+bool fs_check_typemap(FTSENT *f, struct fs_typemap *map)
 {
     switch (map->kind) {
     case FS_MAP_DEFAULT:
-        return 1;
+        return true;
     case FS_MAP_MODE:
         return (f->fts_statp->st_mode & map->crit.mode.mask) ==
             map->crit.mode.val;
     case FS_MAP_NAME:
         if (regexec(map->crit.name_re, f->fts_name, 0, NULL, 0) == 0)
-            return 1;
+            return true;
         else
-            return 0;
+            return false;
     }
-    return 0;
+    return false;
 }
 
 int

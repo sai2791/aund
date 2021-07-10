@@ -77,7 +77,7 @@ static fs_cmd_impl fs_cmd_access;
 static fs_cmd_impl fs_cmd_newuser;
 static fs_cmd_impl fs_cmd_deluser;
 
-static int fs_cli_match(char *cmdline, char **tail, const struct fs_cmd *cmd);
+static bool fs_cli_match(char *cmdline, char **tail, const struct fs_cmd *cmd);
 static void fs_cli_unrec(struct fs_context *, char *);
 
 /* the table has command, number of character to make it */
@@ -178,7 +178,7 @@ fs_cli_unrec(struct fs_context *c, char *cmd)
  * cmd. If it does, return the tail of the command beyond that.
  */
 
-static int
+static bool
 fs_cli_match(char *cmdline, char **tail, const struct fs_cmd *cmd)
 {
     int i;
@@ -190,19 +190,19 @@ fs_cli_match(char *cmdline, char **tail, const struct fs_cmd *cmd)
         if (creal == '\0') {   /* real command has just ended */
             if (strchr(" .^&@$%", cthis)) {   /* so has input */
                 *tail = cmdline + i;
-                return 1;
+                return true;
             } else {
-                return 0;   /* no match */
+                return false;   /* no match */
             }
         }
         if (cthis == '.') {    /* input command is abbreviated */
             if (i < cmd->minlen)
-                return 0;   /* too short an abbreviation */
+                return false;   /* too short an abbreviation */
             *tail = cmdline + i + 1;   /* skip the dot */
-            return 1;      /* abbreviation which matches */
+            return true;      /* abbreviation which matches */
         }
         if (creal != cthis)
-            return 0;      /* mismatched character */
+            return false;      /* mismatched character */
     }
 }
 
