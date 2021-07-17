@@ -97,7 +97,7 @@ static const struct fs_cmd cmd_tab[] = {
     {"LOAD",    1, fs_cmd_load,     },
     {"LOGOFF",  3, fs_cmd_bye,      },
     {"PASS",    1, fs_cmd_pass,     },
-    {"PRIV",    1, fs_cmd_priv,     },
+    {"PRIV",    2, fs_cmd_priv,     },
     {"RENAME",  1, fs_cmd_rename,   },
     {"SAVE",    1, fs_cmd_save,     },
     {"SDISC",   3, fs_cmd_sdisc,    },
