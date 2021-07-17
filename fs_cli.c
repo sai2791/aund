@@ -142,6 +142,7 @@ fs_cli(struct fs_context *c)
                 if (cmd_tab[i].impl == fs_cmd_i_am ||
                     cmd_tab[i].impl == fs_cmd_pass)
                     printf("[%.*s <hidden>]",
+    // loop and accept new connections
                         (int)(tail - backup), backup);
                 else
                     printf("[%s]", c->req->data);
@@ -313,6 +314,7 @@ fs_cmd_priv(struct fs_context *c, char *tail)
 {
     struct ec_fs_reply reply;
     char *user, *priv;
+
     user = fs_cli_getarg(&tail);
     priv = fs_cli_getarg(&tail);
     if (debug) printf("cli: priv request %s to '%s'\n", user, priv);
@@ -320,6 +322,14 @@ fs_cmd_priv(struct fs_context *c, char *tail)
         fs_err(c, EC_FS_E_WHOAREYOU);
         return;
     }
+    // Add Validation to the privilege level
+    if (strlen(priv) > 1) 
+    {
+        // TODO: Write a procedure to check that the priv flag is valid
+        fs_err(c, EC_FS_E_NOPRIV);
+        return;
+    }
+
     if (userfuncs->set_priv(c->client, user, priv)) {
         fs_err(c, EC_FS_E_NOPRIV);  // Should be Priv??
         return;
