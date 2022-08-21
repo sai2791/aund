@@ -408,7 +408,7 @@ fs_randomio_common(struct fs_context *c, int h)
     int fd;
 
     fd = c->client->handles[h]->fd;
-    if (debug) printf("%c", (c->req->aun.flag & 1) ? '/' : '\\');
+    printf(" [[->%c %0x]]", (c->req->aun.flag & 1) ? '/' : '\\', (c->req->aun.flag));
     if (c->client->handles[h]->sequence != (c->req->aun.flag & 1)) {
         /*
          * Different sequence number from last request.  Save
