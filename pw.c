@@ -320,6 +320,14 @@ pw_get_priv(const char *user)
         return -1;
 
     while (pw_read_line(&u, &p, &d, &s, &opt4) == 0) {
+
+        // TODO: Change these privilege levels match those
+        //       defined in PiEconetBridge FS Software 
+        //     L - Locked cannot log in
+        //     N - Unlocked (normal) user but cannot change password
+        //     S - System User - DONE!
+        //     U - Unlocked (normal) user
+        //
                 if (!strcasecmp(user, u)) {
                     pw_close();
                     switch (*s) {
