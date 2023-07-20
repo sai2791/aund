@@ -248,6 +248,24 @@ fs_get_info(struct fs_context *c)
         }
     }
     break;
+    case EC_FS_GET_INFO_ALL_32: {
+        struct ec_fs_reply_info_all_32 reply;
+
+        memset(&reply, 0, sizeof(reply));
+        reply.std_tx.return_code = EC_FS_RC_OK;
+        reply.std_tx.command_code = EC_FS_CC_DONE;
+        if (f->fts_info == FTS_ERR || f->fts_info == FTS_NS) {
+            reply.type = 0;
+        } else {
+            reply.type = fs_mode_to_type(f->fts_statp->st_mode);
+            fs_get_meta(f, &(reply.meta));
+            fs_write_val(reply.size, f->fts_statp->st_size, sizeof(reply.size));
+            reply.access = fs_mode_to_access(f->fts_statp->st_mode);
+            fs_write_date(&(reply.date), f->fts_statp->st_ctime);
+        }
+        fs_reply(c, &(reply.std_tx), sizeof(reply));
+    }
+    break;
     default:
         fs_err(c, EC_FS_E_BADINFO);
     }

@@ -136,6 +136,7 @@ fs_unixify_path(struct fs_context *c, char *path)
 		    c->client->handles[c->req->urd]->path : NULL;
 		/* FALLTHROUGH */
 	case EC_FS_FUNC_LOAD:
+	case EC_FS_FUNC_LOAD_32:
 	case EC_FS_FUNC_LOAD_COMMAND:
 	case EC_FS_FUNC_SAVE:
 	case EC_FS_FUNC_GETBYTES:

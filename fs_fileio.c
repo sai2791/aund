@@ -56,7 +56,7 @@
 
 #define OUR_DATA_PORT 0x97
 
-static ssize_t fs_data_send(struct fs_context *, int, size_t);
+static ssize_t fs_data_send(struct fs_context *, int, size_t, uint8_t);
 static ssize_t fs_data_recv(struct fs_context *, int, size_t, int);
 static int fs_close1(struct fs_context *c, int h);
 
@@ -83,6 +83,7 @@ void
 fs_open(struct fs_context *c)
 {
     struct ec_fs_reply_open reply;
+    struct ec_fs_reply_open_32 reply_32;
     struct ec_fs_req_open *request;
     struct stat st;
     char *upath;
@@ -229,10 +230,22 @@ fs_open(struct fs_context *c)
         return;
     }
 #endif
-    reply.std_tx.command_code = EC_FS_CC_DONE;
-    reply.std_tx.return_code = EC_FS_RC_OK;
-    reply.handle = h;
-    fs_reply(c, &(reply.std_tx), sizeof(reply));
+    if (c->req->function == EC_FS_FUNC_OPEN) {
+        reply.std_tx.command_code = EC_FS_CC_DONE;
+        reply.std_tx.return_code = EC_FS_RC_OK;
+        reply.handle = h;
+        fs_reply(c, &(reply.std_tx), sizeof(reply));
+    } else {
+        reply_32.std_tx.command_code = EC_FS_CC_DONE;
+        reply_32.std_tx.return_code = EC_FS_RC_OK;
+        reply_32.type = fs_mode_to_type(st.st_mode);
+        reply_32.access = fs_mode_to_access(st.st_mode);
+        reply_32.unknown = 0xff;
+        reply_32.handle = h;
+        fs_write_val(reply_32.size, st.st_size, sizeof(reply_32.size));
+        fs_write_val(reply_32.size1, st.st_size, sizeof(reply_32.size1));
+        fs_reply(c, &(reply_32.std_tx), sizeof(reply_32));
+    }
 }
 
 void
@@ -241,7 +254,7 @@ fs_close(struct fs_context *c)
     struct ec_fs_reply reply;
     struct ec_fs_req_close *request;
     int h, error, thiserr;
-    
+
     if (c->client == NULL) {
         fs_err(c, EC_FS_E_WHOAREYOU);
         return;
@@ -295,40 +308,68 @@ fs_get_args(struct fs_context *c)
 {
     struct stat st;
     struct ec_fs_reply_get_args reply;
-    struct ec_fs_req_get_args *request;
+    struct ec_fs_reply_get_args_32 reply_32;
     off_t ptr;
     int h, fd;
+    uint8_t handle;
+    uint8_t arg;
+    bool is_32 = false;
 
     if (c->client == NULL) {
         fs_err(c, EC_FS_E_WHOAREYOU);
         return;
     }
-    request = (struct ec_fs_req_get_args *)(c->req);
-    if (debug) printf("get args [%d, %d]", request->handle, request->arg);
-    if ((h = fs_check_handle(c->client, request->handle)) != 0) {
+
+    if (c->req->function == EC_FS_FUNC_GET_ARGS) {
+        struct ec_fs_req_get_args *request;
+
+        request = (struct ec_fs_req_get_args *)(c->req);
+        handle = request->handle;
+        arg = request->arg;
+        if (debug) printf("get args [%d, %d]", handle, arg);
+    } else {
+        struct ec_fs_req_get_args_32 *request_32;
+
+        request_32 = (struct ec_fs_req_get_args_32 *)(c->req);
+        handle = request_32->handle;
+        arg = request_32->arg;
+        if (debug) printf("get args 32 [%d, %d]", handle, arg);
+        is_32 = true;
+    }
+    if ((h = fs_check_handle(c->client, handle)) != 0) {
         fd = c->client->handles[h]->fd;
-        switch (request->arg) {
+        switch (arg) {
         case EC_FS_ARG_PTR:
             if ((ptr = lseek(fd, 0, SEEK_CUR)) == -1) {
                 fs_errno(c);
                 return;
             }
-            fs_write_val(reply.val, ptr, sizeof(reply.val));
+            if (is_32)
+                fs_write_val(reply_32.val, ptr, sizeof(reply_32.val));
+            else
+                fs_write_val(reply.val, ptr, sizeof(reply.val));
             break;
         case EC_FS_ARG_EXT:
             if (fstat(fd, &st) == -1) {
                 fs_errno(c);
                 return;
-                }
-            fs_write_val(reply.val, st.st_size, sizeof(reply.val));
+            }
+            if (is_32)
+                fs_write_val(reply_32.val, st.st_size, sizeof(reply_32.val));
+            else
+                fs_write_val(reply.val, st.st_size, sizeof(reply.val));
             break;
         case EC_FS_ARG_SIZE:
             if (fstat(fd, &st) == -1) {
                 fs_errno(c);
                 return;
             }
-            fs_write_val(reply.val, st.st_blocks * S_BLKSIZE,
-                sizeof(reply.val));
+            if (is_32)
+                fs_write_val(reply_32.val, st.st_blocks * S_BLKSIZE,
+                    sizeof(reply_32.val));
+            else
+                fs_write_val(reply.val, st.st_blocks * S_BLKSIZE,
+                    sizeof(reply.val));
             break;
         default:
             if (debug) printf("\n");
@@ -349,9 +390,15 @@ fs_get_args(struct fs_context *c)
                 fs_read_val(reply.val, sizeof(reply.val)));
         #endif    
 
-        reply.std_tx.command_code = EC_FS_CC_DONE;
-        reply.std_tx.return_code = EC_FS_RC_OK;
-        fs_reply(c, &(reply.std_tx), sizeof(reply));
+        if (c->req->function == EC_FS_FUNC_GET_ARGS) {
+            reply.std_tx.command_code = EC_FS_CC_DONE;
+            reply.std_tx.return_code = EC_FS_RC_OK;
+            fs_reply(c, &(reply.std_tx), sizeof(reply));
+        } else {
+            reply_32.std_tx.command_code = EC_FS_CC_DONE;
+            reply_32.std_tx.return_code = EC_FS_RC_OK;
+            fs_reply(c, &(reply_32.std_tx), sizeof(reply_32));
+        }
     } else {
         fs_err(c, EC_FS_E_CHANNEL);
     }
@@ -361,22 +408,39 @@ void
 fs_set_args(struct fs_context *c)
 {
     struct ec_fs_reply reply;
-    struct ec_fs_req_set_args *request;
     off_t val;
     int h, fd;
+    uint8_t handle;
+    uint8_t arg;
 
     if (c->client == NULL) {
         fs_err(c, EC_FS_E_WHOAREYOU);
         return;
     }
-    request = (struct ec_fs_req_set_args *)(c->req);
-    val = fs_read_val(request->val, sizeof(request->val));
-    if (debug)
-        printf("set args [%d, %d := %ju]\n",
-            request->handle, request->arg, (uintmax_t)val);
-    if ((h = fs_check_handle(c->client, request->handle)) != 0) {
+    if (c->req->function == EC_FS_FUNC_SET_ARGS) {
+        struct ec_fs_req_set_args *request;
+
+        request = (struct ec_fs_req_set_args *)(c->req);
+        val = fs_read_val(request->val, sizeof(request->val));
+        handle = request->handle;
+        arg = request->arg;
+        if (debug)
+            printf("set args [%d, %d := %ju]\n",
+                request->handle, request->arg, (uintmax_t)val);
+    } else {
+        struct ec_fs_req_set_args_32 *request_32;
+
+        request_32 = (struct ec_fs_req_set_args_32 *)(c->req);
+        val = fs_read_val(request_32->val, sizeof(request_32->val));
+        handle = request_32->handle;
+        arg = request_32->arg;
+        if (debug)
+            printf("set args 32 [%d, %d := %ju]\n",
+                request_32->handle, request_32->arg, (uintmax_t)val);
+    }
+    if ((h = fs_check_handle(c->client, handle)) != 0) {
         fd = c->client->handles[h]->fd;
-        switch (request->arg) {
+        switch (arg) {
         case EC_FS_ARG_PTR:
             if (lseek(fd, val, SEEK_SET) == -1) {
                 fs_errno(c);
@@ -388,6 +452,11 @@ fs_set_args(struct fs_context *c)
                 fs_errno(c);
                 return;
             }
+            break;
+        case EC_FS_ARG_SIZE:
+            // I don't understand this - it does something 32 bit mode.
+            // Just say we handled it - seems to keep
+            // everything happy.
             break;
         default:
             fs_error(c, 0xff, "bad argument to set_args");
@@ -514,25 +583,45 @@ void
 fs_getbytes(struct fs_context *c)
 {
     struct ec_fs_reply reply1;
-    struct ec_fs_reply_getbytes2 reply2;
-    struct ec_fs_req_getbytes *request;
     int h, fd;
     off_t off;
     size_t size, got;
+    uint8_t handle;
+    bool use_ptr = false;
+    uint8_t reply_port;
 
     if (c->client == NULL) {
         fs_err(c, EC_FS_E_WHOAREYOU);
         return;
     }
-    request = (struct ec_fs_req_getbytes *)(c->req);
-    size = fs_read_val(request->nbytes, sizeof(request->nbytes));
-    off = fs_read_val(request->offset, sizeof(request->offset));
-    if (debug)
-        printf("getbytes [%d, %zu%s%ju]\n",
-            request->handle, size, request->use_ptr ? "!" : "@",
-            (uintmax_t)off);
-    if ((h = fs_check_handle(c->client, request->handle)) != 0) {
-        if (fs_randomio_common(c, request->handle)) return;
+
+    if (c->req->function == EC_FS_FUNC_GETBYTES) {
+        struct ec_fs_req_getbytes *request;
+        request = (struct ec_fs_req_getbytes *)(c->req);
+        size = fs_read_val(request->nbytes, sizeof(request->nbytes));
+        off = fs_read_val(request->offset, sizeof(request->offset));
+        handle = request->handle;
+        use_ptr = request->use_ptr;
+        reply_port = c->req->urd;
+        if (debug)
+            printf("getbytes [%d, %zu%s%ju]\n",
+                request->handle, size, request->use_ptr ? "!" : "@",
+                (uintmax_t)off);
+    } else {
+        struct ec_fs_req_getbytes_32 *request_32;
+        request_32 = (struct ec_fs_req_getbytes_32 *)(c->req);
+        size = fs_read_val(request_32->nbytes, sizeof(request_32->nbytes));
+        off = fs_read_val(request_32->offset, sizeof(request_32->offset));
+        handle = request_32->handle;
+        reply_port = request_32->reply_port;
+        /* FIXME: Where is use_ptr in this request */
+        if (debug)
+            printf("getbytes 32 [%d, %zu@%ju]\n",
+                request_32->handle, size,
+                (uintmax_t)off);
+    }
+    if ((h = fs_check_handle(c->client, handle)) != 0) {
+        if (fs_randomio_common(c, handle)) return;
         if (c->client->handles[h]->can_read == false)
         {
             // We are trying to read from a file without the correct permission
@@ -540,7 +629,7 @@ fs_getbytes(struct fs_context *c)
             return;
         }
         fd = c->client->handles[h]->fd;
-        if (!request->use_ptr) { 
+        if (!use_ptr) { 
             if (lseek(fd, off, SEEK_SET) == -1) {
                 fs_errno(c);
                 return;
@@ -549,19 +638,34 @@ fs_getbytes(struct fs_context *c)
         reply1.command_code = EC_FS_CC_DONE;
         reply1.return_code = EC_FS_RC_OK;
         fs_reply(c, &reply1, sizeof(reply1));
-        reply2.std_tx.command_code = EC_FS_CC_DONE;
-        reply2.std_tx.return_code = EC_FS_RC_OK;
-        got = fs_data_send(c, fd, size);
+        got = fs_data_send(c, fd, size, reply_port);
         if (got == -1) {
             /* Error */
             fs_errno(c);
         } else {
-            if (got == size && !at_eof(fd))
-                reply2.flag = 0;
-            else
-                reply2.flag = 0x80; /* EOF reached */
-            fs_write_val(reply2.nbytes, got, sizeof(reply2.nbytes));
-            fs_reply(c, &(reply2.std_tx), sizeof(reply2));
+            if (c->req->function == EC_FS_FUNC_GETBYTES) {
+                struct ec_fs_reply_getbytes2 reply2;
+
+                reply2.std_tx.command_code = EC_FS_CC_DONE;
+                reply2.std_tx.return_code = EC_FS_RC_OK;
+                if (got == size && !at_eof(fd))
+                    reply2.flag = 0;
+                else
+                    reply2.flag = 0x80; /* EOF reached */
+                fs_write_val(reply2.nbytes, got, sizeof(reply2.nbytes));
+                fs_reply(c, &(reply2.std_tx), sizeof(reply2));
+            } else {
+                struct ec_fs_reply_getbytes2_32 reply2_32;
+
+                reply2_32.std_tx.command_code = EC_FS_CC_DONE;
+                reply2_32.std_tx.return_code = EC_FS_RC_OK;
+                if (got == size && !at_eof(fd))
+                    reply2_32.flag = 0;
+                else
+                    reply2_32.flag = 0x80; /* EOF reached */
+                fs_write_val(reply2_32.nbytes, got, sizeof(reply2_32.nbytes));
+                fs_reply(c, &(reply2_32.std_tx), sizeof(reply2_32));
+            }
         }
     } else {
         fs_err(c, EC_FS_E_CHANNEL);
@@ -614,25 +718,50 @@ fs_putbytes(struct fs_context *c)
 {
     struct ec_fs_reply_putbytes1 reply1;
     struct ec_fs_reply_putbytes2 reply2;
-    struct ec_fs_req_putbytes *request;
+    struct ec_fs_reply_putbytes2_32 reply2_32;
     int h, fd, replyport;
     off_t off;
     size_t size, got;
+    uint8_t handle;
+    int ackport;
+    uint8_t use_ptr = false;
+    bool api_32 = false;
 
     if (c->client == NULL) {
         fs_err(c, EC_FS_E_WHOAREYOU);
         return;
     }
     replyport = c->req->reply_port;
-    request = (struct ec_fs_req_putbytes *)(c->req);
-    size = fs_read_val(request->nbytes, sizeof(request->nbytes));
-    off = fs_read_val(request->offset, sizeof(request->offset));
-    if (debug)
-        printf("putbytes [%d, %zu%s%ju]\n",
-            request->handle, size, request->use_ptr ? "!" : "@",
-            (uintmax_t)off);
-    if ((h = fs_check_handle(c->client, request->handle)) != 0) {
-        if (fs_randomio_common(c, request->handle)) return;
+    if (c->req->function == EC_FS_FUNC_PUTBYTES) {
+        struct ec_fs_req_putbytes *request;
+
+        request = (struct ec_fs_req_putbytes *)(c->req);
+        size = fs_read_val(request->nbytes, sizeof(request->nbytes));
+        off = fs_read_val(request->offset, sizeof(request->offset));
+        use_ptr = request->use_ptr;
+        if (debug)
+            printf("putbytes [%d, %zu%s%ju]\n",
+                request->handle, size, request->use_ptr ? "!" : "@",
+                (uintmax_t)off);
+        handle = request->handle;
+        ackport = c->req->urd;
+    } else {
+        struct ec_fs_req_putbytes_32 *request_32;
+
+        api_32 = true;
+        request_32 = (struct ec_fs_req_putbytes_32 *)(c->req);
+        size = fs_read_val(request_32->nbytes, sizeof(request_32->nbytes));
+        off = fs_read_val(request_32->offset, sizeof(request_32->offset));
+        /* FIXME: Is use_ptr used here? */
+        if (debug)
+            printf("putbytes 32 [%d, %zu@%ju]\n",
+                request_32->handle, size,
+                (uintmax_t)off);
+        handle = request_32->handle;
+        ackport = request_32->ack_port;
+    }
+    if ((h = fs_check_handle(c->client, handle)) != 0) {
+        if (fs_randomio_common(c, handle)) return;
         if (c->client->handles[h]->read_only)
         {
             // Trying to write to a read only file
@@ -652,7 +781,7 @@ fs_putbytes(struct fs_context *c)
             return;
         }
         fd = c->client->handles[h]->fd;
-        if (!request->use_ptr) {
+        if (!use_ptr) {
             if (lseek(fd, off, SEEK_SET) == -1) {
                 if (debug) printf("Fs_file error\n");
                 fs_errno(c);
@@ -672,18 +801,27 @@ fs_putbytes(struct fs_context *c)
         fs_write_val(reply1.block_size, aunfuncs->max_block,
                 sizeof(reply1.block_size));
         fs_reply(c, &(reply1.std_tx), sizeof(reply1));
-        reply2.std_tx.command_code = EC_FS_CC_DONE;
-        reply2.std_tx.return_code = EC_FS_RC_OK;
-        got = fs_data_recv(c, fd, size, c->req->urd);
+        got = fs_data_recv(c, fd, size, ackport);
         if (got == -1) {
             /* Error */
             if (debug) printf("got error\n");
             fs_errno(c);
         } else {
-            reply2.zero = 0;
-            fs_write_val(reply2.nbytes, got, sizeof(reply2.nbytes));
-            c->req->reply_port = replyport;
-            fs_reply(c, &(reply2.std_tx), sizeof(reply2));
+            if (api_32) {
+                reply2_32.flag = 0;
+                reply2_32.std_tx.command_code = EC_FS_CC_DONE;
+                reply2_32.std_tx.return_code = EC_FS_RC_OK;
+                fs_write_val(reply2_32.nbytes, got, sizeof(reply2_32.nbytes));
+                c->req->reply_port = replyport;
+                fs_reply(c, &(reply2_32.std_tx), sizeof(reply2_32));
+            } else {
+                reply2.std_tx.command_code = EC_FS_CC_DONE;
+                reply2.std_tx.return_code = EC_FS_RC_OK;
+                reply2.zero = 0;
+                fs_write_val(reply2.nbytes, got, sizeof(reply2.nbytes));
+                c->req->reply_port = replyport;
+                fs_reply(c, &(reply2.std_tx), sizeof(reply2));
+            }
         }
     } else {
         fs_err(c, EC_FS_E_CHANNEL);
@@ -694,8 +832,8 @@ void
 fs_load(struct fs_context *c)
 {
     struct ec_fs_reply_load1 reply1;
+    struct ec_fs_reply_load1_32 reply1_32;
     struct ec_fs_reply_load2 reply2;
-    struct ec_fs_req_load *request;
     char *upath, *upathlib, *path_argv[3];
     int fd, as_command;
     size_t got;
@@ -703,31 +841,53 @@ fs_load(struct fs_context *c)
     FTSENT *f;
     bool is_owner = false;
     bool can_read = false;
+    bool use_reply_32 = false;
+    char *ro_path = NULL;
 
     if (c->client == NULL) {
         fs_err(c, EC_FS_E_WHOAREYOU);
         return;
     }
-    request = (struct ec_fs_req_load *)(c->req);
-    request->path[strcspn(request->path, "\r")] = '\0';
-    as_command = c->req->function == EC_FS_FUNC_LOAD_COMMAND;
-    if (debug) printf("load%s [%s]\n",
-         as_command ? " as command" : "", request->path);
-    /*
-     * 8-bit clients tend to send the whole command line for "load
-     * as command", so we trim it for them.
-     */
-    request->path[strcspn(request->path, " ")] = '\0';
-    upath = fs_unixify_path(c, request->path);
-    if (upath == NULL) return;
+    if (c->req->function == EC_FS_FUNC_LOAD ||
+        c->req->function == EC_FS_FUNC_LOAD_COMMAND) {
+        struct ec_fs_req_load *request;
 
+        request = (struct ec_fs_req_load *)(c->req);
+        request->path[strcspn(request->path, "\r")] = '\0';
+        as_command = c->req->function == EC_FS_FUNC_LOAD_COMMAND;
+        if (debug) printf("load%s [%s]\n",
+             as_command ? " as command" : "", request->path);
+        /*
+         * 8-bit clients tend to send the whole command line for "load
+         * as command", so we trim it for them.
+         */
+        request->path[strcspn(request->path, " ")] = '\0';
+        upath = fs_unixify_path(c, request->path);
+        ro_path = request->path;
+    } else if (c->req->function == EC_FS_FUNC_LOAD_32) {
+        struct ec_fs_req_load_32 *request_32;
+
+        as_command = false;
+        use_reply_32 = true;
+        request_32 = (struct ec_fs_req_load_32 *)(c->req);
+        request_32->path[strcspn(request_32->path, "\r")] = '\0';
+        /*
+         * 8-bit clients tend to send the whole command line for "load
+         * as command", so we trim it for them.
+         */
+        request_32->path[strcspn(request_32->path, " ")] = '\0';
+        upath = fs_unixify_path(c, request_32->path);
+        ro_path = request_32->path;
+    }
+
+    if (upath == NULL) return;
     is_owner = fs_is_owner(c, upath);
 
     path_argv[0] = upath;
     path_argv[1] = NULL;
     if (as_command) {
         c->req->csd = c->req->lib;
-        upathlib = fs_unixify_path(c, request->path);
+        upathlib = fs_unixify_path(c, ro_path);
         if (upathlib == NULL) {
             free(upath);
             return;
@@ -773,16 +933,28 @@ fs_load(struct fs_context *c)
         goto out;
     }
 
-    fs_get_meta(f, &(reply1.meta));
-    fs_write_val(reply1.size, f->fts_statp->st_size, sizeof(reply1.size));
-    reply1.access = fs_mode_to_access(f->fts_statp->st_mode);
-    fs_write_date(&(reply1.date), fs_get_birthtime(f));
-    reply1.std_tx.command_code = EC_FS_CC_DONE;
-    reply1.std_tx.return_code = EC_FS_RC_OK;
-    fs_reply(c, &(reply1.std_tx), sizeof(reply1));
-    reply2.std_tx.command_code = EC_FS_CC_DONE;
-    reply2.std_tx.return_code = EC_FS_RC_OK;
-    got = fs_data_send(c, fd, f->fts_statp->st_size);
+    if (use_reply_32) {
+        fs_get_meta(f, &reply1_32.meta);
+        fs_write_val(reply1_32.size, f->fts_statp->st_size, sizeof(reply1_32.size));
+        reply1_32.access = fs_mode_to_access(f->fts_statp->st_mode);
+        fs_write_date(&(reply1_32.date), fs_get_birthtime(f));
+        reply1_32.std_tx.command_code = EC_FS_CC_DONE;
+        reply1_32.std_tx.return_code = EC_FS_RC_OK;
+        fs_reply(c, &(reply1_32.std_tx), sizeof(reply1_32));
+        reply2.std_tx.command_code = EC_FS_CC_DONE;
+        reply2.std_tx.return_code = EC_FS_RC_OK;
+    } else {
+        fs_get_meta(f, &(reply1.meta));
+        fs_write_val(reply1.size, f->fts_statp->st_size, sizeof(reply1.size));
+        reply1.access = fs_mode_to_access(f->fts_statp->st_mode);
+        fs_write_date(&(reply1.date), fs_get_birthtime(f));
+        reply1.std_tx.command_code = EC_FS_CC_DONE;
+        reply1.std_tx.return_code = EC_FS_RC_OK;
+        fs_reply(c, &(reply1.std_tx), sizeof(reply1));
+        reply2.std_tx.command_code = EC_FS_CC_DONE;
+        reply2.std_tx.return_code = EC_FS_RC_OK;
+    }
+    got = fs_data_send(c, fd, f->fts_statp->st_size, c->req->urd);
     if (got == -1) {
         /* Error */
         fs_errno(c);
@@ -802,7 +974,6 @@ fs_save(struct fs_context *c)
 {
     struct ec_fs_reply_save1 reply1;
     struct ec_fs_reply_save2 reply2;
-    struct ec_fs_req_save *request;
     struct ec_fs_meta meta;
     char *upath, *path_argv[2];
     int fd, ackport, replyport;
@@ -816,13 +987,28 @@ fs_save(struct fs_context *c)
         fs_err(c, EC_FS_E_WHOAREYOU);
         return;
     }
-    request = (struct ec_fs_req_save *)(c->req);
-    request->path[strcspn(request->path, "\r")] = '\0';
+    if (c->req->function == EC_FS_FUNC_SAVE) {
+        struct ec_fs_req_save *request;
+
+        request = (struct ec_fs_req_save *)(c->req);
+        request->path[strcspn(request->path, "\r")] = '\0';
+        meta = request->meta;
+        if (debug) printf("save [%s]\n", request->path);
+        size = fs_read_val(request->size, sizeof(request->size));
+        upath = fs_unixify_path(c, request->path);
+        ackport = c->req->urd;
+    } else {
+        struct ec_fs_req_save_32 *request_32;
+
+        request_32 = (struct ec_fs_req_save_32 *)(c->req);
+        request_32->path[strcspn(request_32->path, "\r")] = '\0';
+        meta = request_32->meta;
+        if (debug) printf("save 32 [%s]\n", request_32->path);
+        size = fs_read_val(request_32->size, sizeof(request_32->size));
+        upath = fs_unixify_path(c, request_32->path);
+        ackport = request_32->ack_port;
+    }
     replyport = c->req->reply_port;
-    ackport = c->req->urd;
-    if (debug) printf("save [%s]\n", request->path);
-    size = fs_read_val(request->size, sizeof(request->size));
-    upath = fs_unixify_path(c, request->path);
     if (upath == NULL) return;
 
     /* Check that we have owner permission in the directory we 
@@ -892,7 +1078,6 @@ fs_save(struct fs_context *c)
     }
     fts_close(ftsp);
 
-    meta = request->meta;
     reply1.std_tx.command_code = EC_FS_CC_DONE;
     reply1.std_tx.return_code = EC_FS_RC_OK;
     reply1.data_port = OUR_DATA_PORT;
@@ -941,7 +1126,6 @@ void
 fs_create(struct fs_context *c)
 {
     struct ec_fs_reply_create reply;
-    struct ec_fs_req_create *request;
     struct ec_fs_meta meta;
     char *upath, *path_argv[2];
     int fd, replyport;
@@ -953,12 +1137,26 @@ fs_create(struct fs_context *c)
         fs_err(c, EC_FS_E_WHOAREYOU);
         return;
     }
-    request = (struct ec_fs_req_create *)(c->req);
-    request->path[strcspn(request->path, "\r")] = '\0';
+    if (c->req->function == EC_FS_FUNC_CREATE) {
+        struct ec_fs_req_create *request;
+
+        request = (struct ec_fs_req_create *)(c->req);
+        request->path[strcspn(request->path, "\r")] = '\0';
+        meta = request->meta;
+        if (debug) printf("create [%s]\n", request->path);
+        size = fs_read_val(request->size, sizeof(request->size));
+        upath = fs_unixify_path(c, request->path);
+    } else {
+        struct ec_fs_req_create_32 *request_32;
+
+        request_32 = (struct ec_fs_req_create_32 *)(c->req);
+        request_32->path[strcspn(request_32->path, "\r")] = '\0';
+        meta = request_32->meta;
+        if (debug) printf("create 32 [%s]\n", request_32->path);
+        size = fs_read_val(request_32->size, sizeof(request_32->size));
+        upath = fs_unixify_path(c, request_32->path);
+    }
     replyport = c->req->reply_port;
-    if (debug) printf("create [%s]\n", request->path);
-    size = fs_read_val(request->size, sizeof(request->size));
-    upath = fs_unixify_path(c, request->path);
     if (upath == NULL) return;
     if ((fd = open(upath, O_CREAT|O_TRUNC|O_RDWR, 0666)) == -1) {
         fs_errno(c);
@@ -971,7 +1169,6 @@ fs_create(struct fs_context *c)
         free(upath);
         return;
     }
-    meta = request->meta;
     reply.std_tx.command_code = EC_FS_CC_DONE;
     reply.std_tx.return_code = EC_FS_RC_OK;
     close(fd);
@@ -994,7 +1191,7 @@ fs_create(struct fs_context *c)
 }
 
 static ssize_t
-fs_data_send(struct fs_context *c, int fd, size_t size)
+fs_data_send(struct fs_context *c, int fd, size_t size, uint8_t reply_port)
 {
     struct aun_packet *pkt;
     void *buf;
@@ -1025,7 +1222,7 @@ fs_data_send(struct fs_context *c, int fd, size_t size)
             }
         }
         pkt->type = AUN_TYPE_UNICAST;
-        pkt->dest_port = c->req->urd;
+        pkt->dest_port = reply_port; //c->req->urd;
         pkt->flag = c->req->aun.flag & 1;
         if (aunfuncs->xmit(pkt, sizeof(*pkt) + this, c->from) == -1)
             warn("send data");
