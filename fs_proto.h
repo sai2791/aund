@@ -66,6 +66,8 @@
 #define EC_FS_PRIV_LIMIT 2  /* MDFS Cant change passwd */
 #define EC_FS_PRIV_SYST  3  /* System User */	
 
+#define EC_FILE_LEN 10
+
 /*
  * Structures common to several calls.
  */
@@ -510,6 +512,16 @@ struct ec_fs_reply_info_uid {
 	uint8_t fsnum[2];
 };
 
+#define EC_FS_GET_INFO_ALL_32	8
+struct ec_fs_reply_info_all_32 {
+	struct ec_fs_reply std_tx;
+	u_int8_t type;
+	struct ec_fs_meta meta;
+	u_int8_t size[4];
+	u_int8_t access;
+	struct ec_fs_date date;
+};
+
 /* Set file info - code 19 */
 #define EC_FS_FUNC_SET_INFO	19
 struct ec_fs_req_set_info {
@@ -666,5 +678,137 @@ struct ec_fs_reply_set_user_free {
 #define EC_FS_FUNC_USERS_EXT	33
 #define EC_FS_FUNC_USER_INFO_EXT 34
 #define EC_FS_FUNC_COPY_DATA	35
+
+#define EC_FS_FUNC_SAVE_32      38
+struct ec_fs_req_save_32 {
+	struct ec_fs_req std_rx;
+	u_int8_t ack_port;
+	u_int8_t access;
+	struct ec_fs_meta meta;
+	u_int8_t size[4];
+	char path[0]; /* CR terminated */
+};
+
+#define EC_FS_FUNC_CREATE_32    39
+struct ec_fs_req_create_32 {
+	struct ec_fs_req std_rx;
+	u_int8_t ack_port;
+	u_int8_t access;
+	struct ec_fs_meta meta;
+	u_int8_t size[4];
+	char path[0]; /* CR terminated */
+};
+
+#define EC_FS_FUNC_LOAD_32		40
+struct ec_fs_req_load_32 {
+	/* NB std_tx.urd is actually data port, and not a handle */
+	struct ec_fs_req std_rx;
+	u_int8_t	reply_port;  /* Should be the same as std_tx.urd */
+	char path[0]; /* CR terminated */
+};
+
+/* before data transfer */
+struct ec_fs_reply_load1_32 {
+	struct ec_fs_reply std_tx;
+	struct ec_fs_meta meta;
+	u_int8_t size[4];
+	u_int8_t access;
+	struct ec_fs_date date;
+};
+#define EC_FS_FUNC_GET_ARGS_32	41
+struct ec_fs_req_get_args_32 {
+	struct ec_fs_req std_rx;
+	u_int8_t arg;
+	u_int8_t handle;
+};
+
+struct ec_fs_reply_get_args_32 {
+	struct ec_fs_reply std_tx;
+	u_int8_t val[4];
+};
+
+#define EC_FS_FUNC_SET_ARGS_32	42
+struct ec_fs_req_set_args_32 {
+	struct ec_fs_req std_rx;
+	u_int8_t arg;
+	u_int8_t handle;
+	u_int8_t val[4];
+};
+
+
+#define EC_FS_FUNC_GETBYTES_32		43
+struct ec_fs_req_getbytes_32 {
+	struct ec_fs_req std_rx;
+	u_int8_t unknown1[2];		/* use_ptr somewhere here? */
+	u_int8_t reply_port;
+	u_int8_t handle;
+	u_int8_t nbytes[4];
+	u_int8_t offset[4];
+};
+
+struct ec_fs_reply_getbytes2_32 {
+	struct ec_fs_reply std_tx;
+	u_int8_t flag;
+	u_int8_t nbytes[4];
+};
+
+#define EC_FS_FUNC_PUTBYTES_32		44
+struct ec_fs_req_putbytes_32 {
+	struct ec_fs_req std_rx;
+	u_int8_t unknown[2]; /* use_server_ptr in here somewhere? */
+	u_int8_t ack_port;
+	u_int8_t handle;
+	u_int8_t nbytes[4];
+	u_int8_t offset[4]; /* only if use_ptr != 0 */
+};
+
+struct ec_fs_reply_putbytes2_32 {
+	struct ec_fs_reply std_tx;
+	u_int8_t flag;
+	u_int8_t nbytes[4];
+};
+
+#define EC_FS_FUNC_EXAMINE_32		45
+#define EC_FS_EXAMINE_ALL_32		8
+struct ec_fs_exall_32 {
+//	struct ec_fs_date date;
+	u_int8_t unknown1;
+	struct ec_fs_meta meta;
+	u_int8_t size[4];
+	u_int8_t access;
+	u_int8_t unknown2[11];
+	char name[EC_FILE_LEN];
+	char cr;
+};
+struct ec_fs_reply_examine_all_32 {
+	struct ec_fs_reply std_tx;
+	u_int8_t nentries;
+	u_int8_t undef0;
+	struct ec_fs_exall_32 data[0];
+};
+
+struct ec_fs_reply_examine_32 {
+	struct ec_fs_reply std_tx;
+	u_int8_t nentries;
+	/*
+	 * this next byte isn't in any of the specs, but awServer puts
+	 * it in and RISC OS seems to expect it.
+	 */
+	u_int8_t undef0;
+	u_int8_t undef1;
+	char data[0];
+};
+#define SIZEOF_ec_fs_reply_examine_all_32(N) (sizeof(struct ec_fs_reply_examine_all_32) + (N)*sizeof(struct ec_fs_exall_32))
+
+#define EC_FS_FUNC_OPEN_32		46
+struct ec_fs_reply_open_32 {
+	struct ec_fs_reply std_tx;
+	u_int8_t handle;
+	u_int8_t type;
+	u_int8_t access;
+	u_int8_t unknown;	/* 0xff? */
+	u_int8_t size[4];	/* Size of valid data? */
+	u_int8_t size1[4];	/* Extent on disk? */
+};
 
 #endif

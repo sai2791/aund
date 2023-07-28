@@ -132,6 +132,15 @@ fs_func_impl * const fs_dispatch[] = {
     [EC_FS_FUNC_CDIRN] = fs_cdirn,
     [EC_FS_FUNC_CREATE] = fs_create,
     [EC_FS_FUNC_GET_USER_FREE] = fs_get_user_free,
+    [EC_FS_FUNC_SAVE_32] = fs_save,
+    [EC_FS_FUNC_CREATE_32] = fs_create,
+    [EC_FS_FUNC_EXAMINE_32] = fs_examine,
+    [EC_FS_FUNC_LOAD_32] = fs_load,
+    [EC_FS_FUNC_OPEN_32] = fs_open,
+    [EC_FS_FUNC_GETBYTES_32] = fs_getbytes,
+    [EC_FS_FUNC_PUTBYTES_32] = fs_putbytes,
+    [EC_FS_FUNC_GET_ARGS_32] = fs_get_args,
+    [EC_FS_FUNC_SET_ARGS_32] = fs_set_args,
 };
 #define NFUNC (sizeof(fs_dispatch) / sizeof(fs_dispatch[0]))
 

@@ -48,6 +48,7 @@
 static int fs_examine_read(struct fs_context *, const char *, int);
 
 static int fs_examine_all(FTSENT *, struct ec_fs_reply_examine **, size_t *);
+static int fs_examine_all_32(FTSENT *, struct ec_fs_reply_examine_32 **, size_t *);
 static int fs_examine_longtxt(struct fs_context *c, FTSENT *,
     struct ec_fs_reply_examine **, size_t *);
 static int fs_examine_name(FTSENT *, struct ec_fs_reply_examine **, size_t *);
@@ -62,8 +63,19 @@ fs_examine(struct fs_context *c)
     char *upath;
     FTSENT *ent;
     struct ec_fs_reply_examine *reply;
+    // Warning: Don't access reply->data in EC_FS_FUNC_EXAMINE_32 mode - it
+    // is at a different offset!
     size_t reply_size;
     int i, rc;
+
+    if (c->req->function == EC_FS_FUNC_EXAMINE_32)
+    {
+        // Examine_32 seems to have "start" and "arg" the wrong way round
+        u_int8_t tmp;
+        tmp = request->start;
+        request->start = request->arg;
+        request->arg = tmp;
+    }
 
     request->path[strcspn(request->path, "\r")] = '\0';
     if (debug)
@@ -89,7 +101,11 @@ fs_examine(struct fs_context *c)
     if (request->arg == EC_FS_EXAMINE_SHORTTXT ||
         request->arg == EC_FS_EXAMINE_LONGTXT)
         reply = malloc(reply_size+1);
-    else
+    else if (c->req->function == EC_FS_FUNC_EXAMINE_32) {
+        // 1 byte larger than EC_FS_FUNC_EXAMINE
+        reply_size += 1;
+        reply = malloc(reply_size);
+    } else
         reply = malloc(reply_size);
     if (fs_examine_read(c, upath, request->start) == -1 || reply == NULL) {
         free(reply);
@@ -120,7 +136,10 @@ fs_examine(struct fs_context *c)
         i++;
         switch (request->arg) {
         case EC_FS_EXAMINE_ALL:
-            rc = fs_examine_all(ent, &reply, &reply_size);
+            if (c->req->function == EC_FS_FUNC_EXAMINE)
+                rc = fs_examine_all(ent, &reply, &reply_size);
+            else if (c->req->function == EC_FS_FUNC_EXAMINE_32)
+                rc = fs_examine_all_32(ent, (struct ec_fs_reply_examine_32 **)&reply, &reply_size);
             break;
         case EC_FS_EXAMINE_LONGTXT:
             rc = fs_examine_longtxt(c, ent, &reply, &reply_size);
@@ -252,6 +271,34 @@ fs_examine_all(FTSENT *ent, struct ec_fs_reply_examine **replyp,
     fs_write_val(exall->sin, fs_get_sin(ent), sizeof(exall->sin));
     fs_write_val(exall->size, ent->fts_statp->st_size,
              sizeof(exall->size));
+    *reply_sizep += sizeof(*exall);
+    return 0;
+burn:
+    return -1;
+}
+
+static int
+fs_examine_all_32(FTSENT *ent, struct ec_fs_reply_examine_32 **replyp, size_t *reply_sizep)
+{
+    struct ec_fs_exall_32 *exall;
+    void *new_reply;
+
+    if ((new_reply = realloc(*replyp, *reply_sizep + sizeof(*exall)))
+        != NULL)
+        *replyp = new_reply;
+    if (new_reply == NULL) {
+        errno = ENOMEM;
+        goto burn;
+    }
+    exall = (struct ec_fs_exall_32 *)(((void *)*replyp) + *reply_sizep);
+    fs_get_meta(ent, &(exall->meta)); /* This needs the name unmodified */
+    fs_acornify_name(ent->fts_name);
+    strncpy(exall->name, ent->fts_name, sizeof(exall->name));
+    strpad(exall->name, ' ', sizeof(exall->name));
+    exall->cr = '\r';
+    exall->access = fs_mode_to_access(ent->fts_statp->st_mode);
+    fs_write_val(exall->size, ent->fts_statp->st_size,
+                 sizeof(exall->size));
     *reply_sizep += sizeof(*exall);
     return 0;
 burn:
