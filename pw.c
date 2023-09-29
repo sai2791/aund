@@ -476,9 +476,9 @@ pw_del_user(char *user) {
     bool found = false;
     char *user_name, *password, *directory_name;
     char *privilege;
-    int opt4;
-    int match;
-    int result;
+    int opt4 = 0;
+    int match = -1;
+    int result = -1;
 
     if (pw_open(1) < 0)
         return -1;

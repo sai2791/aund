@@ -1228,7 +1228,7 @@ fs_cmd_deluser(struct fs_context *c, char *tail)
     char *username;
     int priv = EC_FS_PRIV_NONE; /* Assume no Priv */
     bool user_exists = false;
-    int result;
+    int result = -1;
 
     username = fs_cli_getarg(&tail);
 

@@ -834,7 +834,8 @@ fs_load(struct fs_context *c)
     struct ec_fs_reply_load1 reply1;
     struct ec_fs_reply_load1_32 reply1_32;
     struct ec_fs_reply_load2 reply2;
-    char *upath, *upathlib, *path_argv[3];
+    char *upath = NULL;
+    char *upathlib, *path_argv[3];
     int fd, as_command;
     size_t got;
     FTS *ftsp;
